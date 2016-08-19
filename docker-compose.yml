@@ -6,11 +6,18 @@ services:
     image: tianon/true
     volumes:
       - ./mysql-datadir:/var/lib/mysql
+      - ./cassandra-datadir:/var/lib/cassandra
       - ./initdb:/docker-entrypoint-initdb.d
 
   db:
 #    image: mariadb:10.1.14
     image: mysql:5.7
+    env_file: .env
+    volumes_from:
+      - fs
+
+  ddb:
+    image: cassandra
     env_file: .env
     volumes_from:
       - fs
@@ -23,9 +30,11 @@ services:
       - as
 
   as:
-    build: .
+    build: tomcat/.
     ports:
       - 3306:3306
+
+
 
   backup:
     image: alpine

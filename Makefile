@@ -9,11 +9,11 @@ all: init build up
 
 init:
 	@echo "Pulling source code for dependencies..."
-	mkdir -p mysql-datadir initdb
+	mkdir -p mysql-datadir cassandra-datadir initdb
 	curl -L -s -o wait-for-it.sh \
 		https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
 		chmod +x wait-for-it.sh
-	curl -o collectory.war http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
+	curl -o tomcat/collectory.war http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
 	touch initdb/manash.sql
 
 build:
@@ -35,7 +35,7 @@ clean:
 
 rm: stop clean
 	docker-compose rm -vf
-	sudo rm -rf mysql-datadir initdb
+	sudo rm -rf mysql-datadir cassandra-datadir initdb
 
 push:
 	docker push $(NAME)
