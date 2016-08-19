@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+
+  fs:
+    image: tianon/true
+    volumes:
+      - ./mysql-datadir:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d
+
+  db:
+#    image: mariadb:10.1.14
+    image: mysql:5.7
+    env_file: .env
+    volumes_from:
+      - fs
+
+  ws:
+    image: nginx
+    depends_on:
+      - as
+    links:
+      - as
+
+  as:
+    build: .
+    ports:
+      - 3306:3306
+
+  backup:
+    image: alpine
+    command: sh -c "tar cvfz /tmp/db-backup.tgz /var/lib/mysql"
+    volumes_from:
+      - db
+      - as
+
+
