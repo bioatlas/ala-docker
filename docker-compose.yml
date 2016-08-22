@@ -8,11 +8,14 @@ services:
       - ./mysql-datadir:/var/lib/mysql
       - ./cassandra-datadir:/var/lib/cassandra
       - ./initdb:/docker-entrypoint-initdb.d
+      - ./data:/data
 
   db:
 #    image: mariadb:10.1.14
     image: mysql:5.7
     env_file: .env
+    ports:
+      - 3306:3306
     volumes_from:
       - fs
 
@@ -32,15 +35,7 @@ services:
   as:
     build: tomcat/.
     ports:
-      - 3306:3306
+      - 8080:8080
 
-
-
-  backup:
-    image: alpine
-    command: sh -c "tar cvfz /tmp/db-backup.tgz /var/lib/mysql"
-    volumes_from:
-      - db
-      - as
 
 
