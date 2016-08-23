@@ -1,9 +1,9 @@
 # Current issues:
 
-Tomcat starts up and expects a properties-file:
+collectory.war file needs to be built from scratch rather than pulling it from repo
 
-default_config = /data/generic-collectory/config/generic-collectory-config.properties
+travis build, maybe
 
-Where should these settings be taken from?
+
 
 
