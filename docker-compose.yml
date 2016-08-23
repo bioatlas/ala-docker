@@ -10,8 +10,7 @@ services:
       - ./initdb:/docker-entrypoint-initdb.d
       - ./data:/data
 
-  db:
-#    image: mariadb:10.1.14
+  collectory_db_host:
     image: mysql:5.7
     env_file: .env
     ports:
@@ -19,23 +18,22 @@ services:
     volumes_from:
       - fs
 
-  ddb:
-    image: cassandra
-    env_file: .env
-    volumes_from:
-      - fs
+#  ddb:
+#    image: cassandra
+#    env_file: .env
+#    volumes_from:
+#      - fs
 
   ws:
     image: nginx
     depends_on:
-      - as
+      - collectory_as
     links:
-      - as
+      - collectory_as
 
-  as:
+  collectory_as:
     build: tomcat/.
     ports:
       - 8080:8080
-
-
-
+    links:
+      - collectory_db_host
