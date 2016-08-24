@@ -10,7 +10,7 @@ services:
       - ./initdb:/docker-entrypoint-initdb.d
       - ./data:/data
 
-  collectory_db_host:
+  db:
     image: mysql:5.7
     env_file: .env
     ports:
@@ -27,13 +27,13 @@ services:
   ws:
     image: nginx
     depends_on:
-      - collectory_as
+      - as
     links:
-      - collectory_as
+      - as
 
-  collectory_as:
+  as:
     build: tomcat/.
     ports:
       - 8080:8080
     links:
-      - collectory_db_host
+      - db
