@@ -2,27 +2,35 @@ version: '2'
 
 services:
 
-  fs:
+  fs_db:
     image: tianon/true
     volumes:
       - ./mysql-datadir:/var/lib/mysql
-      - ./cassandra-datadir:/var/lib/cassandra
       - ./initdb:/docker-entrypoint-initdb.d
-      - ./data:/data
-
+      
+  fs_ddb:
+    image: tianon/true
+    volumes:      
+      - ./cassandra-datadir:/data      
+      
   db:
     image: mysql:5.7
     env_file: .env
-    ports:
-      - 3306:3306
     volumes_from:
-      - fs
+      - fs_db
+    ports:
+      - 3306:3306 
 
-#  ddb:
-#    image: cassandra
-#    env_file: .env
-#    volumes_from:
-#      - fs
+  ddb:
+    build: cassandra/.    
+    volumes_from:
+      - fs_ddb
+    ports:
+      - 7000:7000
+      - 7001:7001
+      - 7199:7199
+      - 9042:9042
+      - 9160:9160 
 
   ws:
     image: nginx
