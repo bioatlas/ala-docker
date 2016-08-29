@@ -6,9 +6,8 @@ services:
     image: tianon/true
     volumes:
       - ./mysql-datadir:/var/lib/mysql
-      - ./cassandra-datadir/cassandra:/var/lib/cassandra
       - ./initdb:/docker-entrypoint-initdb.d
-      - ./data:/data
+      #- ./cassandra-datadir:/data/cassandra
 
   db:
     image: mysql:5.7

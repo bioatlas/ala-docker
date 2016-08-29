@@ -18,7 +18,7 @@ init:
 
 build:
 	@echo "Building Docker image..."
-	docker-compose build as
+	docker-compose build
 
 up: 
 	@echo "Starting services..."
