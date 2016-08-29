@@ -7,12 +7,17 @@ services:
     volumes:
       - ./mysql-datadir:/var/lib/mysql
       - ./initdb:/docker-entrypoint-initdb.d
+<<<<<<< HEAD
       
   fs_ddb:
     image: tianon/true
     volumes:      
       - ./cassandra-datadir:/data      
       
+=======
+      #- ./cassandra-datadir:/data/cassandra
+
+>>>>>>> 9d56105718888bc145cbd92f4b8b15b8729c8110
   db:
     image: mysql:5.7
     env_file: .env
