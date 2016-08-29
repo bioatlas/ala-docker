@@ -18,9 +18,9 @@ init:
 
 build:
 	@echo "Building Docker image..."
-	docker-compose build
+	docker-compose build --no-cache
 
-up: 
+up:
 	@echo "Starting services..."
 	docker-compose up -d
 
