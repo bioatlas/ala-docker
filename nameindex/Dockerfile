@@ -9,7 +9,11 @@ FROM openjdk:7
 #generate the index from scratch
 
 RUN mkdir -p /data/lucene/sources
-COPY sources/*.zip /data/lucene/sources/
+COPY dwca-col.zip /data/lucene/sources/
+COPY dwca-col-mammals.zip /data/lucene/sources/
+COPY IRMNG_DWC_HOMONYMS.zip /data/lucene/sources/
+COPY col_vernacular.txt.zip /data/lucene/sources/
+
 RUN unzip -u /data/lucene/sources/dwca-col.zip -d /data/lucene/sources/
 RUN unzip -u /data/lucene/sources/dwca-col-mammals.zip -d /data/lucene/sources/
 RUN unzip -u /data/lucene/sources/IRMNG_DWC_HOMONYMS.zip -d /data/lucene/sources/IRMNG_DWC_HOMONYMS/
