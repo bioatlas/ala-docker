@@ -1,5 +1,27 @@
 FROM openjdk:7
 
-RUN mkdir -p /data/lucene/namematching
-COPY namematching.tgz /data/lucene/ 
-RUN tar xvf /data/lucene/namematching.tgz -C /data/lucene/namematching --strip-components 1
+# download and move the pre-generated index
+
+#RUN mkdir -p /data/lucene/namematching
+#COPY namematching.tgz /data/lucene/ 
+#RUN tar xvf /data/lucene/namematching.tgz -C /data/lucene/namematching --strip-components 1
+
+#generate the index from scratch
+
+RUN mkdir -p /data/lucene/sources
+COPY sources/*.zip /data/lucene/sources/
+RUN unzip -u /data/lucene/sources/dwca-col.zip -d /data/lucene/sources/
+RUN unzip -u /data/lucene/sources/dwca-col-mammals.zip -d /data/lucene/sources/
+RUN unzip -u /data/lucene/sources/IRMNG_DWC_HOMONYMS.zip -d /data/lucene/sources/IRMNG_DWC_HOMONYMS/
+RUN unzip -u /data/lucene/sources/col_vernacular.txt.zip -d /data/lucene/sources/
+
+COPY nameindexer.zip /usr/lib/nameindexer/
+RUN unzip -u -o /usr/lib/nameindexer/nameindexer.zip -d /usr/lib/nameindexer
+COPY lib/log4j.xml /usr/lib/nameindexer/
+COPY nameindexer.sh /usr/lib/nameindexer/nameindexer
+RUN chmod 777 /usr/lib/nameindexer/nameindexer
+RUN mv /usr/lib/nameindexer/ala-name-matching-2.3.1.jar /usr/lib/nameindexer/nameindexer.jar
+RUN cat /usr/lib/nameindexer/nameindexer.jar >> /usr/lib/nameindexer/nameindexer
+RUN ln -s /usr/lib/nameindexer/nameindexer /usr/bin/nameindexer
+
+CMD ["/usr/bin/nameindexer"]
