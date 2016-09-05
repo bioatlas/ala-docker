@@ -26,10 +26,10 @@ init:
 	test -f nameindex/namematching.tgz || curl -o nameindex/namematching.tgz $(col_namematching_url)
 	test -f nameindex/nameindexer.zip || curl -o nameindex/nameindexer.zip $(ala_names_distribution_url)
 
-	test -f nameindex/sources/dwca-col.zip || curl -o nameindex/sources/dwca-col.zip $(name_indexes_repo)/dwca-col.zip		
-	test -f nameindex/sources/dwca-col-mammals.zip || curl -o nameindex/sources/dwca-col-mammals.zip $(name_indexes_repo)/dwca-col-mammals.zip
-	test -f nameindex/sources/IRMNG_DWC_HOMONYMS.zip || curl -o nameindex/sources/IRMNG_DWC_HOMONYMS.zip $(name_indexes_repo)/IRMNG_DWC_HOMONYMS.zip
-	test -f nameindex/sources/col_vernacular.txt.zip || curl -o nameindex/sources/col_vernacular.txt.zip $(name_indexes_repo)/col_vernacular.txt.zip
+	test -f nameindex/dwca-col.zip || curl -o nameindex/dwca-col.zip $(name_indexes_repo)/dwca-col.zip		
+	test -f nameindex/dwca-col-mammals.zip || curl -o nameindex/dwca-col-mammals.zip $(name_indexes_repo)/dwca-col-mammals.zip
+	test -f nameindex/IRMNG_DWC_HOMONYMS.zip || curl -o nameindex/IRMNG_DWC_HOMONYMS.zip $(name_indexes_repo)/IRMNG_DWC_HOMONYMS.zip
+	test -f nameindex/col_vernacular.txt.zip || curl -o nameindex/col_vernacular.txt.zip $(name_indexes_repo)/col_vernacular.txt.zip
 
 build:
 	@echo "Building Docker image..."
