@@ -4,13 +4,15 @@ ME = $(USER)
 HOST = ala.dina-web.net
 TS := $(shell date '+%Y_%m_%d_%H_%M')
 
-name_indexes_repo:= https://s3.amazonaws.com/ala-nameindexes/20140610
-col_namematching_url:= $(name_indexes_repo)/col_namematching.tgz
-merged_namematching_url:= $(name_indexes_repo)/merge_namematching.tgz
-ala_namematching_url:= $(name_indexes_repo)/namematching.tgz
-ala_names_distribution_url:= 
+name_indexes_repo= https://s3.amazonaws.com/ala-nameindexes/20140610
 
-collectory_war_url:= http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
+col_namematching_url= $(name_indexes_repo)/col_namematching.tgz
+merged_namematching_url= $(name_indexes_repo)/merge_namematching.tgz
+ala_namematching_url= $(name_indexes_repo)/namematching.tgz
+
+collectory_war_url= http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
+
+ala_names_distribution_url= http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/2.3.1/ala-name-matching-2.3.1-distribution.zip 
 
 all: init build up
 
@@ -22,6 +24,12 @@ init:
 		chmod +x wait-for-it.sh
 	test -f tomcat/collectory.war || curl -o tomcat/collectory.war $(collectory_war_url)		
 	test -f nameindex/namematching.tgz || curl -o nameindex/namematching.tgz $(col_namematching_url)
+	test -f nameindex/nameindexer.zip || curl -o nameindex/nameindexer.zip $(ala_names_distribution_url)
+
+	test -f nameindex/sources/dwca-col.zip || curl -o nameindex/sources/dwca-col.zip $(name_indexes_repo)/dwca-col.zip		
+	test -f nameindex/sources/dwca-col-mammals.zip || curl -o nameindex/sources/dwca-col-mammals.zip $(name_indexes_repo)/dwca-col-mammals.zip
+	test -f nameindex/sources/IRMNG_DWC_HOMONYMS.zip || curl -o nameindex/sources/IRMNG_DWC_HOMONYMS.zip $(name_indexes_repo)/IRMNG_DWC_HOMONYMS.zip
+	test -f nameindex/sources/col_vernacular.txt.zip || curl -o nameindex/sources/col_vernacular.txt.zip $(name_indexes_repo)/col_vernacular.txt.zip
 
 build:
 	@echo "Building Docker image..."
