@@ -22,6 +22,7 @@ init:
 	curl -L -s -o wait-for-it.sh \
 		https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
 		chmod +x wait-for-it.sh
+	test -f cassandra/wait-for-it.sh || cp wait-for-it.sh cassandra/
 	test -f tomcat/collectory.war || curl -o tomcat/collectory.war $(collectory_war_url)		
 	test -f nameindex/namematching.tgz || curl -o nameindex/namematching.tgz $(col_namematching_url)
 	test -f nameindex/nameindexer.zip || curl -o nameindex/nameindexer.zip $(ala_names_distribution_url)
@@ -31,7 +32,7 @@ init:
 	test -f nameindex/IRMNG_DWC_HOMONYMS.zip || curl -o nameindex/IRMNG_DWC_HOMONYMS.zip $(name_indexes_repo)/IRMNG_DWC_HOMONYMS.zip
 	test -f nameindex/col_vernacular.txt.zip || curl -o nameindex/col_vernacular.txt.zip $(name_indexes_repo)/col_vernacular.txt.zip
 
-build:
+build:	
 	@echo "Building Docker image..."
 	docker-compose build --no-cache
 
@@ -61,3 +62,7 @@ push:
 	docker push $(NAME)
 
 release: build push
+
+
+#docker build -t solr:4.10 --no-cache .
+#docker build -t cassandra:1.2 --no-cache .

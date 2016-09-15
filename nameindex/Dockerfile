@@ -28,4 +28,4 @@ RUN mv /usr/lib/nameindexer/ala-name-matching-2.3.1.jar /usr/lib/nameindexer/nam
 RUN cat /usr/lib/nameindexer/nameindexer.jar >> /usr/lib/nameindexer/nameindexer
 RUN ln -s /usr/lib/nameindexer/nameindexer /usr/bin/nameindexer
 
-CMD ["/usr/bin/nameindexer"]
+CMD ["which", "/usr/bin/nameindexer"]
