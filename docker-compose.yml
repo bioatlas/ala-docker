@@ -23,8 +23,8 @@ services:
 
   ddb:
     build: cassandra/.    
-    volumes_from:
-      - fs_ddb
+#    volumes_from:
+#      - fs_ddb
     ports:
       - 7000:7000
       - 7001:7001

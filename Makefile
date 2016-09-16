@@ -16,6 +16,11 @@ init:
 	test -f tomcat/collectory.war || curl -o tomcat/collectory.war \
 		http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
 
+	test -f cassandra/templates/cassandra.yaml.new || \
+		grep -v "#" cassandra/templates/cassandra.yaml | \
+		sed -e "s/data\/cassandra/var\/lib\/cassandra/g" > \
+		cassandra/templates/cassandra.yaml.new
+
 build:
 	@echo "Building Docker image..."
 	docker-compose build
