@@ -33,7 +33,9 @@ init:
 
 build:	
 	@echo "Building Docker image..."
-	docker-compose build --no-cache
+	docker build -t solr:4.10 solr4
+	docker build -t cassandra:1.2 cassandra12x
+	docker-compose build
 
 up:
 	@echo "Starting services..."
@@ -63,5 +65,4 @@ push:
 release: build push
 
 
-#docker build -t solr:4.10 --no-cache .
-#docker build -t cassandra:1.2 --no-cache .
+
