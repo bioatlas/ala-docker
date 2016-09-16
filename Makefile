@@ -28,7 +28,6 @@ init:
 	test -f tomcat/collectory.war || curl -o tomcat/collectory.war $(collectory_war_url)		
 	test -f nameindex/namematching.tgz || curl -o nameindex/namematching.tgz $(col_namematching_url)
 	test -f nameindex/nameindexer.zip || curl -o nameindex/nameindexer.zip $(ala_names_distribution_url)
-
 	test -f nameindex/dwca-col.zip || curl -o nameindex/dwca-col.zip $(name_indexes_repo)/dwca-col.zip		
 	test -f nameindex/dwca-col-mammals.zip || curl -o nameindex/dwca-col-mammals.zip $(name_indexes_repo)/dwca-col-mammals.zip
 	test -f nameindex/IRMNG_DWC_HOMONYMS.zip || curl -o nameindex/IRMNG_DWC_HOMONYMS.zip $(name_indexes_repo)/IRMNG_DWC_HOMONYMS.zip
@@ -38,7 +37,9 @@ init:
 
 build:	
 	@echo "Building Docker image..."
-	docker-compose build --no-cache
+	docker build -t solr:4.10 solr4
+	docker build -t cassandra:1.2 cassandra12x
+	docker-compose build
 
 up:
 	@echo "Starting services..."
@@ -60,7 +61,7 @@ clean:
 rm: stop
 	@echo "Removing containers and persisted data"
 	docker-compose rm -vf
-	sudo rm -rf mysql-datadir cassandra-datadir initdb lucene-datadir
+	#sudo rm -rf mysql-datadir cassandra-datadir initdb lucene-datadir
 
 push:
 	docker push $(NAME)
@@ -68,5 +69,4 @@ push:
 release: build push
 
 
-#docker build -t solr:4.10 --no-cache .
-#docker build -t cassandra:1.2 --no-cache .
+

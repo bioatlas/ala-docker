@@ -11,20 +11,20 @@ services:
   fs_ddb:
     image: tianon/true
     volumes:      
-      - ./cassandra-datadir:/data       
+      - ./cassandra-datadir:/var/lib/cassandra
       
   db:
     image: mysql:5.7
     env_file: .env
-    volumes_from:
-      - fs_db
+#    volumes_from:
+#      - fs_db
     ports:
       - 3306:3306 
 
   ddb:
     build: cassandra/.    
-    volumes_from:
-      - fs_ddb
+#    volumes_from:
+#      - fs_ddb
     ports:
       - 7000:7000
       - 7001:7001
