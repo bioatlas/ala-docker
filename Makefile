@@ -57,7 +57,7 @@ clean:
 rm: stop
 	@echo "Removing containers and persisted data"
 	docker-compose rm -vf
-	sudo rm -rf mysql-datadir cassandra-datadir initdb lucene-datadir
+	#sudo rm -rf mysql-datadir cassandra-datadir initdb lucene-datadir
 
 push:
 	docker push $(NAME)
