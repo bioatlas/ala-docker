@@ -14,6 +14,8 @@ collectory_war_url= http://nexus.ala.org.au/service/local/repositories/releases/
 
 ala_names_distribution_url= http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/2.3.1/ala-name-matching-2.3.1-distribution.zip 
 
+sds_layers_url= http://biocache.ala.org.au/archives/layers/sds-layers.tgz
+
 all: init build up
 
 init:
@@ -31,6 +33,8 @@ init:
 	test -f nameindex/dwca-col-mammals.zip || curl -o nameindex/dwca-col-mammals.zip $(name_indexes_repo)/dwca-col-mammals.zip
 	test -f nameindex/IRMNG_DWC_HOMONYMS.zip || curl -o nameindex/IRMNG_DWC_HOMONYMS.zip $(name_indexes_repo)/IRMNG_DWC_HOMONYMS.zip
 	test -f nameindex/col_vernacular.txt.zip || curl -o nameindex/col_vernacular.txt.zip $(name_indexes_repo)/col_vernacular.txt.zip
+
+	test -f tomcat/biocache-properties-files/sds-layers.tgz || curl -o tomcat/biocache-properties-files/sds-layers.tgz $(sds_layers_url)
 
 build:	
 	@echo "Building Docker image..."

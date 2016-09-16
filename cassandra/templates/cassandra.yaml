@@ -110,7 +110,7 @@ partitioner: org.apache.cassandra.dht.ByteOrderedPartitioner
 # will spread data evenly across them, subject to the granularity of
 # the configured compaction strategy.
 data_file_directories:
-    - /data/cassandra/data
+    #- /data/cassandra/data
 
 # commit log
 commitlog_directory: /data/cassandra/commitlog
