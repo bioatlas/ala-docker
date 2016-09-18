@@ -67,10 +67,20 @@ up:
 	@echo "Starting services..."
 	@docker-compose up -d
 
+test-solr:
+	@docker exec -it aladocker_solr_1 sh -c \
+		"curl http://localhost:8983/solr/admin/cores?status" > solr.xml && \
+		firefox solr.xml
+
+test-cas:
+	@echo "Listing keyspaces in cassandra:"
+	@docker exec -it aladocker_cas_1 sh -c \
+		'echo "DESC KEYSPACES;" | cqlsh'
+
 test:
 	@echo "Opening up collectory... did you add ala.local in /etc/hosts?"
-	@curl -H "Host: ala.local" localhost/collectory/
-	@xdg-open http://ala.local/collectory/ &
+	#@curl -H "Host: ala.local" localhost/collectory/
+	./wait-for-it.sh ala.local:80 -q -- xdg-open http://ala.local/collectory/ &
 
 stop:
 	@echo "Stopping services..."

@@ -5,6 +5,7 @@ RUN groupadd -r cassandra --gid=999 && useradd -r -g cassandra --uid=999 cassand
 
 # grab gosu for easy step-down from root
 ENV GOSU_VERSION 1.7
+RUN apt-get update
 RUN set -x \
 	&& apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
 	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
@@ -35,7 +36,6 @@ ENV CASSANDRA_CONFIG /etc/cassandra
 RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chown -R cassandra:cassandra /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chmod 777 /var/lib/cassandra "$CASSANDRA_CONFIG"
-VOLUME /var/lib/cassandra
 
 # ALA configs
 
@@ -55,6 +55,11 @@ RUN cassandra && \
 	./opt/wait-for-it.sh --timeout=30 localhost:9042 --strict -- \ 
 	cassandra-cli -f /opt/cassandra-schema.txt && \
 	cassandra stop
+
+# if any build steps change the data within the volume 
+# after it has been declared, those changes will be discarded.
+# therefore the VOLUME below comes after the command above
+VOLUME /var/lib/cassandra
 
 EXPOSE 7000 7001 7199 9042 9160
 
