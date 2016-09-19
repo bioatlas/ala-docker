@@ -6,18 +6,13 @@ This is currently Work In Progress! Beware!
 
 You need `git`, `make`, `docker` and `docker-compose` (v 1.8 was used). 
 
-Then:
+Clone the repo with
 
-- Clone this repo
-- Issue "make"
-- Issue "make test"
+	git clone --depth=1 $REPO_SLUG
 
-# Current issues:
-
-collectory.war file needs to be built from scratch rather than pulling it from repo
-
-travis build, maybe
-
-
-
+Manage services with
+	
+	make  # build images and start containers
+	make test  # verify that services run
+	make release  # push a tagged images to Docker Hub
 
