@@ -56,8 +56,8 @@ init:
 
 build:
 	@echo "Building images..."
-	touch tomcat/biocache-properties-files/subgroups.json
-	touch tomcat/biocache-properties-files/biocache-config.properties
+	#touch tomcat/biocache-properties-files/subgroups.json
+	#touch tomcat/biocache-properties-files/biocache-config.properties
 	@docker build -t dina/ala-solrindex:v0.1 solr4
 	@docker build -t dina/ala-cassandra:v0.1 cassandra
 	@docker build -t dina/ala-tomcat:v0.1 tomcat
