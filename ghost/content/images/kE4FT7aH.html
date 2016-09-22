@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="sv" id="ng-app" ng-app="myApp">
+    <head>
+        <!--[if lte IE 7]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.1/json3.min.js"></script>
+        <![endif]-->
+        <!--[if lte IE 8]>
+        <script>
+            document.createElement('alert');
+            document.createElement('pagination');
+        </script>
+        <![endif]-->
+        <meta charset="utf-8">
+        <title>GBIF Sweden</title>
+        <link rel="icon" type="image/png" href="img/gbif16x16.png">
+        <link rel="stylesheet" href="css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="css/app.css"/>
+        <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7.3/leaflet.css">
+        <link rel="stylesheet" href="lib/leaflet.draw/leaflet.draw.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <ONLY-IN-DEPLOYMENT-ENVIRONMENT>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-51348348-1', 'naturfynd.se');
+        </script>
+        </ONLY-IN-DEPLOYMENT-ENVIRONMENT> -->
+    </head>
+    <body ng-controller="GeneralCtrl" analytics>
+        
+            <div id="navigation" class="nav navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">-->
+                        <button type="button" class="navbar-toggle btn btn-navbar" data-ng-init="isCollapsed = true" data-ng-click="isCollapsed = !isCollapsed">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand logo-nav" href="#/index"><img src="img/gbif_logo.png"></a>
+                        <!--<a class="navbar-brand" href="#/index">GBIF-Sweden</a>-->
+                    </div><!-- navbar-header -->
+                    <div class="navbar-collapse collapse" collapse="isCollapsed">
+                        <!--<div class="navbar-collapse collapse">-->
+                        <ul class="nav navbar-nav navbar-left">
+                            <li ng-class="navClass('index')"><a href="#/index">{{translation.GBIF_SE}}</a></li>
+                            <!--<li ng-class="navClass('index')"><a href="#/index">{{translation.HOME}}</a></li>-->
+                            <!--<li ng-class="navClass('form')"><a href="#/form">{{translation.MENUSEARCH}}</a></li>-->
+                            <li ng-class="navClass('seach_help')"><a href="#/help">{{translation.SEARCH_HELP}}</a></li>
+                            <!-- <li ng-class="navClass('project')"><a href="#/project">{{translation.PROJECTINFORMATION}}</a></li>-->
+                            <li ng-class="navClass('project')"><a href="/neversblog/omGBIF">{{translation.PROJECTINFORMATION}}</a></li>
+                            <!-- <li ng-class="navClass('activities')"><a href="#/activities">{{translation.ACTIVITIES}}</a></li>-->
+                            <li ng-class="navClass('activities')"><a href="/neversblog/nyheter">{{translation.ACTIVITIES}}</a></li>
+                            <!-- <li ng-class="navClass('metadata')"><a href="#/metadata">{{translation.METADATA}}</a></li> -->
+                            <li ng-class="navClass('old_gbif_se')"><a href="http://old.gbif.se">{{translation.TO_OLD_GBIF_SE}}</a></li>
+                            <li ng-class="navClass('gbif_org')"><a href="http://www.gbif.org" target="_blank">{{translation.TO_GBIF_ORG}}</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <img id="flagmenu" /> <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a ng-click="changeLanguage('sv')" class="fakeLink"><img src="img/famfamfam-flags/se.png"/> Svenska</a></li>
+                                    <li><a ng-click="changeLanguage('en')" class="fakeLink"><img src="img/famfamfam-flags/gb.png"/> English</a></li>
+                                    <!--<li><a ng-click="changeLanguage('fr')" class="fakeLink"><img src="img/famfamfam-flags/fr.png"/> Français</a></li>-->
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-view id="main"></div>
+
+            <footer class = "footer">
+                <div class="container">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <ul class="list-unstyled">
+                            <li><strong>{{translation.GBIF_SE}}</strong></li>
+                            <li>{{translation.MUSEUM}}</li>
+                            <li>Box 50007</li>
+                            <li>104 05 Stockholm</li>
+                            <li>{{translation.COUNTRY}}</li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <ul class="list-unstyled">
+                            <li><strong>{{translation.CONTACT}}</strong></li>
+                            <li>{{translation.EMAIL}}: <a href="mailto:gbif@nrm.se">gbif@nrm.se</a></li>
+                            <li>{{translation.TELEPHONE_EXCHANGE}}: +46 (0) 8-519 540 00</li>
+                            <li>Fax: +46 (0) 8-519 540 85</li>
+                            <a href="//www.google.com/maps/place/Naturhistoriska+riksmuseet/@59.368803,18.0534,17z/">59°22'07"N, 18°03'09"E</a>
+                        </ul>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <ul class="list-unstyled">
+                            <li><strong>{{translation.FOLLOW_US}}</strong></li>
+                            <li>Twitter: <a href="//www.twitter.com/gbifsweden">@gbifsweden</a></li>
+                            <li>Facebook: <a href="//www.facebook.com/pages/GBIF-Sweden/374750022480">GBIF-Sweden</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="container" align="center">Copyright (c) 2014 by Swedish Museum of Natural History. All rights reserved. Icons by <a href="//glyphicons.com/" target="_blank">Glyphicons.com</a> and <a href="//www.famfamfam.com/" target="_blank">FamFamFam</a>.</div>
+            </footer>
+            <!-- In production use:
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+            -->
+            <!--
+            <script src="lib/angular/angular.js"></script>
+            <script src="lib/angular/angular-route.js"></script>
+            <script src="lib/angular/angular-resource.js"></script>
+            <script src="lib/angular/angular-cookies.js"></script>
+            <script src="lib/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+            -->
+            <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.12/angular.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.12/angular-route.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.12/angular-resource.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.12/angular-cookies.min.js"></script>
+            <script src="lib/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+            <script src="lib/leaflet.js"></script>
+            <script src="config.js"></script>
+            <script src="lib/leaflet.draw/leaflet.draw.js"></script>
+            <!-- <ONLY-IN-DEVELOPMENT-ENVIRONMENT>
+            <script src="js/maps.js"></script>
+            <script src="js/app.js"></script>
+            <script src="js/services.js"></script>
+            <script src="js/controllers.js"></script>
+            <script src="js/filters.js"></script>
+            <script src="js/directives.js"></script>
+            </ONLY-IN-DEVELOPMENT-ENVIRONMENT> -->
+            <!-- <ONLY-IN-DEPLOYMENT-ENVIRONMENT>-->
+            <script src="js/corsaint.min.js"></script>
+            <!--</ONLY-IN-DEPLOYMENT-ENVIRONMENT> -->
+        
+    </body>
+</html>

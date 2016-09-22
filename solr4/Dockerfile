@@ -38,6 +38,7 @@ RUN chmod +x /tini
 COPY scripts /opt/docker-solr/scripts
 RUN rm -rf /opt/solr/example/solr
 COPY solr /opt/solr/example/solr
+#COPY $JTS_JAR /opt/solr/server/solr/lib/
 
 RUN chown -R $SOLR_USER:$SOLR_USER /opt/docker-solr
 RUN chown -R $SOLR_USER:$SOLR_USER /opt/solr
