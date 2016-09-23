@@ -35,9 +35,29 @@ services:
       - db
       - cas
 
+  ws:
+    image: nginx
+
   ndex:
     image: dina/ala-nameindex:v0.1   
 
   solr:
     image: dina/ala-solrindex:v0.1
 
+  mongo:
+    image: mongo
+
+  uptime:
+    image: usman/docker-uptime
+    ports:
+      - 8082:8082
+    links:
+      - mongo:mongodb
+      - ghost
+
+  ghost: 
+    image: ghost
+    volumes:
+      - ./ghost:/tmp
+    ports:
+      - 2368:2368

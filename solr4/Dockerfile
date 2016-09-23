@@ -40,7 +40,11 @@ RUN chmod +x /tini
 COPY scripts /opt/docker-solr/scripts
 RUN rm -rf /opt/solr/example/solr
 COPY solr /opt/solr/example/solr
+<<<<<<< HEAD
 RUN curl --progress -o /opt/solr/example/lib/ext/jts-1.12.jar ${JTS_URL}
+=======
+#COPY $JTS_JAR /opt/solr/server/solr/lib/
+>>>>>>> a78e0a24c621be088647358e0c3bca943aeb7ff9
 
 RUN chown -R $SOLR_USER:$SOLR_USER /opt/docker-solr
 RUN chown -R $SOLR_USER:$SOLR_USER /opt/solr
