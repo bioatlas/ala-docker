@@ -16,6 +16,8 @@ RUN groupadd -r -g $SOLR_UID $SOLR_USER && \
 
 ENV SOLR_VERSION 4.10.4
 ENV SOLR_URL ${SOLR_DOWNLOAD_SERVER:-https://archive.apache.org/dist/lucene/solr}/$SOLR_VERSION/solr-$SOLR_VERSION.tgz
+ENV JTS_URL http://central.maven.org/maven2/com/vividsolutions/jts/1.12/jts-1.12.jar 
+
 
 RUN mkdir -p /opt/solr && \
   wget -nv $SOLR_URL -O /opt/solr.tgz && \
@@ -38,6 +40,7 @@ RUN chmod +x /tini
 COPY scripts /opt/docker-solr/scripts
 RUN rm -rf /opt/solr/example/solr
 COPY solr /opt/solr/example/solr
+RUN curl --progress -o /opt/solr/example/lib/ext/jts-1.12.jar ${JTS_URL}
 
 RUN chown -R $SOLR_USER:$SOLR_USER /opt/docker-solr
 RUN chown -R $SOLR_USER:$SOLR_USER /opt/solr
