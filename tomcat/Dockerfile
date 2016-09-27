@@ -78,6 +78,26 @@ COPY biocache-hub-files/config/generic-hub-config.properties /data/generic-hub/c
 COPY biocache-hub-files/config/*.json /data/generic-hub/config/
 COPY generic-hub.war $CATALINA_HOME/webapps/
 
+#biocache-cli deployment
+
+RUN mkdir -p /usr/lib/biocache
+RUN rm -Rf /usr/lib/biocache/lib /usr/lib/biocache/*.jar
+COPY biocache-cli-files/log4j.xml /usr/lib/biocache/log4j.xml
+COPY biocache-cli-files/subgroups.json /data/biocache/config/subgroups.json
+COPY biocache.zip /usr/lib/biocache/biocache.zip
+RUN unzip /usr/lib/biocache/biocache.zip -d /usr/lib/biocache/
+COPY biocache-cli-files/biocache.sh /usr/lib/biocache/biocache 
+RUN chmod 777 /usr/lib/biocache/biocache
+RUN mv /usr/lib/biocache/biocache-store-*.jar /usr/lib/biocache/biocache.jar
+RUN cat /usr/lib/biocache/biocache.jar >> /usr/lib/biocache/biocache
+RUN ln -s /usr/lib/biocache/biocache /usr/bin/biocache
+
+RUN mkdir -m 777 -p \
+    /data/biocache-reindex/solr-template \
+    /data/biocache-reindex/solr-create \
+    /data/biocache-reindex/solr
+COPY biocache-cli-files/solr-template /data/biocache-reindex/solr-template
+
 # tini
 
 ENV TINI_VERSION v0.10.0
@@ -90,4 +110,3 @@ RUN chmod +x /tini
 
 ENTRYPOINT ["/tini", "--"]
 CMD ["catalina.sh", "run"]
-

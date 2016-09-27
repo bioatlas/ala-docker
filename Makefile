@@ -7,14 +7,15 @@ HOST = ala.dina-web.net
 TS := $(shell date '+%Y_%m_%d_%H_%M')
 
 URL_NAMEIDX = https://s3.amazonaws.com/ala-nameindexes/20140610
-URL_COL= $(URL_NAMEIDX)/col_namematching.tgz
-URL_ALA= $(URL_NAMEIDX)/namematching.tgz
-URL_MRG= $(URL_NAMEIDX)/merge_namematching.tgz
+URL_COL = $(URL_NAMEIDX)/col_namematching.tgz
+URL_ALA = $(URL_NAMEIDX)/namematching.tgz
+URL_MRG = $(URL_NAMEIDX)/merge_namematching.tgz
 URL_SDS = http://biocache.ala.org.au/archives/layers/sds-layers.tgz
 URL_COLLECTORY = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
 URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/2.3.1/ala-name-matching-2.3.1-distribution.zip 
 URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.0/biocache-service-1.8.0.war
 URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
+URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip 
 
 all: init build up
 .PHONY: all
@@ -61,6 +62,9 @@ init:
 
 	@test -f tomcat/generic-hub.war || \
 		curl --progress -o tomcat/generic-hub.war $(URL_BIOCACHE_HUB)
+
+	@test -f tomcat/biocache.zip || \
+		curl --progress -o tomcat/biocache.zip $(URL_BIOCACHE_CLI)	
 		
 build:
 	@echo "Building images..."
@@ -109,6 +113,7 @@ push:
 	@docker push dina/ala-tomcat:v0.1
 	@docker push dina/ala-nameindex:v0.1
 	@docker push dina/ala-solrindex:v0.1
+	
 
 release: build push
 
