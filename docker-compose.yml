@@ -27,14 +27,16 @@ services:
   as:
     image: dina/ala-tomcat:v0.1
     environment:
-      - VIRTUAL_HOST=ala.local
+      - VIRTUAL_HOST=gbifsweden.se
     depends_on:
       - db
       - cas
+      - solr
     links:
       - db
       - cas
-
+      - solr
+      
   ws:
     image: nginx
 

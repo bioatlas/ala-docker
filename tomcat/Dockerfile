@@ -32,7 +32,8 @@ RUN tar zxvf /data/biocache/layers/sds-layers.tgz -C /data/biocache/layers/
 COPY biocache-properties-files/subgroups.json \
 	/data/biocache/config/subgroups.json
 
-RUN mkdir -m 0774 -p /data/ala/layers/ready/shape \
+RUN mkdir -m 0774 -p \
+	/data/ala/layers/ready/shape \
 	/data/biocache-load \
 	/data/biocache-media \
 	/data/biocache-upload \
@@ -43,6 +44,39 @@ RUN mkdir -m 0774 -p /data/ala/layers/ready/shape \
 	/data/tool
 
 # biocache-service deployment section
+
+COPY biocache-service-files/applicationContext.xml \
+	/data/biocache/config/applicationContext.xml
+COPY biocache-service-files/facets.json\
+	/data/biocache/config/facets.json
+COPY biocache-service-files/log4j.xml \
+	/data/biocache/config/log4j.xml
+
+COPY biocache-service.war $CATALINA_HOME/webapps/
+
+RUN mkdir -m 0774 -p \
+	/data/ala/layers/ready/shape/data \
+    /data/biocache-load/data \
+    /data/biocache-upload/data \
+    /data/biocache-delete/data \
+    /data/cache/data \
+    /data/tmp/data \
+    /data/offline/exports/data \
+    /data/tool/data \
+    /data/biocache-download/tmp/data
+
+RUN chmod 777 /data/biocache-media
+RUN chmod 777 /data/biocache-load
+
+#biocache-hub role or the generic-hub app deployment section
+
+RUN mkdir -m 0774 -p \
+	/data/generic-hub/config \
+    /data/generic-hub/cache
+
+COPY biocache-hub-files/config/generic-hub-config.properties /data/generic-hub/config/generic-hub-config.properties
+COPY biocache-hub-files/config/*.json /data/generic-hub/config/
+COPY generic-hub.war $CATALINA_HOME/webapps/
 
 # tini
 

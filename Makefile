@@ -13,6 +13,8 @@ URL_MRG= $(URL_NAMEIDX)/merge_namematching.tgz
 URL_SDS = http://biocache.ala.org.au/archives/layers/sds-layers.tgz
 URL_COLLECTORY = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
 URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/2.3.1/ala-name-matching-2.3.1-distribution.zip 
+URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.0/biocache-service-1.8.0.war
+URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
 
 all: init build up
 .PHONY: all
@@ -21,7 +23,7 @@ init:
 	@echo "Caching files required for the build..."
 
 	@mkdir -p mysql-datadir cassandra-datadir initdb \
-		lucene-datadir tomcat/biocache-properties-files
+		lucene-datadir
 
 	@curl --progress -L -s -o wait-for-it.sh \
 		https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
@@ -52,8 +54,14 @@ init:
 		curl --progress -o nameindex/col_vernacular.txt.zip $(URL_NAMEIDX)/col_vernacular.txt.zip
 
 	@test -f tomcat/biocache-properties-files/sds-layers.tgz || \
-		curl --progress -o tomcat/biocache-properties-files/sds-layers.tgz $(URL_SDS)
+		curl --progress --create-dirs -o tomcat/biocache-properties-files/sds-layers.tgz $(URL_SDS)
 
+	@test -f tomcat/biocache-service.war || \
+		curl --progress -o tomcat/biocache-service.war $(URL_BIOCACHE_SERVICE)
+
+	@test -f tomcat/generic-hub.war || \
+		curl --progress -o tomcat/generic-hub.war $(URL_BIOCACHE_HUB)
+		
 build:
 	@echo "Building images..."
 	#touch tomcat/biocache-properties-files/subgroups.json
@@ -80,7 +88,7 @@ test-cas:
 test:
 	@echo "Opening up collectory... did you add ala.local in /etc/hosts?"
 	#@curl -H "Host: ala.local" localhost/collectory/
-	./wait-for-it.sh ala.local:80 -q -- xdg-open http://ala.local/collectory/ &
+	./wait-for-it.sh gbifsweden.se:80 -q -- xdg-open http://gbifsweden.se/collectory/ &
 
 stop:
 	@echo "Stopping services..."
