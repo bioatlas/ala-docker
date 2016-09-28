@@ -98,6 +98,13 @@ RUN mkdir -m 777 -p \
     /data/biocache-reindex/solr
 COPY biocache-cli-files/solr-template /data/biocache-reindex/solr-template
 
+#sandbox deployment
+
+RUN mkdir -p /data/sandbox/config
+RUN mkdir -p /data/sandbox/uploads
+COPY sandbox-files/sandbox-config.properties /data/sandbox/config/sandbox-config.properties
+COPY sandbox.war $CATALINA_HOME/webapps/
+
 # tini
 
 ENV TINI_VERSION v0.10.0

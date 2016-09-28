@@ -16,6 +16,7 @@ URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/cont
 URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.0/biocache-service-1.8.0.war
 URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
 URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip 
+URL_SANDBOX = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/sandbox/1.2/sandbox-1.2.war
 
 all: init build up
 .PHONY: all
@@ -65,11 +66,12 @@ init:
 
 	@test -f tomcat/biocache.zip || \
 		curl --progress -o tomcat/biocache.zip $(URL_BIOCACHE_CLI)	
-		
+	
+	@test -f tomcat/sandbox.war || \
+		curl --progress -o tomcat/sandbox.war $(URL_SANDBOX)
+
 build:
 	@echo "Building images..."
-	#touch tomcat/biocache-properties-files/subgroups.json
-	#touch tomcat/biocache-properties-files/biocache-config.properties
 	@docker build -t dina/ala-solrindex:v0.1 solr4
 	@docker build -t dina/ala-cassandra:v0.1 cassandra
 	@docker build -t dina/ala-tomcat:v0.1 tomcat
