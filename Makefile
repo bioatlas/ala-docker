@@ -76,7 +76,7 @@ build:
 	@docker build -t dina/ala-cassandra:v0.1 cassandra
 	@docker build -t dina/ala-tomcat:v0.1 tomcat
 	@docker build -t dina/ala-nameindex:v0.1 nameindex
-
+	@docker build -t dina/ala-nginx:v0.1 nginx
 up:
 	@echo "Starting services..."
 	@docker-compose up -d
@@ -115,7 +115,6 @@ push:
 	@docker push dina/ala-tomcat:v0.1
 	@docker push dina/ala-nameindex:v0.1
 	@docker push dina/ala-solrindex:v0.1
-	
+	@docker push dina/ala-nginx:v0.1
 
 release: build push
-

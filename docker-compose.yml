@@ -21,24 +21,27 @@ services:
     image: mysql:5.7
     env_file: .env
 
-  cas:
+  cass:
     image: dina/ala-cassandra:v0.1
 
   as:
     image: dina/ala-tomcat:v0.1
-    environment:
-      - VIRTUAL_HOST=gbifsweden.se
     depends_on:
       - db
-      - cas
+      - cass
       - solr
     links:
       - db
-      - cas
+      - cass
       - solr
-      
+
   ws:
-    image: nginx
+    image: dina/ala-nginx:v0.1
+    environment:
+      - VIRTUAL_HOST=gbifsweden.se
+    links:
+      - as
+    hostname: gbifsweden.se
 
   ndex:
     image: dina/ala-nameindex:v0.1   
