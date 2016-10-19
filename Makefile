@@ -16,7 +16,6 @@ URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/cont
 URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.0/biocache-service-1.8.0.war
 URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
 URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip 
-URL_SANDBOX = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/sandbox/1.2/sandbox-1.2.war
 
 all: init build up
 .PHONY: all
@@ -34,8 +33,8 @@ init:
 	@test -f cassandra/wait-for-it.sh || \
 		cp wait-for-it.sh cassandra/
 
-	@test -f tomcat/collectory.war || \
-		curl --progress -o tomcat/collectory.war $(URL_COLLECTORY)
+	@test -f collectory/collectory.war || \
+		curl --progress -o collectory/collectory.war $(URL_COLLECTORY)
 
 	@test -f nameindex/namematching.tgz || \
 		curl --progress -o nameindex/namematching.tgz $(URL_COL)
@@ -55,28 +54,29 @@ init:
 	@test -f nameindex/col_vernacular.txt.zip || \
 		curl --progress -o nameindex/col_vernacular.txt.zip $(URL_NAMEIDX)/col_vernacular.txt.zip
 
-	@test -f tomcat/biocache-properties-files/sds-layers.tgz || \
-		curl --progress --create-dirs -o tomcat/biocache-properties-files/sds-layers.tgz $(URL_SDS)
+	@test -f biocachebackend/biocache-properties-files/sds-layers.tgz || \
+		curl --progress --create-dirs -o biocachebackend/biocache-properties-files/sds-layers.tgz $(URL_SDS)
 
-	@test -f tomcat/biocache-service.war || \
-		curl --progress -o tomcat/biocache-service.war $(URL_BIOCACHE_SERVICE)
+	@test -f biocacheservice/biocache-service.war || \
+		curl --progress -o biocacheservice/biocache-service.war $(URL_BIOCACHE_SERVICE)
 
-	@test -f tomcat/generic-hub.war || \
-		curl --progress -o tomcat/generic-hub.war $(URL_BIOCACHE_HUB)
+	@test -f biocachehub/generic-hub.war || \
+		curl --progress -o biocachehub/generic-hub.war $(URL_BIOCACHE_HUB)
 
-	@test -f tomcat/biocache.zip || \
-		curl --progress -o tomcat/biocache.zip $(URL_BIOCACHE_CLI)	
-	
-	@test -f tomcat/sandbox.war || \
-		curl --progress -o tomcat/sandbox.war $(URL_SANDBOX)
+	@test -f biocachebackend/biocache.zip || \
+		curl --progress -o biocachebackend/biocache.zip $(URL_BIOCACHE_CLI)	
 
 build:
 	@echo "Building images..."
 	@docker build -t dina/ala-solrindex:v0.1 solr4
-	@docker build -t dina/ala-cassandra:v0.1 cassandra
-	@docker build -t dina/ala-tomcat:v0.1 tomcat
+	@docker build -t dina/ala-biocachebackend:v0.1 biocachebackend
 	@docker build -t dina/ala-nameindex:v0.1 nameindex
 	@docker build -t dina/ala-nginx:v0.1 nginx
+	@docker build -t dina/ala-biocachehub:v0.1 biocachehub
+	@docker build -t dina/ala-collectory:v0.1 collectory
+	@docker build -t dina/ala-biocacheservice:v0.1 biocacheservice
+	@docker build -t dina/ala-cassandra:v0.1 cassandra
+
 up:
 	@echo "Starting services..."
 	@docker-compose up -d
@@ -112,9 +112,12 @@ rm: stop
 
 push:
 	@docker push dina/ala-cassandra:v0.1
-	@docker push dina/ala-tomcat:v0.1
 	@docker push dina/ala-nameindex:v0.1
 	@docker push dina/ala-solrindex:v0.1
 	@docker push dina/ala-nginx:v0.1
+	@docker push dina/ala-biocachehub:v0.1
+	@docker push dina/ala-collectory:v0.1
+	@docker push dina/ala-biocacheservice:v0.1
+	@docker push dina/ala-biocachebackend:v0.1
 
 release: build push
