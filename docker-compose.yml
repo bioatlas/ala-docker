@@ -17,29 +17,60 @@ services:
       - ./mysql-datadir:/var/lib/mysql
       - ./initdb:/docker-entrypoint-initdb.d
       
-  db:
+  mysqldb:
     image: mysql:5.7
     env_file: .env
 
-  cas:
+  cassandradb:
     image: dina/ala-cassandra:v0.1
 
-  as:
-    image: dina/ala-tomcat:v0.1
-    environment:
-      - VIRTUAL_HOST=ala.local
+  biocacheservice:
+    image: dina/ala-biocacheservice:v0.1
     depends_on:
-      - db
-      - cas
+      - cassandradb
+      - solr
     links:
-      - db
-      - cas
+      - cassandradb
+      - solr
+    environment:
+      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
 
-  ws:
-    image: nginx
+  biocachehub:
+    image: dina/ala-biocachehub:v0.1
+    depends_on:
+      - biocacheservice
+    environment:
+      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+
+  collectory:
+    image: dina/ala-collectory:v0.1
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+    environment:
+      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+
+  webserver:
+    image: dina/ala-nginx:v0.1
+    environment:
+      - VIRTUAL_HOST=gbifsweden.se
+    links:
+      - biocachehub
+      - biocacheservice
+      - collectory
 
   ndex:
-    image: dina/ala-nameindex:v0.1   
+    image: dina/ala-nameindex:v0.1
+
+  biocachebackend:
+    image: dina/ala-biocachebackend:v0.1
+    links:
+      - biocachehub
+      - biocacheservice
+      - collectory
+      - cassandradb
+      - solr
 
   solr:
     image: dina/ala-solrindex:v0.1
@@ -49,15 +80,11 @@ services:
 
   uptime:
     image: usman/docker-uptime
-    ports:
-      - 8082:8082
     links:
       - mongo:mongodb
       - ghost
 
-  ghost: 
+  ghost:
     image: ghost
     volumes:
       - ./ghost:/tmp
-    ports:
-      - 2368:2368

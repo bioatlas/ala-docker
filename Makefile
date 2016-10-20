@@ -7,12 +7,15 @@ HOST = ala.dina-web.net
 TS := $(shell date '+%Y_%m_%d_%H_%M')
 
 URL_NAMEIDX = https://s3.amazonaws.com/ala-nameindexes/20140610
-URL_COL= $(URL_NAMEIDX)/col_namematching.tgz
-URL_ALA= $(URL_NAMEIDX)/namematching.tgz
-URL_MRG= $(URL_NAMEIDX)/merge_namematching.tgz
+URL_COL = $(URL_NAMEIDX)/col_namematching.tgz
+URL_ALA = $(URL_NAMEIDX)/namematching.tgz
+URL_MRG = $(URL_NAMEIDX)/merge_namematching.tgz
 URL_SDS = http://biocache.ala.org.au/archives/layers/sds-layers.tgz
 URL_COLLECTORY = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
 URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/2.3.1/ala-name-matching-2.3.1-distribution.zip 
+URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.0/biocache-service-1.8.0.war
+URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
+URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip 
 
 all: init build up
 .PHONY: all
@@ -21,7 +24,7 @@ init:
 	@echo "Caching files required for the build..."
 
 	@mkdir -p mysql-datadir cassandra-datadir initdb \
-		lucene-datadir tomcat/biocache-properties-files
+		lucene-datadir
 
 	@curl --progress -L -s -o wait-for-it.sh \
 		https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
@@ -30,8 +33,8 @@ init:
 	@test -f cassandra/wait-for-it.sh || \
 		cp wait-for-it.sh cassandra/
 
-	@test -f tomcat/collectory.war || \
-		curl --progress -o tomcat/collectory.war $(URL_COLLECTORY)
+	@test -f collectory/collectory.war || \
+		curl --progress -o collectory/collectory.war $(URL_COLLECTORY)
 
 	@test -f nameindex/namematching.tgz || \
 		curl --progress -o nameindex/namematching.tgz $(URL_COL)
@@ -51,17 +54,28 @@ init:
 	@test -f nameindex/col_vernacular.txt.zip || \
 		curl --progress -o nameindex/col_vernacular.txt.zip $(URL_NAMEIDX)/col_vernacular.txt.zip
 
-	@test -f tomcat/biocache-properties-files/sds-layers.tgz || \
-		curl --progress -o tomcat/biocache-properties-files/sds-layers.tgz $(URL_SDS)
+	@test -f biocachebackend/biocache-properties-files/sds-layers.tgz || \
+		curl --progress --create-dirs -o biocachebackend/biocache-properties-files/sds-layers.tgz $(URL_SDS)
+
+	@test -f biocacheservice/biocache-service.war || \
+		curl --progress -o biocacheservice/biocache-service.war $(URL_BIOCACHE_SERVICE)
+
+	@test -f biocachehub/generic-hub.war || \
+		curl --progress -o biocachehub/generic-hub.war $(URL_BIOCACHE_HUB)
+
+	@test -f biocachebackend/biocache.zip || \
+		curl --progress -o biocachebackend/biocache.zip $(URL_BIOCACHE_CLI)	
 
 build:
 	@echo "Building images..."
-	#touch tomcat/biocache-properties-files/subgroups.json
-	#touch tomcat/biocache-properties-files/biocache-config.properties
 	@docker build -t dina/ala-solrindex:v0.1 solr4
-	@docker build -t dina/ala-cassandra:v0.1 cassandra
-	@docker build -t dina/ala-tomcat:v0.1 tomcat
+	@docker build -t dina/ala-biocachebackend:v0.1 biocachebackend
 	@docker build -t dina/ala-nameindex:v0.1 nameindex
+	@docker build -t dina/ala-nginx:v0.1 nginx
+	@docker build -t dina/ala-biocachehub:v0.1 biocachehub
+	@docker build -t dina/ala-collectory:v0.1 collectory
+	@docker build -t dina/ala-biocacheservice:v0.1 biocacheservice
+	@docker build -t dina/ala-cassandra:v0.1 cassandra
 
 up:
 	@echo "Starting services..."
@@ -80,7 +94,7 @@ test-cas:
 test:
 	@echo "Opening up collectory... did you add ala.local in /etc/hosts?"
 	#@curl -H "Host: ala.local" localhost/collectory/
-	./wait-for-it.sh ala.local:80 -q -- xdg-open http://ala.local/collectory/ &
+	./wait-for-it.sh gbifsweden.se:80 -q -- xdg-open http://gbifsweden.se/collectory/ &
 
 stop:
 	@echo "Stopping services..."
@@ -98,9 +112,12 @@ rm: stop
 
 push:
 	@docker push dina/ala-cassandra:v0.1
-	@docker push dina/ala-tomcat:v0.1
 	@docker push dina/ala-nameindex:v0.1
 	@docker push dina/ala-solrindex:v0.1
+	@docker push dina/ala-nginx:v0.1
+	@docker push dina/ala-biocachehub:v0.1
+	@docker push dina/ala-collectory:v0.1
+	@docker push dina/ala-biocacheservice:v0.1
+	@docker push dina/ala-biocachebackend:v0.1
 
 release: build push
-

@@ -39,9 +39,9 @@ RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
 
 # ALA configs
 
-COPY conf/90-nproc.conf /etc/security/limits.d/
-COPY conf/limits.conf /etc/security/ 
-COPY templates/cassandra.yaml /etc/cassandra/
+COPY cassandra-files/conf/90-nproc.conf /etc/security/limits.d/
+COPY cassandra-files/conf/limits.conf /etc/security/ 
+COPY cassandra-files/templates/cassandra.yaml /etc/cassandra/
 
 COPY biocache-db/cassandra-schema.txt /opt/
 
@@ -59,6 +59,7 @@ RUN cassandra && \
 # if any build steps change the data within the volume 
 # after it has been declared, those changes will be discarded.
 # therefore the VOLUME below comes after the command above
+
 VOLUME /var/lib/cassandra
 
 EXPOSE 7000 7001 7199 9042 9160
