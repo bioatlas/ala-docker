@@ -54,14 +54,17 @@ services:
   webserver:
     image: dina/ala-nginx:v0.1
     environment:
-      - VIRTUAL_HOST=gbifsweden.se
+      - VIRTUAL_HOST=gbifsweden.se,uptime.gbifsweden.se
     links:
       - biocachehub
       - biocacheservice
       - collectory
+      - ghost
+      - uptime
 
   ndex:
     image: dina/ala-nameindex:v0.1
+    command: /bin/ash
 
   biocachebackend:
     image: dina/ala-biocachebackend:v0.1
@@ -71,20 +74,34 @@ services:
       - collectory
       - cassandradb
       - solr
+    command: /bin/ash
 
   solr:
     image: dina/ala-solrindex:v0.1
 
   mongo:
-    image: mongo
+    image: mvertes/alpine-mongo
 
   uptime:
     image: usman/docker-uptime
     links:
       - mongo:mongodb
-      - ghost
+    volumes:
+      - ./uptime/default.yaml:/tmp/uptime/config/default.yaml
 
   ghost:
-    image: ghost
+    image: zzrot/alpine-ghost
+    container_name: ghost    
+    environment:
+      PROD_DOMAIN: http://gbifsweden.se
+      NODE_ENV: production
     volumes:
-      - ./ghost:/tmp
+      - ./ghost/content:/var/lib/ghost
+
+  ghost-backup:
+    image: bennetimo/ghost-backup
+    container_name: ghost-backup
+    volumes_from:
+      - ghost
+    volumes:
+      - ./ghost/backups:/backups

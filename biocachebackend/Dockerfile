@@ -1,4 +1,4 @@
-FROM openjdk:7
+FROM openjdk:7-alpine
 
 # biocache-properties section
 
@@ -12,8 +12,8 @@ RUN chmod 0644 /data/biocache/config/biocache-config.properties
 COPY biocache-properties-files/sds-layers.tgz \
 	/data/biocache/layers/sds-layers.tgz
 
-RUN tar zxvf /data/biocache/layers/sds-layers.tgz -C /data/biocache/layers/
-RUN rm -f /data/biocache/layers/sds-layers.tgz
+RUN tar zxvf /data/biocache/layers/sds-layers.tgz -C /data/biocache/layers/ && \
+	rm -f /data/biocache/layers/sds-layers.tgz
 
 COPY biocache-properties-files/subgroups.json \
 	/data/biocache/config/subgroups.json
@@ -31,20 +31,23 @@ RUN mkdir -m 0774 -p \
 
 #biocache-cli deployment
 
-RUN mkdir -p /usr/lib/biocache
-RUN rm -Rf /usr/lib/biocache/lib /usr/lib/biocache/*.jar
+RUN mkdir -p /usr/lib/biocache && \
+	rm -Rf /usr/lib/biocache/lib /usr/lib/biocache/*.jar
+
 COPY biocache-cli-files/log4j.xml /usr/lib/biocache/log4j.xml
 COPY biocache-cli-files/subgroups.json /data/biocache/config/subgroups.json
 COPY biocache.zip /usr/lib/biocache/biocache.zip
 RUN unzip /usr/lib/biocache/biocache.zip -d /usr/lib/biocache/
 COPY biocache-cli-files/biocache.sh /usr/lib/biocache/biocache 
-RUN chmod 777 /usr/lib/biocache/biocache
-RUN mv /usr/lib/biocache/biocache-store-*.jar /usr/lib/biocache/biocache.jar
-RUN cat /usr/lib/biocache/biocache.jar >> /usr/lib/biocache/biocache
-RUN ln -s /usr/lib/biocache/biocache /usr/bin/biocache
+
+RUN chmod 777 /usr/lib/biocache/biocache && \
+	mv /usr/lib/biocache/biocache-store-*.jar /usr/lib/biocache/biocache.jar && \
+	cat /usr/lib/biocache/biocache.jar >> /usr/lib/biocache/biocache && \
+	ln -s /usr/lib/biocache/biocache /usr/bin/biocache
 
 RUN mkdir -m 777 -p \
     /data/biocache-reindex/solr-template \
     /data/biocache-reindex/solr-create \
     /data/biocache-reindex/solr
+
 COPY biocache-cli-files/solr-template /data/biocache-reindex/solr-template

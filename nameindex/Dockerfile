@@ -1,4 +1,4 @@
-FROM openjdk:7
+FROM openjdk:7-alpine
 
 # download and move the pre-generated index
 
@@ -8,22 +8,25 @@ FROM openjdk:7
 
 #generate the index from scratch
 
-RUN mkdir -p /data/lucene/sources
+RUN mkdir -p /data/lucene/sources 
 COPY dwca-col.zip /data/lucene/sources/
 COPY dwca-col-mammals.zip /data/lucene/sources/
 COPY IRMNG_DWC_HOMONYMS.zip /data/lucene/sources/
 COPY col_vernacular.txt.zip /data/lucene/sources/
 
-RUN unzip -u /data/lucene/sources/dwca-col.zip -d /data/lucene/sources/
-RUN unzip -u /data/lucene/sources/dwca-col-mammals.zip -d /data/lucene/sources/
-RUN unzip -u /data/lucene/sources/IRMNG_DWC_HOMONYMS.zip -d /data/lucene/sources/IRMNG_DWC_HOMONYMS/
-RUN unzip -u /data/lucene/sources/col_vernacular.txt.zip -d /data/lucene/sources/
+RUN unzip /data/lucene/sources/dwca-col.zip -d /data/lucene/sources/ && \
+	unzip /data/lucene/sources/dwca-col-mammals.zip -d /data/lucene/sources/ && \
+	mkdir -p /data/lucene/sources/IRMNG_DWC_HOMONYMS && \
+	unzip /data/lucene/sources/IRMNG_DWC_HOMONYMS.zip -d /data/lucene/sources/IRMNG_DWC_HOMONYMS/ && \
+	unzip /data/lucene/sources/col_vernacular.txt.zip -d /data/lucene/sources/ && \
+	rm -Rf /data/lucene/sources/*.zip
 
 COPY nameindexer.zip /usr/lib/nameindexer/
-RUN unzip -u -o /usr/lib/nameindexer/nameindexer.zip -d /usr/lib/nameindexer
+RUN unzip -o /usr/lib/nameindexer/nameindexer.zip -d /usr/lib/nameindexer
 COPY lib/log4j.xml /usr/lib/nameindexer/
 COPY nameindexer.sh /usr/lib/nameindexer/nameindexer
-RUN chmod 777 /usr/lib/nameindexer/nameindexer
-RUN mv /usr/lib/nameindexer/ala-name-matching-2.3.1.jar /usr/lib/nameindexer/nameindexer.jar
-RUN cat /usr/lib/nameindexer/nameindexer.jar >> /usr/lib/nameindexer/nameindexer
-RUN ln -s /usr/lib/nameindexer/nameindexer /usr/bin/nameindexer
+
+RUN chmod 777 /usr/lib/nameindexer/nameindexer && \
+	mv /usr/lib/nameindexer/ala-name-matching-2.3.1.jar /usr/lib/nameindexer/nameindexer.jar && \
+	cat /usr/lib/nameindexer/nameindexer.jar >> /usr/lib/nameindexer/nameindexer && \
+	ln -s /usr/lib/nameindexer/nameindexer /usr/bin/nameindexer
