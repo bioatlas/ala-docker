@@ -16,16 +16,20 @@ services:
     volumes:
       - ./mysql-datadir:/var/lib/mysql
       - ./initdb:/docker-entrypoint-initdb.d
-      
+    container_name: fs_volume
+
   mysqldb:
     image: mysql:5.7
     env_file: .env
+    container_name: mysqldb
 
   cassandradb:
     image: dina/ala-cassandra:v0.1
+    container_name: cassandradb
 
   biocacheservice:
     image: dina/ala-biocacheservice:v0.1
+    container_name: biocacheservice
     depends_on:
       - cassandradb
       - solr
@@ -37,6 +41,7 @@ services:
 
   biocachehub:
     image: dina/ala-biocachehub:v0.1
+    container_name: biocachehub
     depends_on:
       - biocacheservice
     environment:
@@ -44,6 +49,7 @@ services:
 
   collectory:
     image: dina/ala-collectory:v0.1
+    container_name: collectory
     depends_on:
       - mysqldb
     links:
@@ -54,37 +60,70 @@ services:
   webserver:
     image: dina/ala-nginx:v0.1
     environment:
-      - VIRTUAL_HOST=gbifsweden.se
+      - VIRTUAL_HOST=gbifsweden.se,uptime.gbifsweden.se
+    container_name: gbifsweden.se
+    environment:
+      - DNSDOCK_ALIAS=gbifsweden.se
     links:
       - biocachehub
       - biocacheservice
       - collectory
+      - ghost
+      - uptime
 
   ndex:
     image: dina/ala-nameindex:v0.1
+    command: /bin/ash
+    container_name: nameindex
 
   biocachebackend:
     image: dina/ala-biocachebackend:v0.1
+    container_name: biocachebackend
     links:
       - biocachehub
       - biocacheservice
       - collectory
       - cassandradb
       - solr
+    command: /bin/ash
 
   solr:
     image: dina/ala-solrindex:v0.1
+    container_name: solr
 
   mongo:
-    image: mongo
+    image: mvertes/alpine-mongo
+    container_name: mongo
 
   uptime:
     image: usman/docker-uptime
+    container_name: uptime
     links:
       - mongo:mongodb
-      - ghost
+    volumes:
+      - ./uptime/default.yaml:/tmp/uptime/config/default.yaml
 
   ghost:
-    image: ghost
+    image: zzrot/alpine-ghost
+    container_name: ghost
+    environment:
+      PROD_DOMAIN: http://gbifsweden.se
+      NODE_ENV: production
     volumes:
-      - ./ghost:/tmp
+      - ./ghost/content:/var/lib/ghost
+
+  ghost-backup:
+    image: bennetimo/ghost-backup
+    container_name: ghost-backup
+    volumes_from:
+      - ghost
+    volumes:
+      - ./ghost/backups:/backups
+
+  dnsdock:
+    image: aacebedo/dnsdock:v1.15.0-amd64
+    container_name: dnsserver
+    ports:
+      - 172.17.0.1:53:53/udp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
