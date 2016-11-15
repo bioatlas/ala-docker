@@ -76,6 +76,7 @@ build:
 	@docker build -t dina/ala-collectory:v0.1 collectory
 	@docker build -t dina/ala-biocacheservice:v0.1 biocacheservice
 	@docker build -t dina/ala-cassandra:v0.1 cassandra
+	@docker build -t dina/ala-mongo:v0.1 mongo
 
 up:
 	@echo "Starting services..."
