@@ -81,7 +81,9 @@ up:
 	@echo "Starting services..."
 	@docker-compose up -d
 
+
 test:
+	@echo "run cd ghost && rm -rf content && make content first to populate front page with content"
 	@echo "Opening up front page... use the bigmac/hamburger menu at the front page to get the toolbar for testing all services.."
 	./wait-for-it.sh gbifsweden.se:80 -q -- xdg-open http://gbifsweden.se/ &
 
