@@ -10,7 +10,9 @@ backup-uptime:
 	@echo "Backing up data"
 	@docker exec -it $(DB) \
 		sh -c "mongodump --out=/tmp/dump_$(TS)"
-	@mkdir -p backups && docker cp $(DB):/tmp/dump_$(TS) backups/dump_$(TS)
+	@mkdir -p backups && \
+		docker cp $(DB):/tmp/dump_$(TS) backups/dump && \
+		docker cp $(DB):/tmp/dump_$(TS) backups/dump_$(TS)
 
 restore-uptime:
 	@echo "Restoring from a backup"
