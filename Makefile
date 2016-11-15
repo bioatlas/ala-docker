@@ -81,20 +81,22 @@ up:
 	@echo "Starting services..."
 	@docker-compose up -d
 
+test:
+	@echo "Opening up front page... use the bigmac/hamburger menu at the front page to get the toolbar for testing all services.."
+	./wait-for-it.sh gbifsweden.se:80 -q -- xdg-open http://gbifsweden.se/ &
+
 test-solr:
-	@docker exec -it aladocker_solr_1 sh -c \
-		"curl http://localhost:8983/solr/admin/cores?status" > solr.xml && \
+	@curl -L -s gbifsweden.se/solr/admin/cores?status > solr.xml && \
 		firefox solr.xml
 
 test-cas:
 	@echo "Listing keyspaces in cassandra:"
-	@docker exec -it aladocker_cas_1 sh -c \
+	@docker exec -it cassandradb sh -c \
 		'echo "DESC KEYSPACES;" | cqlsh'
 
-test:
-	@echo "Opening up collectory... did you add ala.local in /etc/hosts?"
-	#@curl -H "Host: ala.local" localhost/collectory/
-	./wait-for-it.sh gbifsweden.se:80 -q -- xdg-open http://gbifsweden.se/collectory/ &
+test-uptime:
+	#@curl -L admin:password@uptime.gbifsweden.se
+	@xdg-open http://admin:password@uptime.gbifsweden.se
 
 stop:
 	@echo "Stopping services..."
