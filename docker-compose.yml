@@ -59,10 +59,9 @@ services:
 
   webserver:
     image: dina/ala-nginx:v0.1
-    environment:
-      - VIRTUAL_HOST=gbifsweden.se,uptime.gbifsweden.se
     container_name: gbifsweden.se
     environment:
+      - VIRTUAL_HOST=gbifsweden.se,uptime.gbifsweden.se
       - DNSDOCK_ALIAS=gbifsweden.se
     links:
       - biocachehub
