@@ -86,10 +86,10 @@ up:
 test:
 	@echo "run cd ghost && rm -rf content && make content first to populate front page with content"
 	@echo "Opening up front page... use the bigmac/hamburger menu at the front page to get the toolbar for testing all services.."
-	./wait-for-it.sh gbifsweden.se:80 -q -- xdg-open http://gbifsweden.se/ &
+	./wait-for-it.sh testgbif.nrm.se:80 -q -- xdg-open http://testgbif.nrm.se/ &
 
 test-solr:
-	@curl -L -s gbifsweden.se/solr/admin/cores?status > solr.xml && \
+	@curl -L -s testgbif.nrm.se/solr/admin/cores?status > solr.xml && \
 		firefox solr.xml
 
 test-cas:
@@ -98,8 +98,8 @@ test-cas:
 		'echo "DESC KEYSPACES;" | cqlsh'
 
 test-uptime:
-	#@curl -L admin:password@uptime.gbifsweden.se
-	@xdg-open http://admin:password@uptime.gbifsweden.se
+	#@curl -L admin:password@uptime.testgbif.nrm.se
+	@xdg-open http://admin:password@uptime.testgbif.nrm.se
 
 stop:
 	@echo "Stopping services..."

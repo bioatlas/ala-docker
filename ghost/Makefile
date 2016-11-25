@@ -8,7 +8,7 @@ content:
 	unzip content.zip -d content
 
 backup:
-	#curl http://gbifsweden.se/ghost/api/v0.1/db/?access_token=$(TOKEN) > backup_$(TS).json
+	#curl http://testgbif.nrm.se/ghost/api/v0.1/db/?access_token=$(TOKEN) > backup_$(TS).json
 	docker exec ghost-backup backup
 
 restore:

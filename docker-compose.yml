@@ -59,10 +59,10 @@ services:
 
   webserver:
     image: dina/ala-nginx:v0.1
-    container_name: gbifsweden.se
+    container_name: testgbif.nrm.se
     environment:
-      - VIRTUAL_HOST=gbifsweden.se,uptime.gbifsweden.se
-      - DNSDOCK_ALIAS=gbifsweden.se
+      - VIRTUAL_HOST=testgbif.nrm.se,uptime.testgbif.nrm.se
+      - DNSDOCK_ALIAS=testgbif.nrm.se
     links:
       - biocachehub
       - biocacheservice
@@ -107,7 +107,7 @@ services:
     image: zzrot/alpine-ghost
     container_name: ghost
     environment:
-      PROD_DOMAIN: http://gbifsweden.se
+      PROD_DOMAIN: http://testgbif.nrm.se
       NODE_ENV: production
     volumes:
       - ./ghost/content:/var/lib/ghost
