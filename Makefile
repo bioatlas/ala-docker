@@ -11,10 +11,12 @@ URL_COL = $(URL_NAMEIDX)/col_namematching.tgz
 URL_ALA = $(URL_NAMEIDX)/namematching.tgz
 URL_MRG = $(URL_NAMEIDX)/merge_namematching.tgz
 URL_SDS = http://biocache.ala.org.au/archives/layers/sds-layers.tgz
-URL_COLLECTORY = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
+#URL_COLLECTORY = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
+URL_COLLECTORY = https://github.com/shahmanash/generic-collectory-sweden/releases/download/v0.0.1/generic-collectory-1.4.3.war
 URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/2.3.1/ala-name-matching-2.3.1-distribution.zip 
 URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.0/biocache-service-1.8.0.war
-URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
+#URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
+URL_BIOCACHE_HUB = https://github.com/shahmanash/generic-hub-sweden/releases/download/v0.0.1/generic-hub-1.3.2.war
 URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip 
 
 all: init build up
@@ -34,7 +36,7 @@ init:
 		cp wait-for-it.sh cassandra/
 
 	@test -f collectory/collectory.war || \
-		curl --progress -o collectory/collectory.war $(URL_COLLECTORY)
+		wget -q --show-progress -O collectory/collectory.war $(URL_COLLECTORY)
 
 	@test -f nameindex/namematching.tgz || \
 		curl --progress -o nameindex/namematching.tgz $(URL_COL)
@@ -61,7 +63,7 @@ init:
 		curl --progress -o biocacheservice/biocache-service.war $(URL_BIOCACHE_SERVICE)
 
 	@test -f biocachehub/generic-hub.war || \
-		curl --progress -o biocachehub/generic-hub.war $(URL_BIOCACHE_HUB)
+		wget -q --show-progress -O biocachehub/generic-hub.war $(URL_BIOCACHE_HUB)
 
 	@test -f biocachebackend/biocache.zip || \
 		curl --progress -o biocachebackend/biocache.zip $(URL_BIOCACHE_CLI)	
@@ -81,7 +83,6 @@ build:
 up:
 	@echo "Starting services..."
 	@docker-compose up -d
-
 
 test:
 	@echo "run cd ghost && rm -rf content && make content first to populate front page with content"
