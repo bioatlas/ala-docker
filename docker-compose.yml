@@ -85,10 +85,14 @@ services:
       - cassandradb
       - solr
     command: /bin/ash
+    environment:
+      biocache_opts: -Xmx4g -Xms4g
 
   solr:
     image: dina/ala-solrindex:v0.1
     container_name: solr
+    environment:
+      SOLR_JAVA_MEM: -Xmx4g -Xms4g
 
   mongo:
     image: dina/ala-mongo:v0.1
@@ -120,10 +124,20 @@ services:
     volumes:
       - ./ghost/backups:/backups
 
-  dnsdock:
-    image: aacebedo/dnsdock:v1.15.0-amd64
-    container_name: dnsserver
+  #dnsdock:
+  #  image: aacebedo/dnsdock:v1.15.0-amd64
+  #  container_name: dnsserver
+  #  ports:
+  #    - 172.17.0.1:53:53/udp
+  #  volumes:
+  #    - /var/run/docker.sock:/var/run/docker.sock
+
+  dnsmasq:
+    image: andyshinn/dnsmasq:2.76
+    command: --log-facility=-
+    container_name: dnsmasq
+    cap_add: 
+      - NET_ADMIN 
     ports:
+      - 172.17.0.1:53:53/tcp
       - 172.17.0.1:53:53/udp
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
