@@ -17,7 +17,8 @@ URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/cont
 URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.0/biocache-service-1.8.0.war
 #URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
 URL_BIOCACHE_HUB = https://github.com/shahmanash/generic-hub-sweden/releases/download/v0.0.1/generic-hub-1.3.2.war
-URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip 
+URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip
+URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
 
 all: init build up
 .PHONY: all
@@ -66,7 +67,10 @@ init:
 		wget -q --show-progress -O biocachehub/generic-hub.war $(URL_BIOCACHE_HUB)
 
 	@test -f biocachebackend/biocache.zip || \
-		curl --progress -o biocachebackend/biocache.zip $(URL_BIOCACHE_CLI)	
+		curl --progress -o biocachebackend/biocache.zip $(URL_BIOCACHE_CLI)
+
+	@test -f loggerservice/logger-service.war || \
+		curl --progress -o loggerservice/logger-service.war $(URL_LOGGER_SERVICE)
 
 build:
 	@echo "Building images..."
@@ -79,6 +83,7 @@ build:
 	@docker build -t dina/ala-biocacheservice:v0.1 biocacheservice
 	@docker build -t dina/ala-cassandra:v0.1 cassandra
 	@docker build -t dina/ala-mongo:v0.1 mongo
+	@docker build -t dina/ala-loggerservice:v0.1 loggerservice
 
 up:
 	@echo "Starting services..."
@@ -125,5 +130,6 @@ push:
 	@docker push dina/ala-collectory:v0.1
 	@docker push dina/ala-biocacheservice:v0.1
 	@docker push dina/ala-biocachebackend:v0.1
+	@docker push dina/ala-loggerservice:v0.1
 
 release: build push
