@@ -69,6 +69,8 @@ services:
       - collectory
       - ghost
       - uptime
+      - loggerservice
+      - imageservice
 
   ndex:
     image: dina/ala-nameindex:v0.1
@@ -124,23 +126,23 @@ services:
     volumes:
       - ./ghost/backups:/backups
 
-  #dnsdock:
-  #  image: aacebedo/dnsdock:v1.15.0-amd64
-  #  container_name: dnsserver
-  #  ports:
-  #    - 172.17.0.1:53:53/udp
-  #  volumes:
-  #    - /var/run/docker.sock:/var/run/docker.sock
-
-  dnsmasq:
-    image: andyshinn/dnsmasq:2.76
-    command: --log-facility=-
-    container_name: dnsmasq
-    cap_add: 
-      - NET_ADMIN 
+  dnsdock:
+    image: aacebedo/dnsdock:v1.15.0-amd64
+    container_name: dnsserver
     ports:
-      - 172.17.0.1:53:53/tcp
       - 172.17.0.1:53:53/udp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  #dnsmasq:
+  #  image: andyshinn/dnsmasq:2.76
+  #  command: --log-facility=-
+  #  container_name: dnsmasq
+  #  cap_add:
+  #    - NET_ADMIN
+  #  ports:
+  #    - 172.17.0.1:53:53/tcp
+  #    - 172.17.0.1:53:53/udp
 
   loggerservice:
     image: dina/ala-loggerservice:v0.1
@@ -158,3 +160,24 @@ services:
     container_name: mysqldblogger
     volumes:
       - ./loggerservice/db:/docker-entrypoint-initdb.d
+
+  imageservice:
+    image: dina/ala-imageservice:v0.1
+    container_name: imageservice
+    depends_on:
+      - psqldbimage
+    links:
+      - psqldbimage
+    environment:
+      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+
+  imagestore:
+    image: dina/ala-imagestore:v0.1
+    volumes_from:
+      - imageservice:rw
+    container_name: imagestore
+
+  psqldbimage:
+    image: postgres:alpine
+    env_file: .envImage
+    container_name: psqldbimage
