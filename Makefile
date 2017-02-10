@@ -14,7 +14,7 @@ URL_SDS = http://biocache.ala.org.au/archives/layers/sds-layers.tgz
 #URL_COLLECTORY = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
 URL_COLLECTORY = https://github.com/shahmanash/generic-collectory-sweden/releases/download/v0.0.1/generic-collectory-1.4.3.war
 URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/2.3.1/ala-name-matching-2.3.1-distribution.zip 
-URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.0/biocache-service-1.8.0.war
+URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.1/biocache-service-1.8.1.war
 #URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
 URL_BIOCACHE_HUB = https://github.com/shahmanash/generic-hub-sweden/releases/download/v0.0.1/generic-hub-1.3.2.war
 URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip
@@ -128,14 +128,15 @@ rm: stop
 	#sudo rm -rf mysql-datadir cassandra-datadir initdb lucene-datadir
 
 push:
-	@docker push dina/ala-cassandra:v0.1
-	@docker push dina/ala-nameindex:v0.1
 	@docker push dina/ala-solrindex:v0.1
+	@docker push dina/ala-biocachebackend:v0.1
+	@docker push dina/ala-nameindex:v0.1
 	@docker push dina/ala-nginx:v0.1
 	@docker push dina/ala-biocachehub:v0.1
 	@docker push dina/ala-collectory:v0.1
 	@docker push dina/ala-biocacheservice:v0.1
-	@docker push dina/ala-biocachebackend:v0.1
+	@docker push dina/ala-cassandra:v0.1
+	@docker push dina/dina/ala-mongo:v0.1
 	@docker push dina/ala-loggerservice:v0.1
 	@docker push dina/ala-imageservice:v0.1
 	@docker push dina/ala-imagestore:v0.1

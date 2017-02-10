@@ -46,6 +46,12 @@ RUN mkdir -m 0774 -p \
 RUN chmod 777 /data/biocache-media
 RUN chmod 777 /data/biocache-load
 
+#logger-client config section
+RUN mkdir -m 0774 -p \
+	/data/logger-client/config
+COPY biocache-properties-files/logger-client.properties \
+	/data/logger-client/config/logger-client.properties
+
 RUN apk add --update tini
 ENTRYPOINT ["tini", "--"]
 CMD ["catalina.sh", "run"]
