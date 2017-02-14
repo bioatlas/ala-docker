@@ -72,7 +72,7 @@ services:
       - loggerservice
       - imageservice
 
-  ndex:
+  nameindex:
     image: dina/ala-nameindex:v0.1
     command: /bin/ash
     container_name: nameindex
@@ -89,6 +89,8 @@ services:
     command: /bin/ash
     environment:
       biocache_opts: -Xmx4g -Xms4g
+    volumes_from:
+      - nameindex:rw
 
   solr:
     image: dina/ala-solrindex:v0.1

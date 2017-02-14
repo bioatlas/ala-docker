@@ -2,9 +2,10 @@ FROM openjdk:7-alpine
 
 # download and move the pre-generated index
 
-#RUN mkdir -p /data/lucene/namematching
-#COPY namematching.tgz /data/lucene/ 
-#RUN tar xvf /data/lucene/namematching.tgz -C /data/lucene/namematching --strip-components 1
+RUN mkdir -p /data/lucene/namematching
+COPY namematching.tgz /data/lucene/
+RUN apk --update add tar
+RUN tar xvf /data/lucene/namematching.tgz -C /data/lucene/namematching --strip-components 1
 
 #generate the index from scratch
 
@@ -30,3 +31,5 @@ RUN chmod 777 /usr/lib/nameindexer/nameindexer && \
 	mv /usr/lib/nameindexer/ala-name-matching-2.3.1.jar /usr/lib/nameindexer/nameindexer.jar && \
 	cat /usr/lib/nameindexer/nameindexer.jar >> /usr/lib/nameindexer/nameindexer && \
 	ln -s /usr/lib/nameindexer/nameindexer /usr/bin/nameindexer
+
+VOLUME /data/lucene/namematching
