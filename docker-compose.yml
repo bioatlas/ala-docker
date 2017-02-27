@@ -59,10 +59,10 @@ services:
 
   webserver:
     image: dina/ala-nginx:v0.1
-    container_name: testgbif.nrm.se
+    container_name: bioatlas.se
     environment:
-      - VIRTUAL_HOST=testgbif.nrm.se,uptime.testgbif.nrm.se
-      - DNSDOCK_ALIAS=testgbif.nrm.se
+      - VIRTUAL_HOST=bioatlas.se,uptime.bioatlas.se
+      - DNSDOCK_ALIAS=bioatlas.se
     links:
       - biocachehub
       - biocacheservice
@@ -115,7 +115,7 @@ services:
     image: zzrot/alpine-ghost
     container_name: ghost
     environment:
-      PROD_DOMAIN: http://testgbif.nrm.se
+      PROD_DOMAIN: http://bioatlas.se
       NODE_ENV: production
     volumes:
       - ./ghost/content:/var/lib/ghost
