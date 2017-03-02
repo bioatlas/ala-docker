@@ -1,9 +1,9 @@
-include .env
+include env/.envcollectory env/.envimage env/.envlogger
 
 NAME = dina-web/ala-docker
 VERSION = $(TRAVIS_BUILD_ID)
 ME = $(USER)
-HOST = ala.dina-web.net
+HOST = bioatlas.se
 TS := $(shell date '+%Y_%m_%d_%H_%M')
 
 URL_NAMEIDX = https://s3.amazonaws.com/ala-nameindexes/20140610

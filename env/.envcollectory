@@ -2,4 +2,4 @@ MYSQL_ROOT_PASSWORD=passw0rd12
 TZ=Europe/Stockholm
 MYSQL_DATABASE=collectory
 MYSQL_USER=collectory
-MYSQL_PASSWORD=password
+MYSQL_PASSWORD=password321

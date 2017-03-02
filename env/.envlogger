@@ -2,4 +2,4 @@ MYSQL_ROOT_PASSWORD=passw0rd12
 TZ=Europe/Stockholm
 MYSQL_DATABASE=logger
 MYSQL_USER=logger
-MYSQL_PASSWORD=password
+MYSQL_PASSWORD=password123

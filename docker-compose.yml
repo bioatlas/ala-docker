@@ -20,7 +20,7 @@ services:
 
   mysqldb:
     image: mysql:5.7
-    env_file: .env
+    env_file: ./env/.envcollectory
     container_name: mysqldb
 
   cassandradb:
@@ -46,6 +46,8 @@ services:
       - biocacheservice
     environment:
       JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - ./config/generic-hub-config.properties:/data/generic-hub/config/generic-hub-config.properties
 
   collectory:
     image: dina/ala-collectory:v0.1
@@ -56,6 +58,10 @@ services:
       - mysqldb
     environment:
       JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envcollectory
+    volumes:
+      - ./config/generic-collectory-config.properties:/tmp/generic-collectory-config.properties
+    command: /bin/ash -c "envsubst < /tmp/generic-collectory-config.properties > /data/generic-collectory/config/generic-collectory-config.properties && catalina.sh run"
 
   webserver:
     image: dina/ala-nginx:v0.1
@@ -155,10 +161,14 @@ services:
       - mysqldblogger
     environment:
       JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envlogger
+    volumes:
+      - ./config/logger-config.properties:/tmp/logger-config.properties
+    command: /bin/ash -c "envsubst < /tmp/logger-config.properties > /data/logger/config/logger-config.properties && catalina.sh run"
 
   mysqldblogger:
     image: mysql:5.7
-    env_file: .envLogger
+    env_file: ./env/.envlogger
     container_name: mysqldblogger
     volumes:
       - ./loggerservice/db:/docker-entrypoint-initdb.d
@@ -172,6 +182,10 @@ services:
       - psqldbimage
     environment:
       JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envimage
+    volumes:
+      - ./config/images-config.properties:/tmp/images-config.properties
+    command: /bin/ash -c "envsubst < /tmp/images-config.properties > /data/images/config/images-config.properties && catalina.sh run"
 
   imagestore:
     image: dina/ala-imagestore:v0.1
@@ -181,5 +195,5 @@ services:
 
   psqldbimage:
     image: postgres:alpine
-    env_file: .envImage
+    env_file: ./env/.envimage
     container_name: psqldbimage

@@ -6,6 +6,7 @@ RUN mkdir -p /data/lucene/namematching
 COPY namematching.tgz /data/lucene/
 RUN apk --update add tar
 RUN tar xvf /data/lucene/namematching.tgz -C /data/lucene/namematching --strip-components 1
+RUN rm /data/lucene/namematching.tgz
 
 #generate the index from scratch
 

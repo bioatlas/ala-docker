@@ -6,7 +6,7 @@ RUN mkdir -m 0774 -p \
 	/data/generic-hub/config \
     /data/generic-hub/cache
 
-COPY biocache-hub-files/config/generic-hub-config.properties /data/generic-hub/config/generic-hub-config.properties
+#COPY biocache-hub-files/config/generic-hub-config.properties /data/generic-hub/config/generic-hub-config.properties
 COPY biocache-hub-files/config/*.json /data/generic-hub/config/
 COPY generic-hub.war $CATALINA_HOME/webapps/
 
