@@ -1,4 +1,4 @@
-include env/.envcollectory env/.envimage env/.envlogger
+include env/.envcollectory env/.envimage env/.envlogger env/.envapi
 
 NAME = dina-web/ala-docker
 VERSION = $(TRAVIS_BUILD_ID)
@@ -20,6 +20,9 @@ URL_BIOCACHE_HUB = https://github.com/shahmanash/generic-hub-sweden/releases/dow
 URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
 URL_IMAGE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-images/0.7/ala-images-0.7.war
+#URL_API = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/webapi/1.0/webapi-1.0.war
+URL_API = https://github.com/shahmanash/webapi/releases/download/v0.1/webapi-1.1-SNAPSHOT.war
+URL_DASHBOARD = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/dashboard/1.0/dashboard-1.0.war
 
 all: init build up
 .PHONY: all
@@ -76,6 +79,12 @@ init:
 	@test -f imageservice/images.war || \
 		curl --progress -o imageservice/images.war $(URL_IMAGE_SERVICE)
 
+	@test -f api/api.war || \
+		wget -q --show-progress -O api/api.war $(URL_API)
+
+	@test -f dashboard/dashboard.war || \
+		curl --progress -o dashboard/dashboard.war $(URL_DASHBOARD)
+
 build:
 	@echo "Building images..."
 	@docker build -t dina/ala-solrindex:v0.1 solr4
@@ -90,6 +99,8 @@ build:
 	@docker build -t dina/ala-loggerservice:v0.1 loggerservice
 	@docker build -t dina/ala-imageservice:v0.1 imageservice
 	@docker build -t dina/ala-imagestore:v0.1 imagestore
+	@docker build -t dina/ala-api:v0.1 api
+	@docker build -t dina/ala-dashboard:v0.1 dashboard
 
 up:
 	@echo "Starting services..."
@@ -140,5 +151,7 @@ push:
 	@docker push dina/ala-loggerservice:v0.1
 	@docker push dina/ala-imageservice:v0.1
 	@docker push dina/ala-imagestore:v0.1
+	@docker push dina/ala-api:v0.1
+	@docker push dina/ala-dashboard:v0.1
 
 release: build push

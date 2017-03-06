@@ -102,7 +102,7 @@ services:
     image: dina/ala-solrindex:v0.1
     container_name: solr
     environment:
-      SOLR_JAVA_MEM: -Xmx4g -Xms4g
+      SOLR_HEAP: 3g
 
   mongo:
     image: dina/ala-mongo:v0.1
@@ -134,23 +134,23 @@ services:
     volumes:
       - ./ghost/backups:/backups
 
-  #dnsdock:
-  #  image: aacebedo/dnsdock:v1.15.0-amd64
-  #  container_name: dnsserver
-  #  ports:
-  #    - 172.17.0.1:53:53/udp
-  #  volumes:
-  #    - /var/run/docker.sock:/var/run/docker.sock
-
-  dnsmasq:
-    image: andyshinn/dnsmasq:2.76
-    command: --log-facility=-
-    container_name: dnsmasq
-    cap_add:
-      - NET_ADMIN
+  dnsdock:
+    image: aacebedo/dnsdock:v1.15.0-amd64
+    container_name: dnsserver
     ports:
-      - 172.17.0.1:53:53/tcp
       - 172.17.0.1:53:53/udp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  #dnsmasq:
+  #  image: andyshinn/dnsmasq:2.76
+  #  command: --log-facility=-
+  #  container_name: dnsmasq
+  #  cap_add:
+  #    - NET_ADMIN
+  #  ports:
+  #    - 172.17.0.1:53:53/tcp
+  #    - 172.17.0.1:53:53/udp
 
   loggerservice:
     image: dina/ala-loggerservice:v0.1
@@ -197,3 +197,31 @@ services:
     image: postgres:alpine
     env_file: ./env/.envimage
     container_name: psqldbimage
+
+  apiservice:
+    image: dina/ala-api:v0.1
+    container_name: apiservice
+    depends_on:
+      - mysqldbapi
+    links:
+      - mysqldbapi
+    environment:
+      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envapi
+    volumes:
+      - ./config/webapi-config.properties:/tmp/webapi-config.properties
+    command: /bin/ash -c "envsubst < /tmp/webapi-config.properties > /data/webapi/config/webapi-config.properties && catalina.sh run"
+
+  mysqldbapi:
+    image: mysql:5.7
+    env_file: ./env/.envapi
+    container_name: mysqldbapi
+
+  dashboard:
+    image: dina/ala-dashboard:v0.1
+    container_name: dashboard
+    environment:
+      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
+      - ./dashboard/data.json:/data/dashboard/data.json
