@@ -23,6 +23,10 @@ RUN unzip /data/lucene/sources/dwca-col.zip -d /data/lucene/sources/ && \
 	unzip /data/lucene/sources/col_vernacular.txt.zip -d /data/lucene/sources/ && \
 	rm -Rf /data/lucene/sources/*.zip
 
+#COPY backbone.zip /data/lucene/sources/
+#RUN unzip /data/lucene/sources/backbone.zip -d /data/lucene/sources/ && \
+#	rm -Rf /data/lucene/sources/*.zip
+
 COPY nameindexer.zip /usr/lib/nameindexer/
 RUN unzip -o /usr/lib/nameindexer/nameindexer.zip -d /usr/lib/nameindexer
 COPY lib/log4j.xml /usr/lib/nameindexer/

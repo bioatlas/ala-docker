@@ -23,6 +23,7 @@ URL_IMAGE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/
 #URL_API = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/webapi/1.0/webapi-1.0.war
 URL_API = https://github.com/shahmanash/webapi/releases/download/v0.1/webapi-1.1-SNAPSHOT.war
 URL_DASHBOARD = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/dashboard/1.0/dashboard-1.0.war
+URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/2017-02-13/backbone.zip
 
 all: init build up
 .PHONY: all
@@ -60,6 +61,9 @@ init:
 
 	@test -f nameindex/col_vernacular.txt.zip || \
 		curl --progress -o nameindex/col_vernacular.txt.zip $(URL_NAMEIDX)/col_vernacular.txt.zip
+
+	#@test -f nameindex/backbone.zip || \
+	#	curl --progress -o nameindex/backbone.zip $(URL_GBIF_BACKBONE)
 
 	@test -f biocachebackend/biocache-properties-files/sds-layers.tgz || \
 		curl --progress --create-dirs -o biocachebackend/biocache-properties-files/sds-layers.tgz $(URL_SDS)
