@@ -1,0 +1,4 @@
+^nginx-proxy-certs/*
+*.key
+*.crt
+*.pem
