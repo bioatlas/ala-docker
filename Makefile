@@ -29,9 +29,6 @@ all: init build up
 init:
 	@echo "Caching files required for the build..."
 
-	@mkdir -p mysql-datadir cassandra-datadir initdb \
-		lucene-datadir
-
 	@curl --progress -L -s -o wait-for-it.sh \
 		https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
 		chmod +x wait-for-it.sh
@@ -102,6 +99,7 @@ dotfiles: secrets
 	bash -c ". secrets && envsubst < env/envcollectory.template > env/.envcollectory"
 	bash -c ". secrets && envsubst < env/envimage.template > env/.envimage"
 	bash -c ". secrets && envsubst < env/envlogger.template > env/.envlogger"
+	rm -f secrets
 
 build:
 	@echo "Building images..."
@@ -139,22 +137,13 @@ test-cas:
 		'echo "DESC KEYSPACES;" | cqlsh'
 
 test-uptime:
+	#TODO: update to use dotfiles
 	#@curl -L admin:password@uptime.bioatlas.se
-	@xdg-open http://admin:password@uptime.bioatlas.se
+	#@xdg-open http://admin:password@uptime.bioatlas.se
 
 stop:
 	@echo "Stopping services..."
 	@docker-compose stop
-
-clean:
-	@echo "Removing downloaded files and build artifacts"
-	#rm -f wait-for-it.sh
-	#rm -f *.war
-
-rm: stop
-	@echo "Removing containers and persisted data"
-	docker-compose rm -vf
-	#sudo rm -rf mysql-datadir cassandra-datadir initdb lucene-datadir
 
 push:
 	@docker push dina/ala-solrindex:v0.1
