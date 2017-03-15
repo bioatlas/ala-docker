@@ -11,6 +11,7 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx-proxy-certs:/etc/nginx/certs:ro
+      - ./nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
 
   fs_db:
     image: tianon/true
@@ -38,7 +39,7 @@ services:
       - cassandradb
       - solr
     environment:
-      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx8g -Xms8g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
 
   biocachehub:
     image: dina/ala-biocachehub:v0.1
@@ -46,7 +47,7 @@ services:
     depends_on:
       - biocacheservice
     environment:
-      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx8g -Xms8g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/generic-hub-config.properties:/data/generic-hub/config/generic-hub-config.properties
 
@@ -58,7 +59,7 @@ services:
     links:
       - mysqldb
     environment:
-      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx4g -Xms4g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envcollectory
     volumes:
       - ./config/generic-collectory-config.properties:/tmp/generic-collectory-config.properties
@@ -66,10 +67,10 @@ services:
 
   webserver:
     image: dina/ala-nginx:v0.1
-    container_name: bioatlas.se
+    container_name: webserver
     environment:
       - VIRTUAL_HOST=bioatlas.se,uptime.bioatlas.se
-      - DNSDOCK_ALIAS=bioatlas.se
+    #  - DNSDOCK_ALIAS=bioatlas.se
     links:
       - biocachehub
       - biocacheservice
@@ -78,6 +79,8 @@ services:
       - uptime
       - loggerservice
       - imageservice
+    volumes:
+      - ./env/.htpasswd:/etc/nginx/htpasswd
 
   nameindex:
     image: dina/ala-nameindex:v0.1
@@ -95,7 +98,7 @@ services:
       - solr
     command: /bin/ash
     environment:
-      biocache_opts: -Xmx12g -Xms1g
+      biocache_opts: -Xmx16g -Xms1g
     volumes_from:
       - nameindex:rw
 
@@ -103,7 +106,7 @@ services:
     image: dina/ala-solrindex:v0.1
     container_name: solr
     environment:
-      SOLR_HEAP: 3g
+      SOLR_HEAP: 16g
 
   mongo:
     image: dina/ala-mongo:v0.1
@@ -122,7 +125,7 @@ services:
     image: zzrot/alpine-ghost
     container_name: ghost
     environment:
-      PROD_DOMAIN: http://bioatlas.se
+      PROD_DOMAIN: https://bioatlas.se
       NODE_ENV: production
     volumes:
       - ./ghost/content:/var/lib/ghost
@@ -135,23 +138,23 @@ services:
     volumes:
       - ./ghost/backups:/backups
 
-  dnsdock:
-    image: aacebedo/dnsdock:v1.15.0-amd64
-    container_name: dnsserver
-    ports:
-      - 172.17.0.1:53:53/udp
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-
-  #dnsmasq:
-  #  image: andyshinn/dnsmasq:2.76
-  #  command: --log-facility=-
-  #  container_name: dnsmasq
-  #  cap_add:
-  #    - NET_ADMIN
+  #dnsdock:
+  #  image: aacebedo/dnsdock:v1.15.0-amd64
+  #  container_name: dnsserver
   #  ports:
-  #    - 172.17.0.1:53:53/tcp
   #    - 172.17.0.1:53:53/udp
+  #  volumes:
+  #    - /var/run/docker.sock:/var/run/docker.sock
+
+  dnsmasq:
+    image: andyshinn/dnsmasq:2.76
+    command: --log-facility=-
+    container_name: dnsmasq
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 172.17.0.1:53:53/tcp
+      - 172.17.0.1:53:53/udp
 
   loggerservice:
     image: dina/ala-loggerservice:v0.1
@@ -182,11 +185,17 @@ services:
     links:
       - psqldbimage
     environment:
-      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx4g -Xms4g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envimage
     volumes:
       - ./config/images-config.properties:/tmp/images-config.properties
     command: /bin/ash -c "envsubst < /tmp/images-config.properties > /data/images/config/images-config.properties && catalina.sh run"
+
+  static:
+    image: nginx:alpine
+    volumes:
+      - ./static:/usr/share/nginx/html
+    container_name: static
 
   imagestore:
     image: dina/ala-imagestore:v0.1
@@ -222,7 +231,7 @@ services:
     image: dina/ala-dashboard:v0.1
     container_name: dashboard
     environment:
-      JAVA_OPTS: -Xmx2g -Xms2g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx4g -Xms4g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
       - ./dashboard/data.json:/data/dashboard/data.json
