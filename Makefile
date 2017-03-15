@@ -1,4 +1,4 @@
-NAME = dina-web/ala-docker
+
 VERSION = $(TRAVIS_BUILD_ID)
 ME = $(USER)
 HOST = bioatlas.se
@@ -100,6 +100,10 @@ dotfiles: secrets
 	bash -c ". secrets && envsubst < env/envimage.template > env/.envimage"
 	bash -c ". secrets && envsubst < env/envlogger.template > env/.envlogger"
 	rm -f secrets
+
+htpasswd:
+	#bash -c "htpasswd -bn admin passw0rd12 > env/.htpasswd"
+	bash -c "htpasswd -n admin > env/.htpasswd"
 
 build:
 	@echo "Building images..."
