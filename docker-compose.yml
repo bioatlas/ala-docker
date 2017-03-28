@@ -12,6 +12,8 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx-proxy-certs:/etc/nginx/certs:ro
       - ./nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
+    environment:
+      - DNSDOCK_ALIAS=bioatlas.se
 
   fs_db:
     image: tianon/true
@@ -70,7 +72,6 @@ services:
     container_name: webserver
     environment:
       - VIRTUAL_HOST=bioatlas.se,uptime.bioatlas.se
-    #  - DNSDOCK_ALIAS=bioatlas.se
     links:
       - biocachehub
       - biocacheservice
@@ -138,23 +139,23 @@ services:
     volumes:
       - ./ghost/backups:/backups
 
-  #dnsdock:
-  #  image: aacebedo/dnsdock:v1.15.0-amd64
-  #  container_name: dnsserver
-  #  ports:
-  #    - 172.17.0.1:53:53/udp
-  #  volumes:
-  #    - /var/run/docker.sock:/var/run/docker.sock
-
-  dnsmasq:
-    image: andyshinn/dnsmasq:2.76
-    command: --log-facility=-
-    container_name: dnsmasq
-    cap_add:
-      - NET_ADMIN
+  dnsdock:
+    image: aacebedo/dnsdock:v1.15.0-amd64
+    container_name: dnsserver
     ports:
-      - 172.17.0.1:53:53/tcp
       - 172.17.0.1:53:53/udp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  #dnsmasq:
+  #  image: andyshinn/dnsmasq:2.76
+  #  command: --log-facility=-
+  #  container_name: dnsmasq
+  #  cap_add:
+  #    - NET_ADMIN
+  #  ports:
+  #    - 172.17.0.1:53:53/tcp
+  #    - 172.17.0.1:53:53/udp
 
   loggerservice:
     image: dina/ala-loggerservice:v0.1
