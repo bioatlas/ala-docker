@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
 
@@ -15,21 +15,25 @@ services:
     environment:
       - DNSDOCK_ALIAS=bioatlas.se
 
-  fs_db:
-    image: tianon/true
-    volumes:
-      - ./mysql-datadir:/var/lib/mysql
-      - ./initdb:/docker-entrypoint-initdb.d
-    container_name: fs_volume
+  #fs_db:
+  #  image: tianon/true
+  #  volumes:
+  #    - ./mysql-datadir:/var/lib/mysql
+  #    - ./initdb:/docker-entrypoint-initdb.d
+  #  container_name: fs_volume
 
   mysqldb:
     image: mysql:5.7
     env_file: ./env/.envcollectory
     container_name: mysqldb
+    volumes:
+      - db_data_collectory:/var/lib/mysql
 
   cassandradb:
     image: dina/ala-cassandra:v0.1
     container_name: cassandradb
+    volumes:
+      - db_data_cassandra:/var/lib/cassandra
 
   biocacheservice:
     image: dina/ala-biocacheservice:v0.1
@@ -87,6 +91,8 @@ services:
     image: dina/ala-nameindex:v0.1
     command: /bin/ash
     container_name: nameindex
+    volumes:
+      - data_nameindex:/data/lucene/namematching
 
   biocachebackend:
     image: dina/ala-biocachebackend:v0.1
@@ -100,8 +106,8 @@ services:
     command: /bin/ash
     environment:
       biocache_opts: -Xmx16g -Xms1g
-    volumes_from:
-      - nameindex:rw
+    volumes:
+      - data_nameindex:/data/lucene/namematching
 
   solr:
     image: dina/ala-solrindex:v0.1
@@ -113,6 +119,8 @@ services:
     image: dina/ala-mongo:v0.1
     #image: mvertes/alpine-mongo
     container_name: mongo
+    volumes:
+      - db_data_mongo:/data/db
 
   uptime:
     image: usman/docker-uptime
@@ -134,8 +142,6 @@ services:
   ghost-backup:
     image: bennetimo/ghost-backup
     container_name: ghost-backup
-    volumes_from:
-      - ghost
     volumes:
       - ./ghost/backups:/backups
 
@@ -177,6 +183,7 @@ services:
     container_name: mysqldblogger
     volumes:
       - ./loggerservice/db:/docker-entrypoint-initdb.d
+      - db_data_loggerservice:/var/lib/mysql
 
   imageservice:
     image: dina/ala-imageservice:v0.1
@@ -190,6 +197,7 @@ services:
     env_file: ./env/.envimage
     volumes:
       - ./config/images-config.properties:/tmp/images-config.properties
+      - data_images:/data/images/store
     command: /bin/ash -c "envsubst < /tmp/images-config.properties > /data/images/config/images-config.properties && catalina.sh run"
 
   static:
@@ -200,14 +208,16 @@ services:
 
   imagestore:
     image: dina/ala-imagestore:v0.1
-    volumes_from:
-      - imageservice:rw
+    volumes:
+      - data_images:/data/images/store
     container_name: imagestore
 
   psqldbimage:
     image: postgres:alpine
     env_file: ./env/.envimage
     container_name: psqldbimage
+    volumes:
+      - db_data_imageservice:/var/lib/postgresql/data
 
   apiservice:
     image: dina/ala-api:v0.1
@@ -227,6 +237,8 @@ services:
     image: mysql:5.7
     env_file: ./env/.envapi
     container_name: mysqldbapi
+    volumes:
+      - db_data_apiservice:/var/lib/mysql
 
   dashboard:
     image: dina/ala-dashboard:v0.1
@@ -236,3 +248,13 @@ services:
     volumes:
       - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
       - ./dashboard/data.json:/data/dashboard/data.json
+
+volumes:
+  db_data_collectory:
+  db_data_cassandra:
+  db_data_mongo:
+  db_data_loggerservice:
+  db_data_imageservice:
+  db_data_apiservice:
+  data_nameindex:
+  data_images:
