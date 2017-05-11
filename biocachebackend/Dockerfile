@@ -38,7 +38,7 @@ COPY biocache-cli-files/log4j.xml /usr/lib/biocache/log4j.xml
 COPY biocache-cli-files/subgroups.json /data/biocache/config/subgroups.json
 COPY biocache.zip /usr/lib/biocache/biocache.zip
 RUN unzip /usr/lib/biocache/biocache.zip -d /usr/lib/biocache/
-COPY biocache-cli-files/biocache.sh /usr/lib/biocache/biocache 
+COPY biocache-cli-files/biocache.sh /usr/lib/biocache/biocache
 
 RUN chmod 777 /usr/lib/biocache/biocache && \
 	mv /usr/lib/biocache/biocache-store-*.jar /usr/lib/biocache/biocache.jar && \
@@ -51,3 +51,4 @@ RUN mkdir -m 777 -p \
     /data/biocache-reindex/solr
 
 COPY biocache-cli-files/solr-template /data/biocache-reindex/solr-template
+VOLUME /data

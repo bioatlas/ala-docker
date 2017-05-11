@@ -108,7 +108,8 @@ services:
       biocache_opts: -Xmx16g -Xms1g
     volumes:
       - data_nameindex:/data/lucene/namematching
-
+      - data_biocachebackend:/data
+ 
   solr:
     image: dina/ala-solrindex:v0.1
     container_name: solr
@@ -268,4 +269,5 @@ volumes:
   db_data_apiservice:
   data_nameindex:
   data_images:
+  data_biocachebackend:
   data_mirroreum:
