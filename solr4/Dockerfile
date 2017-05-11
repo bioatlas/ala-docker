@@ -51,6 +51,7 @@ ENV PATH /opt/solr/bin:/opt/docker-solr/scripts:$PATH
 EXPOSE 8983
 WORKDIR /opt/solr
 USER $SOLR_USER
+VOLUME /opt/solr
 
 ENTRYPOINT ["tini", "--", "docker-entrypoint.sh"]
 CMD ["solr"]
