@@ -10,16 +10,16 @@ URL_ALA = $(URL_NAMEIDX)/namematching.tgz
 URL_MRG = $(URL_NAMEIDX)/merge_namematching.tgz
 URL_SDS = http://biocache.ala.org.au/archives/layers/sds-layers.tgz
 #URL_COLLECTORY = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-collectory/1.4.3/generic-collectory-1.4.3.war
-URL_COLLECTORY = https://github.com/shahmanash/generic-collectory-sweden/releases/download/v0.0.3/generic-collectory-1.4.3.war
+URL_COLLECTORY = https://github.com/bioatlas/generic-collectory-sweden/releases/download/v0.0.3/generic-collectory-1.4.3.war
 URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/2.3.1/ala-name-matching-2.3.1-distribution.zip 
 URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.8.1/biocache-service-1.8.1.war
 #URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/generic-hub/1.2.5/generic-hub-1.2.5.war
-URL_BIOCACHE_HUB = https://github.com/shahmanash/generic-hub-sweden/releases/download/v0.0.3/generic-hub-1.3.2.war
+URL_BIOCACHE_HUB = https://github.com/bioatlas/generic-hub-sweden/releases/download/v0.0.3/generic-hub-1.3.2.war
 URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
 URL_IMAGE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-images/0.7/ala-images-0.7.war
 #URL_API = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/webapi/1.0/webapi-1.0.war
-URL_API = https://github.com/shahmanash/webapi/releases/download/v0.2/webapi-1.1-SNAPSHOT.war
+URL_API = https://github.com/bioatlas/webapi/releases/download/v0.2/webapi-1.1-SNAPSHOT.war
 URL_DASHBOARD = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/dashboard/1.0/dashboard-1.0.war
 URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/2017-02-13/backbone.zip
 
@@ -93,12 +93,15 @@ secrets:
 		$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> $@
 	printf "export SECRET_POSTGRES_PASSWORD=%b\n" \
 		$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> $@
+	printf "export SECRET_MIRROREUM_PASSWORD=%b\n" \
+		$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> $@
 
 dotfiles: secrets
 	bash -c ". secrets && envsubst < env/envapi.template > env/.envapi"
 	bash -c ". secrets && envsubst < env/envcollectory.template > env/.envcollectory"
 	bash -c ". secrets && envsubst < env/envimage.template > env/.envimage"
 	bash -c ". secrets && envsubst < env/envlogger.template > env/.envlogger"
+	bash -c ". secrets && envsubst < env/envmirroreum.template > env/.envmirroreum"
 	rm -f secrets
 
 htpasswd:
@@ -107,20 +110,20 @@ htpasswd:
 
 build:
 	@echo "Building images..."
-	@docker build -t dina/ala-solrindex:v0.1 solr4
-	@docker build -t dina/ala-biocachebackend:v0.1 biocachebackend
-	@docker build -t dina/ala-nameindex:v0.1 nameindex
-	@docker build -t dina/ala-nginx:v0.1 nginx
-	@docker build -t dina/ala-biocachehub:v0.1 biocachehub
-	@docker build -t dina/ala-collectory:v0.1 collectory
-	@docker build -t dina/ala-biocacheservice:v0.1 biocacheservice
-	@docker build -t dina/ala-cassandra:v0.1 cassandra
-	@docker build -t dina/ala-mongo:v0.1 mongo
-	@docker build -t dina/ala-loggerservice:v0.1 loggerservice
-	@docker build -t dina/ala-imageservice:v0.1 imageservice
-	@docker build -t dina/ala-imagestore:v0.1 imagestore
-	@docker build -t dina/ala-api:v0.1 api
-	@docker build -t dina/ala-dashboard:v0.1 dashboard
+	@docker build -t bioatlas/ala-solrindex:v0.1 solr4
+	@docker build -t bioatlas/ala-biocachebackend:v0.1 biocachebackend
+	@docker build -t bioatlas/ala-nameindex:v0.1 nameindex
+	@docker build -t bioatlas/ala-nginx:v0.1 nginx
+	@docker build -t bioatlas/ala-biocachehub:v0.1 biocachehub
+	@docker build -t bioatlas/ala-collectory:v0.1 collectory
+	@docker build -t bioatlas/ala-biocacheservice:v0.1 biocacheservice
+	@docker build -t bioatlas/ala-cassandra:v0.1 cassandra
+	@docker build -t bioatlas/ala-mongo:v0.1 mongo
+	@docker build -t bioatlas/ala-loggerservice:v0.1 loggerservice
+	@docker build -t bioatlas/ala-imageservice:v0.1 imageservice
+	@docker build -t bioatlas/ala-imagestore:v0.1 imagestore
+	@docker build -t bioatlas/ala-api:v0.1 api
+	@docker build -t bioatlas/ala-dashboard:v0.1 dashboard
 
 up:
 	@echo "Starting services..."
@@ -150,19 +153,19 @@ stop:
 	@docker-compose stop
 
 push:
-	@docker push dina/ala-solrindex:v0.1
-	@docker push dina/ala-biocachebackend:v0.1
-	@docker push dina/ala-nameindex:v0.1
-	@docker push dina/ala-nginx:v0.1
-	@docker push dina/ala-biocachehub:v0.1
-	@docker push dina/ala-collectory:v0.1
-	@docker push dina/ala-biocacheservice:v0.1
-	@docker push dina/ala-cassandra:v0.1
-	@docker push dina/dina/ala-mongo:v0.1
-	@docker push dina/ala-loggerservice:v0.1
-	@docker push dina/ala-imageservice:v0.1
-	@docker push dina/ala-imagestore:v0.1
-	@docker push dina/ala-api:v0.1
-	@docker push dina/ala-dashboard:v0.1
+	@docker push bioatlas/ala-solrindex:v0.1
+	@docker push bioatlas/ala-biocachebackend:v0.1
+	@docker push bioatlas/ala-nameindex:v0.1
+	@docker push bioatlas/ala-nginx:v0.1
+	@docker push bioatlas/ala-biocachehub:v0.1
+	@docker push bioatlas/ala-collectory:v0.1
+	@docker push bioatlas/ala-biocacheservice:v0.1
+	@docker push bioatlas/ala-cassandra:v0.1
+	@docker push bioatlas/ala-mongo:v0.1
+	@docker push bioatlas/ala-loggerservice:v0.1
+	@docker push bioatlas/ala-imageservice:v0.1
+	@docker push bioatlas/ala-imagestore:v0.1
+	@docker push bioatlas/ala-api:v0.1
+	@docker push bioatlas/ala-dashboard:v0.1
 
 release: build push

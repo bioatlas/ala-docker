@@ -250,6 +250,16 @@ services:
       - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
       - ./dashboard/data.json:/data/dashboard/data.json
 
+  mirroreum:
+    image: raquamaps/mirroreum:latest
+    container_name: mirroreum
+    env_file: ./env/.envmirroreum
+    environment:
+      - VIRTUAL_HOST=mirroreum.bioatlas.se
+      - VIRTUAL_PORT=8787
+    volumes:
+      - data_mirroreum:/home/rstudio
+
 volumes:
   db_data_collectory:
   db_data_cassandra:
@@ -260,3 +270,4 @@ volumes:
   data_nameindex:
   data_images:
   data_biocachebackend:
+  data_mirroreum:
