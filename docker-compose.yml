@@ -262,6 +262,13 @@ services:
     volumes:
       - data_mirroreum:/home/rstudio
 
+  shiny:
+    image: raquamaps/shiny:v0
+    container_name: shiny
+    environment:
+      - VIRTUAL_HOST=birdringing.bioatlas.se
+      - VIRTUAL_PORT=3838
+
 volumes:
   db_data_collectory:
   db_data_cassandra:
