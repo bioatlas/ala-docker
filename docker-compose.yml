@@ -46,6 +46,8 @@ services:
       - solr
     environment:
       JAVA_OPTS: -Xmx16g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - data_nameindex:/data/lucene/namematching
 
   biocachehub:
     image: bioatlas/ala-biocachehub:v0.1
@@ -109,7 +111,8 @@ services:
     volumes:
       - data_nameindex:/data/lucene/namematching
       - data_biocachebackend:/data
- 
+      - ./config/blacklistMediaUrls.txt:/data/biocache/config/blacklistMediaUrls.txt
+
   solr:
     image: bioatlas/ala-solrindex:v0.1
     container_name: solr
