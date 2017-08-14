@@ -15,7 +15,7 @@ URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releas
 URL_BIOCACHE_HUB = https://github.com/bioatlas/generic-hub-sweden/releases/download/v0.0.5/generic-hub-1.5.war
 URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
-URL_IMAGE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-images/0.7/ala-images-0.7.war
+URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/v0.0.1/ala-images.war
 URL_API = https://github.com/bioatlas/webapi/releases/download/v0.2/webapi-1.1-SNAPSHOT.war
 URL_DASHBOARD = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/dashboard/1.0/dashboard-1.0.war
 URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/2017-02-13/backbone.zip
@@ -73,7 +73,7 @@ init:
 		curl --progress -o loggerservice/logger-service.war $(URL_LOGGER_SERVICE)
 
 	@test -f imageservice/images.war || \
-		curl --progress -o imageservice/images.war $(URL_IMAGE_SERVICE)
+		wget -q --show-progress -O imageservice/images.war $(URL_IMAGE_SERVICE)
 
 	@test -f api/api.war || \
 		wget -q --show-progress -O api/api.war $(URL_API)
