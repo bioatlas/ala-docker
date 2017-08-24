@@ -207,6 +207,7 @@ services:
     volumes:
       - ./config/images-config.properties:/tmp/images-config.properties
       - data_images:/data/images/store
+      - data_images_elasticsearch:/data/images/elasticsearch
     command: /bin/ash -c "envsubst < /tmp/images-config.properties > /data/images/config/images-config.properties && catalina.sh run"
 
   static:
@@ -287,3 +288,4 @@ volumes:
   data_biocachebackend:
   data_mirroreum:
   data_solr:
+  data_images_elasticsearch:
