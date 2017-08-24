@@ -126,6 +126,10 @@ up:
 	@echo "Starting services..."
 	@docker-compose up -d
 
+up-dev:
+	@echo "Starting services in development mode..."
+	@docker-compose up -d -f docker-compose-dev.yml	
+
 test:
 	@echo "run cd ghost && rm -rf content && make content first to populate front page with content"
 	@echo "Opening up front page... use the bigmac/hamburger menu at the front page to get the toolbar for testing all services.."

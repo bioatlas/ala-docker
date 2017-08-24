@@ -1,0 +1,282 @@
+version: '3'
+
+services:
+
+  proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx-proxy-certs:/etc/nginx/certs:ro
+      - ./nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
+    environment:
+      - DNSDOCK_ALIAS=bioatlas.se
+
+  #fs_db:
+  #  image: tianon/true
+  #  volumes:
+  #    - ./mysql-datadir:/var/lib/mysql
+  #    - ./initdb:/docker-entrypoint-initdb.d
+  #  container_name: fs_volume
+
+  mysqldb:
+    image: mysql:5.7
+    env_file: ./env/.envcollectory
+    container_name: mysqldb
+    volumes:
+      - db_data_collectory:/var/lib/mysql
+
+  cassandradb:
+    image: bioatlas/ala-cassandra:v0.1
+    container_name: cassandradb
+    volumes:
+      - db_data_cassandra:/var/lib/cassandra
+
+  biocacheservice:
+    image: bioatlas/ala-biocacheservice:v0.1
+    container_name: biocacheservice
+    depends_on:
+      - cassandradb
+      - solr
+    links:
+      - cassandradb
+      - solr
+    environment:
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+      - ./config/biocacheservice-config.properties:/data/biocache/config/biocache-config.properties:ro
+      - ./config/logger-client.properties:/data/logger-client/config/logger-client.properties:ro
+
+  biocachehub:
+    image: bioatlas/ala-biocachehub:v0.1
+    container_name: biocachehub
+    depends_on:
+      - biocacheservice
+    environment:
+    volumes:
+      - ./config/generic-hub-config.properties:/data/generic-hub/config/generic-hub-config.properties
+
+  collectory:
+    image: bioatlas/ala-collectory:v0.1
+    container_name: collectory
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+    environment:
+    env_file: ./env/.envcollectory
+    volumes:
+      - ./config/generic-collectory-config.properties:/tmp/generic-collectory-config.properties
+    command: /bin/ash -c "envsubst < /tmp/generic-collectory-config.properties > /data/generic-collectory/config/generic-collectory-config.properties && catalina.sh run"
+
+  webserver:
+    image: bioatlas/ala-nginx:v0.1
+    container_name: webserver
+    environment:
+      - VIRTUAL_HOST=bioatlas.se,uptime.bioatlas.se
+    links:
+      - biocachehub
+      - biocacheservice
+      - collectory
+      - ghost
+      - uptime
+      - loggerservice
+      - imageservice
+    volumes:
+      - ./env/.htpasswd:/etc/nginx/htpasswd
+
+  nameindex:
+    image: bioatlas/ala-nameindex:v0.1
+    command: /bin/ash
+    container_name: nameindex
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+
+  biocachebackend:
+    image: bioatlas/ala-biocachebackend:v0.1
+    container_name: biocachebackend
+    links:
+      - biocachehub
+      - biocacheservice
+      - collectory
+      - cassandradb
+      - solr
+    command: /bin/ash
+    environment:
+      biocache_opts: -Xmx16g -Xms1g
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+      - data_biocachebackend:/data
+      - ./config/blacklistMediaUrls.txt:/data/biocache/config/blacklistMediaUrls.txt
+      - ./config/biocachebackend-config.properties:/data/biocache/config/biocache-config.properties:ro
+
+  solr:
+    image: bioatlas/ala-solrindex:v0.1
+    container_name: solr    
+    volumes:
+      - data_solr:/data/solr
+
+  mongo:
+    image: bioatlas/ala-mongo:v0.1
+    #image: mvertes/alpine-mongo
+    container_name: mongo
+    volumes:
+      - db_data_mongo:/data/db
+
+  uptime:
+    image: usman/docker-uptime
+    container_name: uptime
+    links:
+      - mongo:mongodb
+    volumes:
+      - ./uptime/default.yaml:/tmp/uptime/config/default.yaml
+
+  ghost:
+    image: zzrot/alpine-ghost
+    container_name: ghost
+    environment:
+      PROD_DOMAIN: https://bioatlas.se
+      NODE_ENV: production
+    volumes:
+      - ./ghost/content:/var/lib/ghost
+
+  ghost-backup:
+    image: bennetimo/ghost-backup
+    container_name: ghost-backup
+    volumes:
+      - ./ghost/backups:/backups
+
+  dnsdock:
+    image: aacebedo/dnsdock:v1.15.0-amd64
+    container_name: dnsserver
+    ports:
+      - 172.17.0.1:53:53/udp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  #dnsmasq:
+  #  image: andyshinn/dnsmasq:2.76
+  #  command: --log-facility=-
+  #  container_name: dnsmasq
+  #  cap_add:
+  #    - NET_ADMIN
+  #  ports:
+  #    - 172.17.0.1:53:53/tcp
+  #    - 172.17.0.1:53:53/udp
+
+  loggerservice:
+    image: bioatlas/ala-loggerservice:v0.1
+    container_name: loggerservice
+    depends_on:
+      - mysqldblogger
+    links:
+      - mysqldblogger
+    environment:
+    env_file: ./env/.envlogger
+    volumes:
+      - ./config/logger-config.properties:/tmp/logger-config.properties
+    command: /bin/ash -c "envsubst < /tmp/logger-config.properties > /data/logger/config/logger-config.properties && catalina.sh run"
+
+  mysqldblogger:
+    image: mysql:5.7
+    env_file: ./env/.envlogger
+    container_name: mysqldblogger
+    volumes:
+      - ./loggerservice/db:/docker-entrypoint-initdb.d
+      - db_data_loggerservice:/var/lib/mysql
+
+  imageservice:
+    image: bioatlas/ala-imageservice:v0.1
+    container_name: imageservice
+    depends_on:
+      - psqldbimage
+    links:
+      - psqldbimage
+    environment:
+    env_file: ./env/.envimage
+    volumes:
+      - ./config/images-config.properties:/tmp/images-config.properties
+      - data_images:/data/images/store
+      - data_images_elasticsearch:/data/images/elasticsearch
+    command: /bin/ash -c "envsubst < /tmp/images-config.properties > /data/images/config/images-config.properties && catalina.sh run"
+
+  static:
+    image: nginx:alpine
+    volumes:
+      - ./static:/usr/share/nginx/html
+    container_name: static
+
+  imagestore:
+    image: bioatlas/ala-imagestore:v0.1
+    volumes:
+      - data_images:/data/images/store
+    container_name: imagestore
+
+  psqldbimage:
+    image: postgres:alpine
+    env_file: ./env/.envimage
+    container_name: psqldbimage
+    volumes:
+      - db_data_imageservice:/var/lib/postgresql/data
+
+  apiservice:
+    image: bioatlas/ala-api:v0.1
+    container_name: apiservice
+    depends_on:
+      - mysqldbapi
+    links:
+      - mysqldbapi
+    environment:
+    env_file: ./env/.envapi
+    volumes:
+      - ./config/webapi-config.properties:/tmp/webapi-config.properties
+    command: /bin/ash -c "envsubst < /tmp/webapi-config.properties > /data/webapi/config/webapi-config.properties && catalina.sh run"
+
+  mysqldbapi:
+    image: mysql:5.7
+    env_file: ./env/.envapi
+    container_name: mysqldbapi
+    volumes:
+      - db_data_apiservice:/var/lib/mysql
+
+  dashboard:
+    image: bioatlas/ala-dashboard:v0.1
+    container_name: dashboard
+    environment:
+    volumes:
+      - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
+      - ./dashboard/data.json:/data/dashboard/data.json
+
+  mirroreum:
+    image: raquamaps/mirroreum:latest
+    container_name: mirroreum
+    env_file: ./env/.envmirroreum
+    environment:
+      - VIRTUAL_HOST=mirroreum.bioatlas.se
+      - VIRTUAL_PORT=8787
+    volumes:
+      - data_mirroreum:/home/rstudio
+
+  shiny:
+    image: raquamaps/shiny:v0.1.5
+    container_name: shiny
+    environment:
+      - VIRTUAL_HOST=birdringing.bioatlas.se
+      - VIRTUAL_PORT=3838
+
+volumes:
+  db_data_collectory:
+  db_data_cassandra:
+  db_data_mongo:
+  db_data_loggerservice:
+  db_data_imageservice:
+  db_data_apiservice:
+  data_nameindex:
+  data_images:
+  data_biocachebackend:
+  data_mirroreum:
+  data_solr:
+  data_images_elasticsearch:
