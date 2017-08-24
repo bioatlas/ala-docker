@@ -4,10 +4,10 @@ FROM openjdk:7-alpine
 
 RUN mkdir -p /data/biocache/layers /data/biocache/config
 
-COPY biocache-properties-files/biocache-config.properties \
-	/data/biocache/config/biocache-config.properties
+#COPY biocache-properties-files/biocache-config.properties \
+#	/data/biocache/config/biocache-config.properties
 
-RUN chmod 0644 /data/biocache/config/biocache-config.properties
+#RUN chmod 0644 /data/biocache/config/biocache-config.properties
 
 COPY biocache-properties-files/sds-layers.tgz \
 	/data/biocache/layers/sds-layers.tgz
