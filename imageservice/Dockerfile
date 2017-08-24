@@ -11,7 +11,7 @@ RUN mkdir -p /data \
     /data/images/incoming \
     /data/images/bin/imgcnv
 
-VOLUME /data/images/store
+#VOLUME /data/images/store
 
 #COPY images-config.properties /data/images/config/
 COPY images.war $CATALINA_HOME/webapps/
