@@ -128,7 +128,7 @@ up:
 
 up-dev:
 	@echo "Starting services in development mode..."
-	@docker-compose up -d -f docker-compose-dev.yml	
+	@docker-compose -f docker-compose-dev.yml up -d
 
 test:
 	@echo "run cd ghost && rm -rf content && make content first to populate front page with content"

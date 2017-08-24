@@ -43,8 +43,7 @@ services:
       - solr
     links:
       - cassandradb
-      - solr
-    environment:
+      - solr    
     volumes:
       - data_nameindex:/data/lucene/namematching
       - ./config/biocacheservice-config.properties:/data/biocache/config/biocache-config.properties:ro
@@ -55,7 +54,6 @@ services:
     container_name: biocachehub
     depends_on:
       - biocacheservice
-    environment:
     volumes:
       - ./config/generic-hub-config.properties:/data/generic-hub/config/generic-hub-config.properties
 
@@ -65,8 +63,7 @@ services:
     depends_on:
       - mysqldb
     links:
-      - mysqldb
-    environment:
+      - mysqldb    
     env_file: ./env/.envcollectory
     volumes:
       - ./config/generic-collectory-config.properties:/tmp/generic-collectory-config.properties
@@ -105,8 +102,6 @@ services:
       - cassandradb
       - solr
     command: /bin/ash
-    environment:
-      biocache_opts: -Xmx16g -Xms1g
     volumes:
       - data_nameindex:/data/lucene/namematching
       - data_biocachebackend:/data
@@ -174,7 +169,6 @@ services:
       - mysqldblogger
     links:
       - mysqldblogger
-    environment:
     env_file: ./env/.envlogger
     volumes:
       - ./config/logger-config.properties:/tmp/logger-config.properties
@@ -195,7 +189,6 @@ services:
       - psqldbimage
     links:
       - psqldbimage
-    environment:
     env_file: ./env/.envimage
     volumes:
       - ./config/images-config.properties:/tmp/images-config.properties
@@ -229,7 +222,6 @@ services:
       - mysqldbapi
     links:
       - mysqldbapi
-    environment:
     env_file: ./env/.envapi
     volumes:
       - ./config/webapi-config.properties:/tmp/webapi-config.properties
@@ -245,7 +237,6 @@ services:
   dashboard:
     image: bioatlas/ala-dashboard:v0.1
     container_name: dashboard
-    environment:
     volumes:
       - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
       - ./dashboard/data.json:/data/dashboard/data.json
