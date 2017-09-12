@@ -1,17 +1,17 @@
-FROM tomcat:7-alpine
+FROM tomcat:8-alpine
 
 # collectory deployment section
 
 RUN mkdir -p /data \
-	/data/generic-collectory \
-	/data/generic-collectory/upload/tmp \
-	/data/generic-collectory/taxa/data
+	/data/ala-collectory \
+	/data/ala-collectory/upload/tmp \
+	/data/ala-collectory/taxa/data
 
 COPY generic-collectory-data/generic-collectory/config/connection-profiles.json \
-	/data/generic-collectory/config/
+	/data/ala-collectory/config/
 
 COPY generic-collectory-data/generic-collectory/data\
-	/data/generic-collectory/data
+	/data/ala-collectory/data
 
 COPY collectory.war $CATALINA_HOME/webapps/
 

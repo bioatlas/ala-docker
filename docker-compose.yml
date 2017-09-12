@@ -59,7 +59,7 @@ services:
     environment:
       JAVA_OPTS: -Xmx16g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
-      - ./config/generic-hub-config.properties:/data/generic-hub/config/generic-hub-config.properties
+      - ./config/generic-hub-config.properties:/data/ala-hub/config/ala-hub-config.properties
 
   collectory:
     image: bioatlas/ala-collectory:v0.1
@@ -72,8 +72,8 @@ services:
       JAVA_OPTS: -Xmx8g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envcollectory
     volumes:
-      - ./config/generic-collectory-config.properties:/tmp/generic-collectory-config.properties
-    command: /bin/ash -c "envsubst < /tmp/generic-collectory-config.properties > /data/generic-collectory/config/generic-collectory-config.properties && catalina.sh run"
+      - ./config/generic-collectory-config.properties:/tmp/ala-collectory-config.properties
+    command: /bin/ash -c "envsubst < /tmp/ala-collectory-config.properties > /data/ala-collectory/config/ala-collectory-config.properties && catalina.sh run"
 
   webserver:
     image: bioatlas/ala-nginx:v0.1
