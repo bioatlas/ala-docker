@@ -126,8 +126,11 @@ services:
     container_name: uptime
     links:
       - mongo:mongodb
+    env_file: ./env/.envuptime
     volumes:
-      - ./uptime/default.yaml:/tmp/uptime/config/default.yaml
+      - ./uptime/default.yaml:/tmp/default.yaml
+    command: /bin/bash -c "envsubst < /tmp/default.yaml > /tmp/uptime/config/default.yaml"
+# ENTRYPOINT ["/opt/run-uptime.sh"] CMD ["rootpass"] is in Usman's image
 
   ghost:
     image: zzrot/alpine-ghost

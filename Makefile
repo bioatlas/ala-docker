@@ -92,6 +92,8 @@ secrets:
 		$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> $@
 	printf "export SECRET_MIRROREUM_PASSWORD=%b\n" \
 		$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> $@
+	printf "export SECRET_UPTIME_PASSWORD=%b\n" \
+		$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> $@
 
 dotfiles: secrets
 	bash -c ". secrets && envsubst < env/envapi.template > env/.envapi"
@@ -99,6 +101,7 @@ dotfiles: secrets
 	bash -c ". secrets && envsubst < env/envimage.template > env/.envimage"
 	bash -c ". secrets && envsubst < env/envlogger.template > env/.envlogger"
 	bash -c ". secrets && envsubst < env/envmirroreum.template > env/.envmirroreum"
+	bash -c ". secrets && envsubst < env/envuptime.template > env/.envuptime"
 	rm -f secrets
 
 htpasswd:

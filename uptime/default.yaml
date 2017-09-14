@@ -44,8 +44,8 @@ email:
   # The email plugin also uses the main `url` param for hyperlinks in the sent emails
 
 basicAuth:
-  username:    uptimeadmin
-  password:    password123
+  username:    $USER
+  password:    $PASS
 verbose: true # only used in dev
 
 webPageTest:
