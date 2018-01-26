@@ -136,11 +136,8 @@ services:
     container_name: uptime
     links:
       - mongo:mongodb
-    env_file: ./env/.envuptime
     volumes:
-      - ./uptime/default.yaml:/tmp/default.yaml
-    command: /bin/bash -c "envsubst < /tmp/default.yaml > /tmp/uptime/config/default.yaml"
-# ENTRYPOINT ["/opt/run-uptime.sh"] CMD ["rootpass"] is in Usman's image
+      - ./uptime/default.yaml:/tmp/uptime/config/default.yaml
 
   ghost:
     image: zzrot/alpine-ghost
@@ -273,11 +270,22 @@ services:
       - data_mirroreum:/home/rstudio
 
   shiny:
-    image: raquamaps/shiny:v0.1.5
+    image: raquamaps/shiny:v0.1.6
     container_name: shiny
     environment:
       - VIRTUAL_HOST=birdringing.bioatlas.se
       - VIRTUAL_PORT=3838
+
+  portainer:
+    image: portainer/portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - data_portainer:/data
+#    environment:
+#      - VIRTUAL_HOST=monitor.bioatlas.se
+#      - VIRTUAL_PORT=9000
+    ports:
+      - 9000:9000
 
 volumes:
   db_data_collectory:
@@ -292,3 +300,5 @@ volumes:
   data_mirroreum:
   data_solr:
   data_images_elasticsearch:
+  data_portainer:
+  
