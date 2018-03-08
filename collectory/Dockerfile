@@ -7,17 +7,17 @@ RUN mkdir -p /data \
 	/data/ala-collectory/upload/tmp \
 	/data/ala-collectory/taxa/data
 
-COPY generic-collectory-data/generic-collectory/config/connection-profiles.json \
+COPY ala-collectory-data/ala-collectory/config/* \
 	/data/ala-collectory/config/
 
-COPY generic-collectory-data/generic-collectory/data\
+COPY ala-collectory-data/ala-collectory/data \
 	/data/ala-collectory/data
 
 COPY collectory.war $CATALINA_HOME/webapps/
 
-ENV \ 
-	BUILD_DEPS="gettext" \ 
-	RUNTIME_DEPS="libintl" 
+ENV \
+	BUILD_DEPS="gettext" \
+	RUNTIME_DEPS="libintl"
 
 RUN \
     apk add --update $RUNTIME_DEPS && \
