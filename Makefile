@@ -66,8 +66,8 @@ init:
 	@test -f biocacheservice/biocache-service.war || \
 		wget -q --show-progress -O biocacheservice/biocache-service.war $(URL_BIOCACHE_SERVICE)
 
-	@test -f biocachehub/generic-hub.war || \
-		wget -q --show-progress -O biocachehub/generic-hub.war $(URL_BIOCACHE_HUB)
+	@test -f biocachehub/ala-hub.war || \
+		wget -q --show-progress -O biocachehub/ala-hub.war $(URL_BIOCACHE_HUB)
 
 	@test -f biocachebackend/biocache.zip || \
 		wget -q --show-progress -O biocachebackend/biocache.zip $(URL_BIOCACHE_CLI)
