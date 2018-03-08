@@ -4,21 +4,24 @@ ME = $(USER)
 HOST = bioatlas.se
 TS := $(shell date '+%Y_%m_%d_%H_%M')
 
-URL_NAMEIDX = https://s3.amazonaws.com/ala-nameindexes/20140610
-URL_COL = $(URL_NAMEIDX)/col_namematching.tgz
-URL_ALA = $(URL_NAMEIDX)/namematching.tgz
-URL_MRG = $(URL_NAMEIDX)/merge_namematching.tgz
-URL_SDS = http://biocache.ala.org.au/archives/layers/sds-layers.tgz
-URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/1.4.5/ala-collectory-1.4.5.war
-URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/2.3.1/ala-name-matching-2.3.1-distribution.zip
-URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/1.9/biocache-service-1.9.war
-URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/2.3/ala-hub-2.3.war
-URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/1.8.0/biocache-store-1.8.0-distribution.zip
+#URL_NAMEIDX = https://s3.amazonaws.com/ala-nameindexes/20140610
+#URL_COL = $(URL_NAMEIDX)/col_namematching.tgz
+#URL_ALA = $(URL_NAMEIDX)/namematching.tgz
+#URL_MRG = $(URL_NAMEIDX)/merge_namematching.tgz
+#URL_SDS = http://biocache.ala.org.au/archives/layers/sds-layers.tgz
+URL_COLLECTORY = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-collectory/1.5.1/ala-collectory-1.5.1.war
+URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.1/ala-name-matching-3.1-distribution.zip
+URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.1/biocache-service-2.1.1.war
+URL_BIOCACHE_HUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-hub/3.0.3/ala-hub-3.0.3.war
+URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.2/biocache-store-2.2-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
-URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/v0.7.2/ala-images.war
-URL_API = https://github.com/bioatlas/webapi/releases/download/v0.2/webapi-1.1-SNAPSHOT.war
-URL_DASHBOARD = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/dashboard/1.0/dashboard-1.0.war
-URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/2017-02-13/backbone.zip
+URL_IMAGE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-images/0.8/ala-images-0.8.war
+URL_API = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/webapi/1.0/webapi-1.0.war
+URL_DASHBOARD = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/dashboard/2.1/dashboard-2.1.war
+URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/backbone-current.zip
+URL_BIEHUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-bie/1.4.1/ala-bie-1.4.1.war
+URL_BIEINDEX = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/bie-index/1.4.1.1/bie-index-1.4.1.1.war
+URL_SPECIESLIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/specieslist-webapp/3.0/specieslist-webapp-3.0.war
 
 all: init build up
 .PHONY: all
@@ -36,41 +39,41 @@ init:
 	@test -f collectory/collectory.war || \
 		wget -q --show-progress -O collectory/collectory.war $(URL_COLLECTORY)
 
-	@test -f nameindex/namematching.tgz || \
-		curl --progress -o nameindex/namematching.tgz $(URL_COL)
+	#@test -f nameindex/namematching.tgz || \
+	#	curl --progress -o nameindex/namematching.tgz $(URL_COL)
 
 	@test -f nameindex/nameindexer.zip || \
-		curl --progress -o nameindex/nameindexer.zip $(URL_NAMESDIST)
+		wget -q --show-progress -O nameindex/nameindexer.zip $(URL_NAMESDIST)
 
-	@test -f nameindex/dwca-col.zip || \
-		curl --progress -o nameindex/dwca-col.zip $(URL_NAMEIDX)/dwca-col.zip
+	#@test -f nameindex/dwca-col.zip || \
+	#	curl --progress -o nameindex/dwca-col.zip $(URL_NAMEIDX)/dwca-col.zip
 
-	@test -f nameindex/dwca-col-mammals.zip || \
-		curl --progress -o nameindex/dwca-col-mammals.zip $(URL_NAMEIDX)/dwca-col-mammals.zip
+	#@test -f nameindex/dwca-col-mammals.zip || \
+	#	curl --progress -o nameindex/dwca-col-mammals.zip $(URL_NAMEIDX)/dwca-col-mammals.zip
 
-	@test -f nameindex/IRMNG_DWC_HOMONYMS.zip || \
-		curl --progress -o nameindex/IRMNG_DWC_HOMONYMS.zip $(URL_NAMEIDX)/IRMNG_DWC_HOMONYMS.zip
+	#@test -f nameindex/IRMNG_DWC_HOMONYMS.zip || \
+	#	curl --progress -o nameindex/IRMNG_DWC_HOMONYMS.zip $(URL_NAMEIDX)/IRMNG_DWC_HOMONYMS.zip
 
-	@test -f nameindex/col_vernacular.txt.zip || \
-		curl --progress -o nameindex/col_vernacular.txt.zip $(URL_NAMEIDX)/col_vernacular.txt.zip
+	#@test -f nameindex/col_vernacular.txt.zip || \
+	#	curl --progress -o nameindex/col_vernacular.txt.zip $(URL_NAMEIDX)/col_vernacular.txt.zip
 
-	#@test -f nameindex/backbone.zip || \
-	#	curl --progress -o nameindex/backbone.zip $(URL_GBIF_BACKBONE)
+	@test -f nameindex/backbone.zip || \
+		wget -q --show-progress -O nameindex/backbone.zip $(URL_GBIF_BACKBONE)
 
-	@test -f biocachebackend/biocache-properties-files/sds-layers.tgz || \
-		curl --progress --create-dirs -o biocachebackend/biocache-properties-files/sds-layers.tgz $(URL_SDS)
+	#@test -f biocachebackend/biocache-properties-files/sds-layers.tgz || \
+	#	curl --progress --create-dirs -o biocachebackend/biocache-properties-files/sds-layers.tgz $(URL_SDS)
 
 	@test -f biocacheservice/biocache-service.war || \
-		curl --progress -o biocacheservice/biocache-service.war $(URL_BIOCACHE_SERVICE)
+		wget -q --show-progress -O biocacheservice/biocache-service.war $(URL_BIOCACHE_SERVICE)
 
 	@test -f biocachehub/generic-hub.war || \
 		wget -q --show-progress -O biocachehub/generic-hub.war $(URL_BIOCACHE_HUB)
 
 	@test -f biocachebackend/biocache.zip || \
-		curl --progress -o biocachebackend/biocache.zip $(URL_BIOCACHE_CLI)
+		wget -q --show-progress -O biocachebackend/biocache.zip $(URL_BIOCACHE_CLI)
 
 	@test -f loggerservice/logger-service.war || \
-		curl --progress -o loggerservice/logger-service.war $(URL_LOGGER_SERVICE)
+		wget -q --show-progress -O loggerservice/logger-service.war $(URL_LOGGER_SERVICE)
 
 	@test -f imageservice/images.war || \
 		wget -q --show-progress -O imageservice/images.war $(URL_IMAGE_SERVICE)
@@ -79,7 +82,16 @@ init:
 		wget -q --show-progress -O api/api.war $(URL_API)
 
 	@test -f dashboard/dashboard.war || \
-		curl --progress -o dashboard/dashboard.war $(URL_DASHBOARD)
+		wget -q --show-progress -O dashboard/dashboard.war $(URL_DASHBOARD)
+
+	@test -f biehub/ala-bie.war || \
+		wget -q --show-progress -O biehub/ala-bie.war $(URL_BIEHUB)
+
+	@test -f bieindex/bie-index.war || \
+		wget -q --show-progress -O bieindex/bie-index.war $(URL_BIEINDEX)
+
+	@test -f specieslist/specieslist-webapp.war || \
+		wget -q --show-progress -O specieslist/specieslist-webapp.war $(URL_SPECIESLIST)
 
 secrets:
 	#echo "# Make this unique, and don't share it with anybody.\n# This value was autogenerated." > $@
@@ -110,20 +122,20 @@ htpasswd:
 
 build:
 	@echo "Building images..."
-	@docker build -t bioatlas/ala-solrindex:v0.1 solr4
-	@docker build -t bioatlas/ala-biocachebackend:v0.1 biocachebackend
-	@docker build -t bioatlas/ala-nameindex:v0.1 nameindex
-	@docker build -t bioatlas/ala-nginx:v0.1 nginx
-	@docker build -t bioatlas/ala-biocachehub:v0.1 biocachehub
-	@docker build -t bioatlas/ala-collectory:v0.1 collectory
-	@docker build -t bioatlas/ala-biocacheservice:v0.1 biocacheservice
-	@docker build -t bioatlas/ala-cassandra:v0.1 cassandra
-	@docker build -t bioatlas/ala-mongo:v0.1 mongo
-	@docker build -t bioatlas/ala-loggerservice:v0.1 loggerservice
-	@docker build -t bioatlas/ala-imageservice:v0.1 imageservice
-	@docker build -t bioatlas/ala-imagestore:v0.1 imagestore
-	@docker build -t bioatlas/ala-api:v0.1 api
-	@docker build -t bioatlas/ala-dashboard:v0.1 dashboard
+	#@docker build -t bioatlas/ala-solrindex:v0.2 solr4
+	@docker build -t bioatlas/ala-biocachebackend:v0.2 biocachebackend
+	@docker build -t bioatlas/ala-nameindex:v0.2 nameindex
+	@docker build -t bioatlas/ala-nginx:v0.2 nginx
+	@docker build -t bioatlas/ala-biocachehub:v0.2 biocachehub
+	@docker build -t bioatlas/ala-collectory:v0.2 collectory
+	@docker build -t bioatlas/ala-biocacheservice:v0.2 biocacheservice
+	#@docker build -t bioatlas/ala-cassandra:v0.2 cassandra
+	@docker build -t bioatlas/ala-mongo:v0.2 mongo
+	@docker build -t bioatlas/ala-loggerservice:v0.2 loggerservice
+	@docker build -t bioatlas/ala-imageservice:v0.2 imageservice
+	@docker build -t bioatlas/ala-imagestore:v0.2 imagestore
+	@docker build -t bioatlas/ala-api:v0.2 api
+	@docker build -t bioatlas/ala-dashboard:v0.2 dashboard
 
 up:
 	@echo "Starting services..."
@@ -157,19 +169,19 @@ stop:
 	@docker-compose stop
 
 push:
-	@docker push bioatlas/ala-solrindex:v0.1
-	@docker push bioatlas/ala-biocachebackend:v0.1
-	@docker push bioatlas/ala-nameindex:v0.1
-	@docker push bioatlas/ala-nginx:v0.1
-	@docker push bioatlas/ala-biocachehub:v0.1
-	@docker push bioatlas/ala-collectory:v0.1
-	@docker push bioatlas/ala-biocacheservice:v0.1
-	@docker push bioatlas/ala-cassandra:v0.1
-	@docker push bioatlas/ala-mongo:v0.1
-	@docker push bioatlas/ala-loggerservice:v0.1
-	@docker push bioatlas/ala-imageservice:v0.1
-	@docker push bioatlas/ala-imagestore:v0.1
-	@docker push bioatlas/ala-api:v0.1
-	@docker push bioatlas/ala-dashboard:v0.1
+	#@docker push bioatlas/ala-solrindex:v0.2
+	@docker push bioatlas/ala-biocachebackend:v0.2
+	@docker push bioatlas/ala-nameindex:v0.2
+	@docker push bioatlas/ala-nginx:v0.2
+	@docker push bioatlas/ala-biocachehub:v0.2
+	@docker push bioatlas/ala-collectory:v0.2
+	@docker push bioatlas/ala-biocacheservice:v0.2
+	#@docker push bioatlas/ala-cassandra:v0.2
+	@docker push bioatlas/ala-mongo:v0.2
+	@docker push bioatlas/ala-loggerservice:v0.2
+	@docker push bioatlas/ala-imageservice:v0.2
+	@docker push bioatlas/ala-imagestore:v0.2
+	@docker push bioatlas/ala-api:v0.2
+	@docker push bioatlas/ala-dashboard:v0.2
 
 release: build push
