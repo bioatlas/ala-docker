@@ -1,4 +1,4 @@
-FROM tomcat:7-alpine
+FROM tomcat:8-alpine
 
 # logger-service deployment section
 
