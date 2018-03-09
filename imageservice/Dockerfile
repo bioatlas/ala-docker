@@ -1,24 +1,21 @@
-FROM tomcat:7-alpine
-
-RUN apk --update add apache2
+FROM tomcat:8-alpine
 
 # service deployment section
 RUN mkdir -p /data \
 	/data/images \
 	/data/images/config \
-    /data/images/elasticsearch \
-    /data/images/store \
-    /data/images/incoming \
-    /data/images/bin/imgcnv
+  /data/images/elasticsearch \
+  /data/images/store \
+  /data/images/incoming \
+  /data/images/bin/imgcnv
 
-VOLUME /data/images/store
+VOLUME /data/images/store /data/images/elasticsearch
 
-#COPY images-config.properties /data/images/config/
 COPY images.war $CATALINA_HOME/webapps/
 
-ENV \ 
-	BUILD_DEPS="gettext" \ 
-	RUNTIME_DEPS="libintl" 
+ENV \
+	BUILD_DEPS="gettext" \
+	RUNTIME_DEPS="libintl"
 
 RUN \
     apk add --update $RUNTIME_DEPS && \
