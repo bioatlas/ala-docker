@@ -5,8 +5,6 @@ FROM tomcat:8-alpine
 RUN mkdir -p /data \
 	/data/logger/config
 
-#COPY logger-config.properties /data/logger/config/
-
 COPY logger-service.war $CATALINA_HOME/webapps/
 
 ENV \
