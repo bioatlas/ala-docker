@@ -1,4 +1,4 @@
-FROM tomcat:7-alpine
+FROM tomcat:7-jre8-alpine
 
 # dashboard deployment section
 
@@ -6,13 +6,11 @@ RUN mkdir -p /data \
 	/data/dashboard \
 	/data/dashboard/config
 
-#COPY data.json /data/dashboard/
-
 COPY dashboard.war $CATALINA_HOME/webapps/
 
-ENV \ 
-	BUILD_DEPS="gettext" \ 
-	RUNTIME_DEPS="libintl" 
+ENV \
+	BUILD_DEPS="gettext" \
+	RUNTIME_DEPS="libintl"
 
 RUN \
     apk add --update $RUNTIME_DEPS && \
