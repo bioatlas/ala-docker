@@ -1,4 +1,4 @@
-FROM tomcat:7-alpine
+FROM tomcat:8-alpine
 
 # webapi deployment section
 
@@ -6,9 +6,9 @@ RUN mkdir -p /data/webapi/config
 
 COPY api.war $CATALINA_HOME/webapps/
 
-ENV \ 
-	BUILD_DEPS="gettext" \ 
-	RUNTIME_DEPS="libintl" 
+ENV \
+	BUILD_DEPS="gettext" \
+	RUNTIME_DEPS="libintl"
 
 RUN \
     apk add --update $RUNTIME_DEPS && \

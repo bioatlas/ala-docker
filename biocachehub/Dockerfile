@@ -6,7 +6,7 @@ RUN mkdir -m 0774 -p \
 	/data/ala-hub/config \
   /data/ala-hub/cache \
 	/data/ala-hub/download \
-	/data/ala-hub//geolite_db
+	/data/ala-hub/geolite_db
 
 COPY biocache-hub-files/config/*.json /data/ala-hub/config/
 COPY ala-hub.war $CATALINA_HOME/webapps/
