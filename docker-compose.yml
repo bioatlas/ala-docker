@@ -11,16 +11,7 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx-proxy-certs:/etc/nginx/certs:ro
-      - ./nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
-    environment:
-      - DNSDOCK_ALIAS=bioatlas.se
-
-  #fs_db:
-  #  image: tianon/true
-  #  volumes:
-  #    - ./mysql-datadir:/var/lib/mysql
-  #    - ./initdb:/docker-entrypoint-initdb.d
-  #  container_name: fs_volume
+      - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
 
   mysqldb:
     image: mysql:5.7
@@ -30,13 +21,18 @@ services:
       - db_data_collectory:/var/lib/mysql
 
   cassandradb:
-    image: bioatlas/ala-cassandra:v0.1
+    image: cassandra:3.11.2
     container_name: cassandradb
     volumes:
+      - ./cassandra3/entrypoint-wrap.sh:/entrypoint-wrap.sh
+      - ./cassandra3/biocache-db/cassandra3-schema.txt:/docker-entrypoint-initdb.d/cassandra3-schema.cql
+      - ./cassandra3/cassandra-files/cassandra-env.sh:/tmp/cassandra-env.sh
+      - ./cassandra3/cassandra-files/cassandra.yaml:/tmp/cassandra.yaml
       - db_data_cassandra:/var/lib/cassandra
+    entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
 
   biocacheservice:
-    image: bioatlas/ala-biocacheservice:v0.1
+    image: bioatlas/ala-biocacheservice:v0.2
     container_name: biocacheservice
     depends_on:
       - cassandradb
@@ -45,61 +41,62 @@ services:
       - cassandradb
       - solr
     environment:
-      JAVA_OPTS: -Xmx16g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx2g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
       - data_nameindex:/data/lucene/namematching
-      - ./config/biocacheservice-config.properties:/data/biocache/config/biocache-config.properties:ro
+      - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
       - ./config/logger-client.properties:/data/logger-client/config/logger-client.properties:ro
 
   biocachehub:
-    image: bioatlas/ala-biocachehub:v0.1
+    image: bioatlas/ala-biocachehub:v0.2
     container_name: biocachehub
     depends_on:
       - biocacheservice
     environment:
-      JAVA_OPTS: -Xmx16g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
-      - ./config/generic-hub-config.properties:/data/ala-hub/config/ala-hub-config.properties
+      - ./config/ala-hub-config.properties:/data/ala-hub/config/ala-hub-config.properties:ro
 
   collectory:
-    image: bioatlas/ala-collectory:v0.1
+    image: bioatlas/ala-collectory:v0.2
     container_name: collectory
     depends_on:
       - mysqldb
     links:
       - mysqldb
     environment:
-      JAVA_OPTS: -Xmx8g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envcollectory
     volumes:
-      - ./config/generic-collectory-config.properties:/tmp/ala-collectory-config.properties
+      - ./config/ala-collectory-config.properties:/tmp/ala-collectory-config.properties:ro
     command: /bin/ash -c "envsubst < /tmp/ala-collectory-config.properties > /data/ala-collectory/config/ala-collectory-config.properties && catalina.sh run"
 
   webserver:
-    image: bioatlas/ala-nginx:v0.1
+    image: nginx:alpine
     container_name: webserver
     environment:
-      - VIRTUAL_HOST=bioatlas.se,uptime.bioatlas.se
+      - VIRTUAL_HOST=bioatlas.se
     links:
       - biocachehub
       - biocacheservice
       - collectory
-      - ghost
-      - uptime
+      - wordpress
       - loggerservice
       - imageservice
+      - imagestore
     volumes:
       - ./env/.htpasswd:/etc/nginx/htpasswd
+      - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
 
   nameindex:
-    image: bioatlas/ala-nameindex:v0.1
+    image: bioatlas/ala-nameindex:v0.2
     command: /bin/ash
     container_name: nameindex
     volumes:
       - data_nameindex:/data/lucene/namematching
 
   biocachebackend:
-    image: bioatlas/ala-biocachebackend:v0.1
+    image: bioatlas/ala-biocachebackend:v0.2
     container_name: biocachebackend
     links:
       - biocachehub
@@ -109,81 +106,66 @@ services:
       - solr
     command: /bin/ash
     environment:
-      biocache_opts: -Xmx16g -Xms1g
+      biocache_opts: -Xmx1g -Xms1g
     volumes:
       - data_nameindex:/data/lucene/namematching
       - data_biocachebackend:/data
       - ./config/blacklistMediaUrls.txt:/data/biocache/config/blacklistMediaUrls.txt
-      - ./config/biocachebackend-config.properties:/data/biocache/config/biocache-config.properties:ro
+      - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
 
   solr:
-    image: bioatlas/ala-solrindex:v0.1
+    image: solr:6.6.3-alpine
     container_name: solr
     environment:
-      SOLR_HEAP: 64g
+      SOLR_HEAP: 4g
     volumes:
-      - data_solr:/data/solr
-
-  mongo:
-    image: bioatlas/ala-mongo:v0.1
-    #image: mvertes/alpine-mongo
-    container_name: mongo
-    volumes:
-      - db_data_mongo:/data/db
-
-  uptime:
-    image: usman/docker-uptime
-    container_name: uptime
-    links:
-      - mongo:mongodb
-    volumes:
-      - ./uptime/default.yaml:/tmp/uptime/config/default.yaml
-
-  ghost:
-    image: zzrot/alpine-ghost
-    container_name: ghost
-    environment:
-      PROD_DOMAIN: https://bioatlas.se
-      NODE_ENV: production
-    volumes:
-      - ./ghost/content:/var/lib/ghost
-
-  ghost-backup:
-    image: bennetimo/ghost-backup
-    container_name: ghost-backup
-    volumes:
-      - ./ghost/backups:/backups
-
-  dnsdock:
-    image: aacebedo/dnsdock:v1.15.0-amd64
-    container_name: dnsserver
+      - ./solr6/mycores:/opt/solr/server/solr/mycores
+      - ./solr6/solr.xml:/opt/solr/server/solr/solr.xml
+      - ./solr6/zoo.cfg:/opt/solr/server/solr/zoo.cfg
+      - ./solr6/lib/jts-1.13.jar:/opt/solr/server/lib/ext/jts-1.13.jar
+      - ./solr6/solr.in.sh:/etc/default/solr.in.sh:ro
+      - data_solr:/opt/solr
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - biocache
+      - bie
+      - bie-offline
     ports:
-      - 172.17.0.1:53:53/udp
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - 8983:8983
 
-  #dnsmasq:
-  #  image: andyshinn/dnsmasq:2.76
-  #  command: --log-facility=-
-  #  container_name: dnsmasq
-  #  cap_add:
-  #    - NET_ADMIN
+  #dnsdock:
+  #  image: aacebedo/dnsdock:v1.15.0-amd64
+  #  container_name: dnsserver
   #  ports:
-  #    - 172.17.0.1:53:53/tcp
   #    - 172.17.0.1:53:53/udp
+  #  volumes:
+  #    - /var/run/docker.sock:/var/run/docker.sock
+
+  dnsmasq:
+    image: andyshinn/dnsmasq:2.76
+    container_name: dnsmasq
+    command: --log-facility=- --server=127.0.0.11 --server=193.10.57.11 --server=8.8.8.8 --server=172.16.0.72 --server=172.16.0.7 --neg-ttl=3600 --cache-size=1000 --max-cache-ttl=3600 --min-cache-ttl=3600 --all-servers
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 172.17.0.1:53:53/tcp
+      - 172.17.0.1:53:53/udp
+    links:
+      - proxy:bioatlas.se
 
   loggerservice:
-    image: bioatlas/ala-loggerservice:v0.1
+    image: bioatlas/ala-loggerservice:v0.2
     container_name: loggerservice
     depends_on:
       - mysqldblogger
     links:
       - mysqldblogger
     environment:
-      JAVA_OPTS: -Xmx2g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envlogger
     volumes:
-      - ./config/logger-config.properties:/tmp/logger-config.properties
+      - ./config/logger-config.properties:/tmp/logger-config.properties:ro
     command: /bin/ash -c "envsubst < /tmp/logger-config.properties > /data/logger/config/logger-config.properties && catalina.sh run"
 
   mysqldblogger:
@@ -195,14 +177,14 @@ services:
       - db_data_loggerservice:/var/lib/mysql
 
   imageservice:
-    image: bioatlas/ala-imageservice:v0.1
+    image: bioatlas/ala-imageservice:v0.2
     container_name: imageservice
     depends_on:
       - psqldbimage
     links:
       - psqldbimage
     environment:
-      JAVA_OPTS: -Xmx8g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx2g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envimage
     volumes:
       - ./config/images-config.properties:/tmp/images-config.properties
@@ -217,7 +199,7 @@ services:
     container_name: static
 
   imagestore:
-    image: bioatlas/ala-imagestore:v0.1
+    image: bioatlas/ala-imagestore:v0.2
     volumes:
       - data_images:/data/images/store
     container_name: imagestore
@@ -230,17 +212,17 @@ services:
       - db_data_imageservice:/var/lib/postgresql/data
 
   apiservice:
-    image: bioatlas/ala-api:v0.1
+    image: bioatlas/ala-api:v0.2
     container_name: apiservice
     depends_on:
       - mysqldbapi
     links:
       - mysqldbapi
     environment:
-      JAVA_OPTS: -Xmx2g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envapi
     volumes:
-      - ./config/webapi-config.properties:/tmp/webapi-config.properties
+      - ./config/webapi-config.properties:/tmp/webapi-config.properties:ro
     command: /bin/ash -c "envsubst < /tmp/webapi-config.properties > /data/webapi/config/webapi-config.properties && catalina.sh run"
 
   mysqldbapi:
@@ -250,55 +232,32 @@ services:
     volumes:
       - db_data_apiservice:/var/lib/mysql
 
-  dashboard:
-    image: bioatlas/ala-dashboard:v0.1
-    container_name: dashboard
-    environment:
-      JAVA_OPTS: -Xmx4g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+  mysqldbwordpress:
+    image: mysql:5.7
+    container_name: mysqldbwordpress
+    env_file: ./env/.envwordpress
     volumes:
-      - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
-      - ./dashboard/data.json:/data/dashboard/data.json
+      - db_data_wordpress:/var/lib/mysql
 
-  mirroreum:
-    image: raquamaps/mirroreum:latest
-    container_name: mirroreum
-    env_file: ./env/.envmirroreum
-    environment:
-      - VIRTUAL_HOST=mirroreum.bioatlas.se
-      - VIRTUAL_PORT=8787
-    volumes:
-      - data_mirroreum:/home/rstudio
-
-  shiny:
-    image: raquamaps/shiny:v0.1.6
-    container_name: shiny
-    environment:
-      - VIRTUAL_HOST=birdringing.bioatlas.se
-      - VIRTUAL_PORT=3838
-
-  portainer:
-    image: portainer/portainer
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - data_portainer:/data
-#    environment:
-#      - VIRTUAL_HOST=monitor.bioatlas.se
-#      - VIRTUAL_PORT=9000
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
     ports:
-      - 9000:9000
+      - 8080:80
+    env_file: ./env/.envwordpress
+    volumes:
+      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
+      - ./wordpress/wp-config-sample.php:/usr/src/wordpress/wp-config-sample.php:ro
 
 volumes:
   db_data_collectory:
   db_data_cassandra:
-  db_data_mongo:
   db_data_loggerservice:
   db_data_imageservice:
   db_data_apiservice:
   data_nameindex:
   data_images:
   data_biocachebackend:
-  data_mirroreum:
   data_solr:
   data_images_elasticsearch:
-  data_portainer:
-  
+  db_data_wordpress:
