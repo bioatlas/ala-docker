@@ -1,5 +1,7 @@
 FROM tomcat:8-alpine
 
+RUN apk --update add apache2
+
 # service deployment section
 RUN mkdir -p /data \
 	/data/images \
@@ -9,7 +11,7 @@ RUN mkdir -p /data \
   /data/images/incoming \
   /data/images/bin/imgcnv
 
-VOLUME /data/images/store /data/images/elasticsearch
+VOLUME /data/images/store
 
 COPY images.war $CATALINA_HOME/webapps/
 
