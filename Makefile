@@ -66,7 +66,7 @@ init: theme-dl
 		wget -q --show-progress -O specieslist/specieslist-webapp.war $(URL_SPECIESLIST)
 
 theme-dl:
-	@echo "Downloading bioatlas wordpres theme..."
+	@echo "Downloading bioatlas wordpress theme..."
 	@test -f	wordpress/themes/atlas/master.zip || \
 		wget -q --show-progress -O wordpress/themes/atlas/master.zip $(URL_BIOATLAS_WORDPRESS_THEME) && \
 		unzip -q -o wordpress/themes/atlas/master.zip -d wordpress/themes/atlas/
@@ -93,8 +93,7 @@ dotfiles: secrets
 	rm -f secrets
 
 htpasswd:
-	#bash -c "htpasswd -bn admin passw0rd12 > env/.htpasswd"
-	bash -c "htpasswd -n admin > env/.htpasswd"
+	docker run --rm -it httpd:alpine htpasswd -nb admin admin > env/.htpasswd
 
 build:
 	@echo "Building images..."
@@ -151,3 +150,22 @@ push:
 	@docker push bioatlas/ala-api:v0.2
 
 release: build push
+
+ssl-certs:
+	@echo "Generating SSL certs using https://hub.docker.com/r/paulczar/omgwtfssl/"
+	docker run --rm -v /tmp/certs:/certs -e SSL_SUBJECT=bioatlas.se paulczar/omgwtfssl
+	mkdir -p nginx-proxy-certs
+	cp /tmp/certs/ca.pem /tmp/certs/cert.pem /tmp/certs/key.pem nginx-proxy-certs
+	cd nginx-proxy-certs && mv key.pem bioatlas.se.key && mv cert.pem bioatlas.se.crt
+
+	@echo "Using self-signed certificates will require either the CA cert to be imported system-wide or into apps"
+	@echo "if you don't do this, apps will fail to request data using SSL (https)"
+	@echo "WARNING! You now need to import the /tmp/certs/ca.pem file into Firefox/Chrome etc"
+	@echo "WARNING! For curl to work, you need to provide '--cacert /tmp/certs/ca.pem' switch or SSL requests will fail."
+
+ssl-certs-clean:
+	rm -f nginx-proxy-certs/bioatlas.se.crt nginx-proxy-certs/bioatlas.se.key nginx-proxy-certs/ca.pem
+	sudo rm -rf /tmp/certs
+
+ssl-certs-show:
+	openssl x509 -noout -text -in nginx-proxy-certs/bioatlas.se.crt

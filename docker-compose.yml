@@ -2,6 +2,18 @@ version: '3'
 
 services:
 
+  dnsmasq:
+    image: andyshinn/dnsmasq:2.76
+    container_name: dnsmasq
+    command: --log-facility=- --server=127.0.0.11 --server=193.10.57.11 --server=8.8.8.8 --server=172.16.0.72 --server=172.16.0.7 --neg-ttl=3600 --cache-size=1000 --max-cache-ttl=3600 --min-cache-ttl=3600 --all-servers
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 172.17.0.1:53:53/tcp
+      - 172.17.0.1:53:53/udp
+    links:
+      - proxy:bioatlas.se
+
   proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
@@ -12,6 +24,23 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx-proxy-certs:/etc/nginx/certs:ro
       - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
+
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    environment:
+      - VIRTUAL_HOST=bioatlas.se
+    links:
+      - biocachehub
+      - biocacheservice
+      - collectory
+      - wordpress
+      - loggerservice
+      - imageservice
+      - imagestore
+    volumes:
+      - ./env/.htpasswd:/etc/nginx/htpasswd
+      - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
 
   mysqldb:
     image: mysql:5.7
@@ -71,23 +100,6 @@ services:
       - ./config/ala-collectory-config.properties:/tmp/ala-collectory-config.properties:ro
     command: /bin/ash -c "envsubst < /tmp/ala-collectory-config.properties > /data/ala-collectory/config/ala-collectory-config.properties && catalina.sh run"
 
-  webserver:
-    image: nginx:alpine
-    container_name: webserver
-    environment:
-      - VIRTUAL_HOST=bioatlas.se
-    links:
-      - biocachehub
-      - biocacheservice
-      - collectory
-      - wordpress
-      - loggerservice
-      - imageservice
-      - imagestore
-    volumes:
-      - ./env/.htpasswd:/etc/nginx/htpasswd
-      - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
-
   nameindex:
     image: bioatlas/ala-nameindex:v0.2
     command: /bin/ash
@@ -133,26 +145,6 @@ services:
       - bie-offline
     ports:
       - 8983:8983
-
-  #dnsdock:
-  #  image: aacebedo/dnsdock:v1.15.0-amd64
-  #  container_name: dnsserver
-  #  ports:
-  #    - 172.17.0.1:53:53/udp
-  #  volumes:
-  #    - /var/run/docker.sock:/var/run/docker.sock
-
-  dnsmasq:
-    image: andyshinn/dnsmasq:2.76
-    container_name: dnsmasq
-    command: --log-facility=- --server=127.0.0.11 --server=193.10.57.11 --server=8.8.8.8 --server=172.16.0.72 --server=172.16.0.7 --neg-ttl=3600 --cache-size=1000 --max-cache-ttl=3600 --min-cache-ttl=3600 --all-servers
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - 172.17.0.1:53:53/tcp
-      - 172.17.0.1:53:53/udp
-    links:
-      - proxy:bioatlas.se
 
   loggerservice:
     image: bioatlas/ala-loggerservice:v0.2
@@ -205,7 +197,7 @@ services:
     container_name: imagestore
 
   psqldbimage:
-    image: postgres:alpine
+    image: postgres:9.6.8-alpine
     env_file: ./env/.envimage
     container_name: psqldbimage
     volumes:
