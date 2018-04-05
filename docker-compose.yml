@@ -24,7 +24,7 @@ services:
     image: cassandra:3.11.2
     container_name: cassandradb
     volumes:
-      - ./cassandra3/entrypoint-wrap.sh:/entrypoint-wrap.sh
+      - ./cassandra3/entrypoint-wrap.sh:/entrypoint-wrap.sh:z
       - ./cassandra3/biocache-db/cassandra3-schema.txt:/docker-entrypoint-initdb.d/cassandra3-schema.cql
       - ./cassandra3/cassandra-files/cassandra-env.sh:/tmp/cassandra-env.sh
       - ./cassandra3/cassandra-files/cassandra.yaml:/tmp/cassandra.yaml
