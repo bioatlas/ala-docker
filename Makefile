@@ -128,6 +128,17 @@ pull:
 	@docker pull bioatlas/ala-imagestore:v0.2
 	@docker pull bioatlas/ala-api:v0.2
 
+pull2:
+	@echo "Downloding other official docker images ..."
+	@docker pull mysql:5.7
+	@docker pull cassandra:3.11.2
+	@docker pull postgres:alpine
+	@docker pull solr:6.6.3-alpine
+	@docker pull wordpress:latest
+	@docker pull nginx:alpine
+	@docker pull andyshinn/dnsmasq:2.76
+	@docker pull jwilder/nginx-proxy
+
 push:
 	@docker push bioatlas/ala-biocachebackend:v0.2
 	@docker push bioatlas/ala-nameindex:v0.2
