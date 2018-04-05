@@ -117,16 +117,16 @@ stop:
 	@docker-compose stop
 
 pull:
-	@echo "Downloding docker images..."
-	@docker push bioatlas/ala-biocachebackend:v0.2
-	@docker push bioatlas/ala-nameindex:v0.2
-	@docker push bioatlas/ala-biocachehub:v0.2
-	@docker push bioatlas/ala-collectory:v0.2
-	@docker push bioatlas/ala-biocacheservice:v0.2
-	@docker push bioatlas/ala-loggerservice:v0.2
-	@docker push bioatlas/ala-imageservice:v0.2
-	@docker push bioatlas/ala-imagestore:v0.2
-	@docker push bioatlas/ala-api:v0.2
+	@echo "Downloding docker images for ALA modules..."
+	@docker pull bioatlas/ala-biocachebackend:v0.2
+	@docker pull bioatlas/ala-nameindex:v0.2
+	@docker pull bioatlas/ala-biocachehub:v0.2
+	@docker pull bioatlas/ala-collectory:v0.2
+	@docker pull bioatlas/ala-biocacheservice:v0.2
+	@docker pull bioatlas/ala-loggerservice:v0.2
+	@docker pull bioatlas/ala-imageservice:v0.2
+	@docker pull bioatlas/ala-imagestore:v0.2
+	@docker pull bioatlas/ala-api:v0.2
 
 push:
 	@docker push bioatlas/ala-biocachebackend:v0.2
