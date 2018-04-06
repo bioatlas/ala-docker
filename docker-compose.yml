@@ -22,7 +22,7 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx-proxy-certs:/etc/nginx/certs:ro
+      #- ./nginx-proxy-certs:/etc/nginx/certs:ro
       - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
 
   webserver:
