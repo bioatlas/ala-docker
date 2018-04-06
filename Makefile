@@ -131,7 +131,7 @@ pull2:
 	@echo "Downloding other official docker images ..."
 	@docker pull mysql:5.7
 	@docker pull cassandra:3.11.2
-	@docker pull postgres:alpine
+	@docker pull postgres:9.6.8-alpine
 	@docker pull solr:6.6.3-alpine
 	@docker pull wordpress:latest
 	@docker pull nginx:alpine
