@@ -39,7 +39,7 @@ services:
       - imageservice
       - imagestore
     volumes:
-      - ./env/.htpasswd:/etc/nginx/htpasswd
+      #- ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
 
   mysqldb:
