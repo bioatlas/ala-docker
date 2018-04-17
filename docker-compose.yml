@@ -241,6 +241,28 @@ services:
       - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
       - ./wordpress/wp-config-sample.php:/usr/src/wordpress/wp-config-sample.php:ro
 
+  specieslists:
+    image: bioatlas/ala-specieslists:v0.2
+    container_name: specieslists
+    links:
+      - mysqldbspecieslist
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms1g -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envspecieslists
+    volumes:
+      - ./config/specieslist-webapp-config.properties:/tmp/specieslist-webapp-config.properties:ro
+      - data_nameindex:/data/lucene/namematching
+    command: /bin/ash -c "envsubst < /tmp/specieslist-webapp-config.properties > /data/specieslist-webapp/config/specieslist-webapp-config.properties && catalina.sh run"
+
+  mysqldbspecieslist:
+    image: mysql:5.7
+    env_file: ./env/.envspecieslists
+    container_name: mysqldbspecieslist
+    command: --sql_mode=""
+    volumes:
+      - ./specieslists/db:/docker-entrypoint-initdb.d
+      - db_data_specieslists:/var/lib/mysql
+
 volumes:
   db_data_collectory:
   db_data_cassandra:
@@ -253,3 +275,4 @@ volumes:
   data_solr:
   data_images_elasticsearch:
   db_data_wordpress:
+  db_data_specieslists:

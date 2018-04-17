@@ -90,6 +90,7 @@ dotfiles: secrets
 	bash -c ". secrets && envsubst < env/envlogger.template > env/.envlogger"
 	bash -c ". secrets && envsubst < env/envmirroreum.template > env/.envmirroreum"
 	bash -c ". secrets && envsubst < env/envwordpress.template > env/.envwordpress"
+	bash -c ". secrets && envsubst < env/envspecieslists.template > env/.envspecieslists"
 	rm -f secrets
 
 htpasswd:
@@ -106,6 +107,7 @@ build:
 	@docker build -t bioatlas/ala-imageservice:v0.2 imageservice
 	@docker build -t bioatlas/ala-imagestore:v0.2 imagestore
 	@docker build -t bioatlas/ala-api:v0.2 api
+	@docker build -t bioatlas/ala-specieslists:v0.2 specieslists
 
 up:
 	@echo "Starting services..."
@@ -126,6 +128,7 @@ pull:
 	@docker pull bioatlas/ala-imageservice:v0.2
 	@docker pull bioatlas/ala-imagestore:v0.2
 	@docker pull bioatlas/ala-api:v0.2
+	@docker pull bioatlas/ala-specieslists:v0.2
 
 pull2:
 	@echo "Downloding other official docker images ..."
@@ -148,6 +151,7 @@ push:
 	@docker push bioatlas/ala-imageservice:v0.2
 	@docker push bioatlas/ala-imagestore:v0.2
 	@docker push bioatlas/ala-api:v0.2
+	@docker push bioatlas/ala-specieslists:v0.2
 
 release: build push
 
