@@ -18,12 +18,12 @@ services:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /var/run/docker.sock:/tmp/docker.sock
       #- ./nginx-proxy-certs:/etc/nginx/certs:ro
-      - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
+      - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf
 
   webserver:
     image: nginx:alpine
@@ -126,16 +126,16 @@ services:
       - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
 
   solr:
-    image: solr:6.6.3-alpine
+    image: solr:7.3-alpine
     container_name: solr
     environment:
       SOLR_HEAP: 4g
     volumes:
-      - ./solr6/mycores:/opt/solr/server/solr/mycores
-      - ./solr6/solr.xml:/opt/solr/server/solr/solr.xml
-      - ./solr6/zoo.cfg:/opt/solr/server/solr/zoo.cfg
-      - ./solr6/lib/jts-1.13.jar:/opt/solr/server/lib/ext/jts-1.13.jar
-      - ./solr6/solr.in.sh:/etc/default/solr.in.sh:ro
+      - ./solr7/mycores:/opt/solr/server/solr/mycores
+      - ./solr7/solr.xml:/opt/solr/server/solr/solr.xml
+      - ./solr7/zoo.cfg:/opt/solr/server/solr/zoo.cfg
+      - ./solr7/lib/jts-core-1.15.0.jar:/opt/solr/server/solr-webapp/webapp/WEB-INF/lib/jts-core-1.15.0.jar
+      - ./solr7/solr.in.sh:/etc/default/solr.in.sh:ro
       - data_solr:/opt/solr
     entrypoint:
       - docker-entrypoint.sh
@@ -232,7 +232,7 @@ services:
       - db_data_wordpress:/var/lib/mysql
 
   wordpress:
-    image: wordpress:latest
+    image: wordpress:4.9.5-apache
     container_name: wordpress
     ports:
       - 8080:80

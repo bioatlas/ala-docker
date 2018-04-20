@@ -70,8 +70,8 @@ init: theme-dl
 #	@test -f specieslist/specieslist-webapp.war || \
 #		wget -q --show-progress -O specieslist/specieslist-webapp.war $(URL_SPECIESLIST)
 
-	@test -f solr6/lib/jts-core-1.15.0.jar || \
-		wget -q --show-progress -O solr6/lib/jts-core-1.15.0.jar $(URL_JTS)
+	@test -f solr7/lib/jts-core-1.15.0.jar || \
+		wget -q --show-progress -O solr7/lib/jts-core-1.15.0.jar $(URL_JTS)
 
 theme-dl:
 	@echo "Downloading bioatlas wordpress theme..."
@@ -152,8 +152,8 @@ pull2:
 	@docker pull mysql:5.7
 	@docker pull cassandra:3.11.2
 	@docker pull postgres:9.6.8-alpine
-	@docker pull solr:6.6.3-alpine
-	@docker pull wordpress:latest
+	@docker pull solr:7.3-alpine
+	@docker pull wordpress:4.9.5-apache
 	@docker pull nginx:alpine
 	@docker pull andyshinn/dnsmasq:2.76
 	@docker pull jwilder/nginx-proxy
