@@ -1,7 +1,7 @@
 // initialise plugins
 $(function(){
 
-    var autocompleteUrl = 'https://bie.ala.org.au/ws/search/auto';
+    var autocompleteUrl = 'https://bioatlas.se/bie-index/search/auto.jsonp';
 
     if(typeof BIE_VARS != 'undefined' && BIE_VARS.autocompleteUrl){
         autocompleteUrl = BIE_VARS.autocompleteUrl;
