@@ -13,8 +13,8 @@ URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases
 URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/v0.7.2/ala-images.war
 URL_API = https://github.com/bioatlas/webapi/releases/download/v0.2/webapi-1.1-SNAPSHOT.war
 URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/backbone-current.zip
-URL_BIEHUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-bie/1.4.1/ala-bie-1.4.1.war
-URL_BIEINDEX = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/bie-index/1.4.1.1/bie-index-1.4.1.1.war
+URL_BIEHUB = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-bie/1.3.3/ala-bie-1.3.3.war
+URL_BIEINDEX = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/bie-index/1.3.0-SNAPSHOT/bie-index-1.3.0-20170802.102212-26.war
 URL_SPECIESLIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/specieslist-webapp/3.0/specieslist-webapp-3.0.war
 URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/master.zip
 
@@ -62,8 +62,8 @@ init: theme-dl
 	@test -f bieindex/bie-index.war || \
 		wget -q --show-progress -O bieindex/bie-index.war $(URL_BIEINDEX)
 
-	@test -f specieslist/specieslist-webapp.war || \
-		wget -q --show-progress -O specieslist/specieslist-webapp.war $(URL_SPECIESLIST)
+	@test -f specieslists/specieslist-webapp.war || \
+		wget -q --show-progress -O specieslists/specieslist-webapp.war $(URL_SPECIESLIST)
 
 theme-dl:
 	@echo "Downloading bioatlas wordpress theme..."
@@ -108,7 +108,8 @@ build:
 	@docker build -t bioatlas/ala-imagestore:v0.2 imagestore
 	@docker build -t bioatlas/ala-api:v0.2 api
 	@docker build -t bioatlas/ala-specieslists:v0.2 specieslists
-
+	@docker build -t bioatlas/ala-bieindex:v0.2 bieindex
+	@docker build -t bioatlas/ala-biehub:v0.2 biehub
 up:
 	@echo "Starting services..."
 	@docker-compose up -d
@@ -129,6 +130,8 @@ pull:
 	@docker pull bioatlas/ala-imagestore:v0.2
 	@docker pull bioatlas/ala-api:v0.2
 	@docker pull bioatlas/ala-specieslists:v0.2
+	@docker pull bioatlas/ala-bieindex:v0.2
+	@docker pull bioatlas/ala-biehub:v0.2
 
 pull2:
 	@echo "Downloding other official docker images ..."
@@ -152,6 +155,8 @@ push:
 	@docker push bioatlas/ala-imagestore:v0.2
 	@docker push bioatlas/ala-api:v0.2
 	@docker push bioatlas/ala-specieslists:v0.2
+	@docker push bioatlas/ala-bieindex:v0.2
+	@docker push bioatlas/ala-biehub:v0.2
 
 release: build push
 
