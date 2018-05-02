@@ -138,7 +138,7 @@ stop:
 	@docker-compose stop
 
 pull:
-	@echo "Downloding docker images for ALA modules..."
+	@echo "Downloading docker images for ALA modules..."
 	@docker pull bioatlas/ala-biocachebackend:v0.2
 	@docker pull bioatlas/ala-nameindex:v0.2
 	@docker pull bioatlas/ala-biocachehub:v0.2
@@ -153,7 +153,7 @@ pull:
 	@docker pull bioatlas/ala-biehub:v0.2
 
 pull2:
-	@echo "Downloding other official docker images ..."
+	@echo "Downloading other official docker images ..."
 	@docker pull mysql:5.7
 	@docker pull cassandra:3.11.2
 	@docker pull postgres:9.6.8-alpine
