@@ -70,7 +70,7 @@ services:
       - cassandradb
       - solr
     environment:
-      JAVA_OPTS: -Xmx2g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx2g -Xms256m -Xss256k -Djava.awt.headless=true
     volumes:
       - data_nameindex:/data/lucene/namematching
       - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
@@ -82,7 +82,7 @@ services:
     depends_on:
       - biocacheservice
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/ala-hub-config.properties:/data/ala-hub/config/ala-hub-config.properties:ro
 
@@ -94,7 +94,7 @@ services:
     links:
       - mysqldb
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envcollectory
     volumes:
       - ./config/ala-collectory-config.properties:/tmp/ala-collectory-config.properties:ro
@@ -154,7 +154,7 @@ services:
     links:
       - mysqldblogger
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envlogger
     volumes:
       - ./config/logger-config.properties:/tmp/logger-config.properties:ro
@@ -176,7 +176,7 @@ services:
     links:
       - psqldbimage
     environment:
-      JAVA_OPTS: -Xmx2g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx2g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envimage
     volumes:
       - ./config/images-config.properties:/tmp/images-config.properties
@@ -211,7 +211,7 @@ services:
     links:
       - mysqldbapi
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envapi
     volumes:
       - ./config/webapi-config.properties:/tmp/webapi-config.properties:ro
@@ -247,7 +247,7 @@ services:
     links:
       - mysqldbspecieslist
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envspecieslists
     volumes:
       - ./config/specieslist-webapp-config.properties:/tmp/specieslist-webapp-config.properties:ro
@@ -267,15 +267,15 @@ services:
     image: bioatlas/ala-bieindex:v0.2
     container_name: bieindex
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     volumes:
-      - ./config/bie-index-config.properties:/data/bie-index/config/bie-index-config.properties:ro
+      - ./config/bie-index-config.properties:/data/bie-index/config/bie-index-config.properties
 
   biehub:
     image: bioatlas/ala-biehub:v0.2
     container_name: biehub
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/ala-bie-config.properties:/data/ala-bie/config/ala-bie-config.properties:ro
 
