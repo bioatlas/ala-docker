@@ -74,7 +74,8 @@ init: theme-dl
 		wget -q --show-progress -O solr7/lib/jts-core-1.15.0.jar $(URL_JTS)
 theme-dl:
 	@echo "Downloading bioatlas wordpress theme..."
-	@test -f	wordpress/themes/atlas/master.zip || \
+	@test -f wordpress/themes/atlas/master.zip || \
+		mkdir -p wordpress/themes/atlas && \
 		wget -q --show-progress -O wordpress/themes/atlas/master.zip $(URL_BIOATLAS_WORDPRESS_THEME) && \
 		unzip -q -o wordpress/themes/atlas/master.zip -d wordpress/themes/atlas/
 
@@ -109,11 +110,13 @@ htpasswd:
 	docker run --rm -it httpd:alpine htpasswd -nb admin admin > env/.htpasswd
 
 dotfiles-clean:
-	cd env && rm -f  secrets .envapi .envcollectory .envimage .envlogger .envmirroreum .envwordpress .htpasswd
+	rm -f secrets && \
+		cd env && \
+		rm -f .envapi .envcollectory .envimage .envlogger .envmirroreum .envwordpress .htpasswd .envspecieslists
 
 clean:
 	docker-compose down
-	docker volume rm aladocker_data_biocachebackend aladocker_data_images aladocker_data_images_elasticsearch aladocker_data_nameindex aladocker_data_solr aladocker_db_data_apiservice aladocker_db_data_cassandra aladocker_db_data_collectory aladocker_db_data_imageservice aladocker_db_data_loggerservice aladocker_db_data_loggerservice aladocker_db_data_wordpress
+	docker volume rm aladocker_data_biocachebackend aladocker_data_images aladocker_data_images_elasticsearch aladocker_data_nameindex aladocker_data_solr aladocker_db_data_apiservice aladocker_db_data_cassandra aladocker_db_data_collectory aladocker_db_data_imageservice aladocker_db_data_loggerservice aladocker_db_data_loggerservice aladocker_db_data_wordpress aladocker_db_data_specieslists
 
 build:
 	@echo "Building images..."
