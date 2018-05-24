@@ -18,12 +18,12 @@ services:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx-proxy-certs:/etc/nginx/certs:ro
-      - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
+      - /var/run/docker.sock:/tmp/docker.sock
+      #- ./nginx-proxy-certs:/etc/nginx/certs:ro
+      - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf
 
   webserver:
     image: nginx:alpine
@@ -39,7 +39,7 @@ services:
       - imageservice
       - imagestore
     volumes:
-      - ./env/.htpasswd:/etc/nginx/htpasswd
+      #- ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
 
   mysqldb:
@@ -70,7 +70,7 @@ services:
       - cassandradb
       - solr
     environment:
-      JAVA_OPTS: -Xmx2g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx2g -Xms256m -Xss256k -Djava.awt.headless=true
     volumes:
       - data_nameindex:/data/lucene/namematching
       - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
@@ -82,7 +82,7 @@ services:
     depends_on:
       - biocacheservice
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/ala-hub-config.properties:/data/ala-hub/config/ala-hub-config.properties:ro
 
@@ -94,7 +94,7 @@ services:
     links:
       - mysqldb
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envcollectory
     volumes:
       - ./config/ala-collectory-config.properties:/tmp/ala-collectory-config.properties:ro
@@ -126,16 +126,16 @@ services:
       - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
 
   solr:
-    image: solr:6.6.3-alpine
+    image: solr:7.3-alpine
     container_name: solr
     environment:
       SOLR_HEAP: 4g
     volumes:
-      - ./solr6/mycores:/opt/solr/server/solr/mycores
-      - ./solr6/solr.xml:/opt/solr/server/solr/solr.xml
-      - ./solr6/zoo.cfg:/opt/solr/server/solr/zoo.cfg
-      - ./solr6/lib/jts-1.13.jar:/opt/solr/server/lib/ext/jts-1.13.jar
-      - ./solr6/solr.in.sh:/etc/default/solr.in.sh:ro
+      - ./solr7/mycores:/opt/solr/server/solr/mycores
+      - ./solr7/solr.xml:/opt/solr/server/solr/solr.xml
+      - ./solr7/zoo.cfg:/opt/solr/server/solr/zoo.cfg
+      - ./solr7/lib/jts-core-1.15.0.jar:/opt/solr/server/solr-webapp/webapp/WEB-INF/lib/jts-core-1.15.0.jar
+      - ./solr7/solr.in.sh:/etc/default/solr.in.sh:ro
       - data_solr:/opt/solr
     entrypoint:
       - docker-entrypoint.sh
@@ -154,7 +154,7 @@ services:
     links:
       - mysqldblogger
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envlogger
     volumes:
       - ./config/logger-config.properties:/tmp/logger-config.properties:ro
@@ -176,7 +176,7 @@ services:
     links:
       - psqldbimage
     environment:
-      JAVA_OPTS: -Xmx2g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx2g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envimage
     volumes:
       - ./config/images-config.properties:/tmp/images-config.properties
@@ -211,7 +211,7 @@ services:
     links:
       - mysqldbapi
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envapi
     volumes:
       - ./config/webapi-config.properties:/tmp/webapi-config.properties:ro
@@ -232,7 +232,7 @@ services:
       - db_data_wordpress:/var/lib/mysql
 
   wordpress:
-    image: wordpress:latest
+    image: wordpress:4.9.5-apache
     container_name: wordpress
     ports:
       - 8080:80
@@ -247,7 +247,7 @@ services:
     links:
       - mysqldbspecieslist
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envspecieslists
     volumes:
       - ./config/specieslist-webapp-config.properties:/tmp/specieslist-webapp-config.properties:ro
@@ -267,15 +267,15 @@ services:
     image: bioatlas/ala-bieindex:v0.2
     container_name: bieindex
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     volumes:
-      - ./config/bie-index-config.properties:/data/bie-index/config/bie-index-config.properties:ro
+      - ./config/bie-index-config.properties:/data/bie-index/config/bie-index-config.properties
 
   biehub:
     image: bioatlas/ala-biehub:v0.2
     container_name: biehub
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/ala-bie-config.properties:/data/ala-bie/config/ala-bie-config.properties:ro
 
