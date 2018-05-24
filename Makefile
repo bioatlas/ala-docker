@@ -17,6 +17,15 @@ URL_BIEHUB = http://nexus.ala.org.au/service/local/repositories/releases/content
 URL_BIEINDEX = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/bie-index/1.3.0-SNAPSHOT/bie-index-1.3.0-20170802.102212-26.war
 URL_SPECIESLIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/specieslist-webapp/3.0/specieslist-webapp-3.0.war
 URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/master.zip
+URL_LAYERS_SERVICE = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/layers-service/2.1-SNAPSHOT/layers-service-2.1-20160925.040335-15.war
+URL_LAYER_INGESTION = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/layer-ingestion/1.0-SNAPSHOT/layer-ingestion-1.0-20160224.160123-13-bin.zip
+URL_REGIONS = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/regions/3.0-SNAPSHOT/regions-3.0-20180416.110534-19.war
+URL_GEONETWORK = https://jaist.dl.sourceforge.net/project/geonetwork/GeoNetwork_opensource/v3.4.1/geonetwork.war
+URL_SPATIAL_SERVICE = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/spatial-service/0.2-SNAPSHOT/spatial-service-0.2-20171122.085540-17.war
+URL_SPATIAL_HUB = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/spatial-hub/0.3-SNAPSHOT/spatial-hub-0.3-20180504.030432-41.war
+URL_CAS2 = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-cas/2.0.10/ala-cas-2.0.10.war
+URL_USERDETAILS = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/userdetails/0.12.1/userdetails-0.12.1.war
+URL_APIKEY = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/apikey/0.6/apikey-0.6.war
 
 all: init build up
 .PHONY: all
@@ -65,6 +74,33 @@ init: theme-dl
 	@test -f specieslists/specieslist-webapp.war || \
 		wget -q --show-progress -O specieslists/specieslist-webapp.war $(URL_SPECIESLIST)
 
+	@test -f layersservice/layers-service.war || \
+		wget -q --show-progress -O layersservice/layers-service.war $(URL_LAYERS_SERVICE)
+
+	@test -f layeringestion/layer-ingestion.zip || \
+		wget -q --show-progress -O layeringestion/layer-ingestion.zip $(URL_LAYER_INGESTION)
+
+	@test -f regions/regions.war || \
+			wget -q --show-progress -O regions/regions.war $(URL_REGIONS)
+
+	@test -f geonetwork/geonetwork.war || \
+			wget -q --show-progress -O geonetwork/geonetwork.war $(URL_GEONETWORK)
+
+	@test -f spatialservice/spatial-service.war || \
+			wget -q --show-progress -O spatialservice/spatial-service.war $(URL_SPATIAL_SERVICE)
+
+	@test -f spatialhub/spatial-hub.war || \
+			wget -q --show-progress -O spatialhub/spatial-hub.war $(URL_SPATIAL_HUB)
+
+	@test -f cas2/cas.war || \
+			wget -q --show-progress -O cas2/cas.war $(URL_CAS2)
+
+	@test -f userdetails/userdetails.war || \
+			wget -q --show-progress -O userdetails/userdetails.war $(URL_USERDETAILS)
+
+	@test -f apikey/apikey.war || \
+			wget -q --show-progress -O apikey/apikey.war $(URL_APIKEY)
+
 theme-dl:
 	@echo "Downloading bioatlas wordpress theme..."
 	@test -f	wordpress/themes/atlas/master.zip || \
@@ -110,6 +146,16 @@ build:
 	@docker build -t bioatlas/ala-specieslists:v0.2 specieslists
 	@docker build -t bioatlas/ala-bieindex:v0.2 bieindex
 	@docker build -t bioatlas/ala-biehub:v0.2 biehub
+	@docker build -t bioatlas/ala-layersservice:v0.2 layersservice
+	@docker build -t bioatlas/ala-layeringestion:v0.2 layeringestion
+	@docker build -t bioatlas/ala-regions:v0.2 regions
+	@docker build -t bioatlas/ala-spatialhub:v0.2 spatialhub
+	@docker build -t bioatlas/ala-spatialservice:v0.2 spatialservice
+	@docker build -t bioatlas/ala-geoserver:v0.2 geoserver
+	@docker build -t bioatlas/ala-cas:v0.2 cas2
+	@docker build -t bioatlas/ala-userdetails:v0.2 userdetails
+	@docker build -t bioatlas/ala-apikey:v0.2 apikey
+
 up:
 	@echo "Starting services..."
 	@docker-compose up -d
@@ -132,6 +178,15 @@ pull:
 	@docker pull bioatlas/ala-specieslists:v0.2
 	@docker pull bioatlas/ala-bieindex:v0.2
 	@docker pull bioatlas/ala-biehub:v0.2
+	@docker pull bioatlas/ala-layersservice:v0.2
+	@docker pull bioatlas/ala-layeringestion:v0.2
+	@docker pull bioatlas/ala-regions:v0.2
+	@docker pull bioatlas/ala-spatialhub:v0.2
+	@docker pull bioatlas/ala-spatialservice:v0.2
+	@docker pull bioatlas/ala-geoserver:v0.2
+	@docker pull bioatlas/ala-cas:v0.2
+	@docker pull bioatlas/ala-userdetails:v0.2
+	@docker pull bioatlas/ala-apikey:v0.2
 
 pull2:
 	@echo "Downloding other official docker images ..."
@@ -157,6 +212,15 @@ push:
 	@docker push bioatlas/ala-specieslists:v0.2
 	@docker push bioatlas/ala-bieindex:v0.2
 	@docker push bioatlas/ala-biehub:v0.2
+	@docker push bioatlas/ala-layersservice:v0.2
+	@docker push bioatlas/ala-layeringestion:v0.2
+	@docker push bioatlas/ala-regions:v0.2
+	@docker push bioatlas/ala-spatialhub:v0.2
+	@docker push bioatlas/ala-spatialservice:v0.2
+	@docker push bioatlas/ala-geoserver:v0.2
+	@docker push bioatlas/ala-cas:v0.2
+	@docker push bioatlas/ala-userdetails:v0.2
+	@docker push bioatlas/ala-apikey:v0.2
 
 release: build push
 
