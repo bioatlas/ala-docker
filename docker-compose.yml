@@ -5,7 +5,7 @@ services:
   dnsmasq:
     image: andyshinn/dnsmasq:2.76
     container_name: dnsmasq
-    command: --log-facility=- --server=127.0.0.11 --server=193.10.57.11 --server=8.8.8.8 --server=172.16.0.72 --server=172.16.0.7 --neg-ttl=3600 --cache-size=1000 --max-cache-ttl=3600 --min-cache-ttl=3600 --all-servers
+    command: --log-facility=- --server=127.0.0.11 --server=193.10.57.11 --server=172.16.0.72 --server=172.16.0.7 --neg-ttl=3600 --cache-size=1000 --max-cache-ttl=3600 --min-cache-ttl=3600
     cap_add:
       - NET_ADMIN
     ports:
@@ -279,6 +279,145 @@ services:
     volumes:
       - ./config/ala-bie-config.properties:/data/ala-bie/config/ala-bie-config.properties:ro
 
+  postgis:
+    image: mdillon/postgis:9.6-alpine
+    container_name: postgis
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db_data_postgis:/var/lib/postgresql/data
+      - ./postgis/pg_hba.conf:/etc/pg_hba.conf:ro
+      - ./postgis/layersdb.sql:/docker-entrypoint-initdb.d/layersdb.sql
+
+  geoserver:
+    #image: kartoza/geoserver:2.11.2
+    image: bioatlas/ala-geoserver:v0.2
+    container_name: geoserver
+    environment:
+      - USERNAME=admin
+      - PASS=geoserver
+      - GEOSERVER_URL=http://localhost:8080/geoserver
+    volumes:
+      - data_geoserver:/opt/geoserver/data_dir
+    #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver.sh"
+
+  layersservice:
+    image: bioatlas/ala-layersservice:v0.2
+    container_name: layersservice
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    links:
+      - postgis
+      - geoserver
+    volumes:
+      - ./layersservice/log4j.properties:/data/layers-store/config/log4j.properties:ro
+      - ./layersservice/log4j.properties:/data/layers-service/config/log4j.properties:ro
+      - ./config/layers-store-config.properties:/data/layers-store/config/layers-store-config.properties:ro
+      - ./config/layers-service-config.properties:/data/layers-service/config/layers-service-config.properties:ro
+      - ./config/data.xml:/data/layers-service/config/layers-service-data-config.xml:ro
+      - ./config/data.xml:/data/layers-store/config/layers-store-data-config.xml:ro
+      - data_layersservice:/data
+
+  layeringestion:
+    image: bioatlas/ala-layeringestion:v0.2
+    container_name: layeringestion
+    volumes:
+      - data_layersservice:/data
+    links:
+      - layersservice
+      - postgis
+      - geoserver
+
+  regions:
+    image: bioatlas/ala-regions:v0.2
+    container_name: regions
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - ./config/regions-config.properties:/data/regions/config/regions-config.properties:ro
+
+  geonetwork:
+    image: geonetwork:3.4.1
+    container_name: geonetwork
+    environment:
+      - DATA_DIR=/data/ala/data/geonetwork/
+      - POSTGRES_DB_USERNAME=postgres
+      - POSTGRES_DB_PASSWORD=password
+      - POSTGRES_DB_HOST=geonetworkdb
+      - POSTGRES_DB_PORT=5432
+    volumes:
+      - data_geonetwork:/data/ala/data/geonetwork/
+#      - ./geonetwork/geonetwork-files/postgres-postgis.xml:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/postgres-postgis.xml
+#      - ./geonetwork/geonetwork-files/postgis-alternate-datasource.xml:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/postgis-alternate-datasource.xml
+#      - ./geonetwork/geonetwork-files/jdbc.properties:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/jdbc.properties
+    depends_on:
+      - geonetworkdb
+
+  geonetworkdb:
+    image: mdillon/postgis:9.6-alpine
+    container_name: geonetworkdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=geonetwork
+    volumes:
+      - db_data_geonetworkdb:/var/lib/postgresql/data
+      - ./geonetwork/pg_hba.conf:/etc/pg_hba.conf:ro
+
+  spatialhub:
+    image: bioatlas/ala-spatialhub:v0.2
+    container_name: spatialhub
+    volumes:
+      - data_spatialhub:/data/ala/runtime/files
+      - ./config/spatial-hub-config.properties:/data/spatial-hub/config/spatial-hub-config.properties
+
+  spatialservice:
+    image: bioatlas/ala-spatialservice:v0.2
+    container_name: spatialservice
+    volumes:
+      - data_spatialservice:/data
+      - ./config/spatial-service-config.properties:/data/spatial-service/config/spatial-service-config.properties
+      - ./config/spatial-service-data-config.xml:/data/spatial-service/config/spatial-service-data-config.xml
+
+  mysqldbcas:
+    image: mysql:5.7
+    env_file: ./env/.envcas
+    container_name: mysqldbcas
+    volumes:
+      - ./cas2/db:/docker-entrypoint-initdb.d
+      - db_data_mysqldbcas:/var/lib/mysql
+
+  casserver:
+    image: bioatlas/ala-cas:v0.2
+    container_name: casserver
+    volumes:
+      - ./config/cas.properties:/data/cas/config/cas.properties
+
+  userdetails:
+    image: bioatlas/ala-userdetails:v0.2
+    container_name: userdetails
+    volumes:
+      - ./config/userdetails-config.properties:/data/userdetails/config/userdetails-config.properties
+
+  mysqldbapikey:
+    image: mysql:5.7
+    container_name: mysqldbapikey
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=apikey
+      - MYSQL_USER=apikey
+      - MYSQL_PASSWORD=apikey
+    volumes:
+      - ./apikey/db:/docker-entrypoint-initdb.d
+      - db_data_mysqldbapikey:/var/lib/mysql
+
+  apikey:
+    image: bioatlas/ala-apikey:v0.2
+    container_name: apikey
+    volumes:
+      - ./config/apikey-config.properties:/data/apikey/config/apikey-config.properties
+
 volumes:
   db_data_collectory:
   db_data_cassandra:
@@ -292,3 +431,12 @@ volumes:
   data_images_elasticsearch:
   db_data_wordpress:
   db_data_specieslists:
+  db_data_postgis:
+  data_geoserver:
+  data_layersservice:
+  data_geonetwork:
+  db_data_geonetworkdb:
+  data_spatialhub:
+  data_spatialservice:
+  db_data_mysqldbcas:
+  db_data_mysqldbapikey:
