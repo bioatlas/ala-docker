@@ -5,14 +5,15 @@ services:
   dnsmasq:
     image: andyshinn/dnsmasq:2.76
     container_name: dnsmasq
-    command: --log-facility=- --server=127.0.0.11 --server=193.10.57.11 --server=172.16.0.72 --server=172.16.0.7 --neg-ttl=3600 --cache-size=1000 --max-cache-ttl=3600 --min-cache-ttl=3600
+    command: --log-facility=- --server=127.0.0.11 --neg-ttl=3600 --cache-size=1000 --max-cache-ttl=3600 --min-cache-ttl=3600
     cap_add:
       - NET_ADMIN
     ports:
       - 172.17.0.1:53:53/tcp
       - 172.17.0.1:53:53/udp
-    links:
+    external_links:
       - proxy:bioatlas.se
+      - proxy:auth.bioatlas.se
 
   proxy:
     image: jwilder/nginx-proxy
@@ -22,14 +23,14 @@ services:
       - 443:443
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-      #- ./nginx-proxy-certs:/etc/nginx/certs:ro
+      - ./nginx-proxy-certs:/etc/nginx/certs:ro
       - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf
 
   webserver:
     image: nginx:alpine
     container_name: webserver
     environment:
-      - VIRTUAL_HOST=bioatlas.se
+      - VIRTUAL_HOST=bioatlas.se,auth.bioatlas.se
     links:
       - biocachehub
       - biocacheservice

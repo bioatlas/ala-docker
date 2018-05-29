@@ -2,7 +2,7 @@
 $(function(){
     // autocomplete on navbar search input
     // autocomplete on navbar search input
-    $("#biesearch").autocomplete('http://bioatlas.se/bie-index/search/auto.jsonp', {
+    $("#biesearch").autocomplete('https://bioatlas.se/bie-index/search/auto.jsonp', {
         extraParams: {limit: 100},
         dataType: 'jsonp',
         parse: function(data) {
