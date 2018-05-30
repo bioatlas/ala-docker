@@ -120,7 +120,7 @@ services:
     image: bioatlas/ala-solrindex:v0.1
     container_name: solr
     environment:
-      SOLR_HEAP: 4g
+      SOLR_HEAP: 64g
     volumes:
       - data_solr:/data/solr
 
