@@ -120,7 +120,7 @@ services:
     image: bioatlas/ala-solrindex:v0.1
     container_name: solr
     environment:
-      SOLR_HEAP: 64g
+      SOLR_HEAP: 4g
     volumes:
       - data_solr:/data/solr
 
@@ -287,6 +287,23 @@ services:
     ports:
       - 9000:9000
 
+  mysqldbwordpress:
+    image: mysql:5.7
+    container_name: mysqldbwordpress
+    env_file: ./env/.envwordpress
+    volumes:
+      - db_data_wordpress:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:4.9.5-apache
+    container_name: wordpress
+    ports:
+      - 8080:80
+    env_file: ./env/.envwordpress
+    volumes:
+      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
+      - ./wordpress/wp-config-sample.php:/usr/src/wordpress/wp-config-sample.php:ro
+
 volumes:
   db_data_collectory:
   db_data_cassandra:
@@ -301,4 +318,4 @@ volumes:
   data_solr:
   data_images_elasticsearch:
   data_portainer:
-  
+  db_data_wordpress:
