@@ -3,16 +3,12 @@
   <div class="container container-navbar">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">
-          <img alt="Brand" src="https://bioatlas.se/static/bs3/img/bas-logo-2016-inline.png">
-        </a>
+        <a class="navbar-brand" href="/"><img alt="Brand" src="https://bioatlas.se/static/bs3/img/bas-logo-2016-inline.png"></a>
     </div>
-
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <div class="row row-search">
         <div class="col-xs-12 col-sm-4 col-md-6">
@@ -25,7 +21,6 @@
         </div>
       </div>
       <!-- End row -->
-
       <ul class="nav navbar-nav">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -48,9 +43,16 @@
               </a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="https://bioatlas.se/ala-hub/search#tab_spatialSearch">Explore by polygon</a></li>
-            <li><a href="https://bioatlas.se/ala-hub/explore/your-area">Explore your location</a></li>
+            <li><a href="https://bioatlas.se/ala-hub/explore/your-area">Explore by location</a></li>
+            <li><a href="/regions/">Explore by region</a></li>
             <li class="divider"></li>
-            <li><a href="https://bioatlas.se/mirroreum/">Mirroreum</a></li>
+<!--             <li><a href="https://downloads.ala.org.au">Download data</a>
+-->
+            <li><a href="/spatial-portal/">Spatial portal</a></li>
+            <li class="divider"></li>
+            <li><a href="/mirroreum/">Mirroreum</a></li>
+            <li class="divider"></li>
+            <li><a href="https://bioatlas.se/api/">Our APIs</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -59,19 +61,27 @@
                 <span class="caret"></span>
               </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="https://bioatlas.se/api/">APIs</a></li>
+            <li><a href="/about/">About Us</a></li>
             <li class="divider"></li>
-            <li><a href="https://bioatlas.se/atlascommunity/">Living Atlases Community</a></li>
-            <li><a href="https://bioatlas.se/gbifnetwork/">GBIF Network</a></li>
+            <li><a href="/how-to-use-the-bioatlas/">How to use the BioAtlas</a></li>
+            <li><a href="/how-to-work-with-data/">How to work with data</a></li>
+            <li><a href="/how-to-cite-the-bioatlas/">How to cite the BioAtlas</a></li>
             <li class="divider"></li>
-            <li><a href="https://bioatlas.se/about/">About Bioatlas Sweden</a></li>
-            <li><a href="https://bioatlas.se/contacts/">Contact Us</a></li>
+            <li><a href="/the-living-atlases-community/">Living Atlases Community</a></li>
+            <li><a href="/the-gbif-network/">GBIF Network</a></li>
+            <li class="divider"></li>
+            <li><a href="/category/news/">BioAtlas News</a></li>
+            <li class="divider"></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
           </ul>
         </li>
       </ul>
+      <!--
       <ul class="nav navbar-nav navbar-right visible-xs">
 
       </ul>
+      -->
     </div>
     <!-- /.navbar-collapse -->
   </div>
