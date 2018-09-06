@@ -1,6 +1,6 @@
 FROM openjdk:8-alpine
 
-RUN mkdir -p /data/lucene/namematching
+#RUN mkdir -p /data/lucene/namematching
 RUN mkdir -p /data/lucene/sources
 
 COPY backbone.zip /data/lucene/sources/
