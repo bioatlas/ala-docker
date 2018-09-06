@@ -147,6 +147,32 @@ dotfiles: secrets htpasswd
 htpasswd:
 	docker run --rm -it httpd:alpine htpasswd -nb admin admin > env/.htpasswd
 
+init-clean:
+	@echo "Removing cached files from the build"
+	rm -f cassandra/wait-for-it.sh \
+		collectory/collectory.war \
+		nameindex/nameindexer.zip \
+		nameindex/backbone.zip \
+		biocacheservice/biocache-service.war \
+		biocachehub/ala-hub.war \
+		biocachebackend/biocache.zip \
+		loggerservice/logger-service.war \
+		imageservice/images.war \
+		api/api.war \
+		biehub/ala-bie.war \
+		bieindex/bie-index.war \
+		specieslists/specieslist-webapp.war \
+		layersservice/layers-service.war \
+		layeringestion/layer-ingestion.zip \
+		regions/regions.war \
+		geonetwork/geonetwork.war \
+		spatialservice/spatial-service.war \
+		spatialhub/spatial-hub.war \
+		cas2/cas.war \
+		userdetails/userdetails.war \
+		apikey/apikey.war \
+		solr7/lib/jts-core-1.15.0.jar
+
 dotfiles-clean:
 	rm -f secrets && \
 		cd env && \
