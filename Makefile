@@ -141,7 +141,15 @@ dotfiles: secrets htpasswd
 			envsubst < env/envlogger.template > env/.envlogger && \
 			envsubst < env/envmirroreum.template > env/.envmirroreum && \
 			envsubst < env/envwordpress.template > env/.envwordpress && \
-			envsubst < env/envspecieslists.template > env/.envspecieslists'
+			envsubst < env/envspecieslists.template > env/.envspecieslists && \
+			envsubst < env/envpostgis.template > env/.envpostgis && \
+			envsubst < env/envgeoserver.template > env/.envgeoserver &&\
+			envsubst < env/envgeonetwork.template > env/.envgeonetwork && \
+			envsubst < env/envgeonetworkdb.template > env/.envgeonetworkdb && \
+			envsubst < env/envspatial.template > env/.envspatial && \
+			envsubst < env/layersservice.template > env/.envlayersservice && \
+			envsubst < env/envcas.template > env/.envcas && \
+			envsubst < env/envapikey.template > env/.envapikey'
 	touch dotfiles
 
 htpasswd:
@@ -150,7 +158,7 @@ htpasswd:
 dotfiles-clean:
 	rm -f secrets && \
 		cd env && \
-		rm -f .envapi .envcollectory .envimage .envlogger .envmirroreum .envwordpress .htpasswd .envspecieslists
+		rm -f .envapi .envcollectory .envimage .envlogger .envmirroreum .envwordpress .htpasswd .envspecieslists .envpostgis .envgeoserver .envgeonetwork .envgeonetworkdb .envspatial .envlayersservice .envcas .envapikey
 
 clean:
 	docker-compose down
