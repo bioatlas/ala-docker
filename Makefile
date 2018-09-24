@@ -10,9 +10,9 @@ GID := $(shell id -g)
 
 URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/1.5.5-SNAPSHOT/ala-collectory-1.5.5-SNAPSHOT.war
 URL_NAMESDIST = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.3/ala-name-matching-3.3-distribution.zip
-URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.1/biocache-service-2.1.1.war
+URL_BIOCACHE_SERVICE = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.12/biocache-service-2.1.12.war
 URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/3.0.10-SNAPSHOT/ala-hub-3.0.10-SNAPSHOT.war
-URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.2/biocache-store-2.2-distribution.zip
+URL_BIOCACHE_CLI = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.3.7/biocache-store-2.3.7-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
 URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/0.9.1-SNAPSHOT/ala-images.war
 URL_API = https://github.com/bioatlas/webapi/releases/download/v0.3/webapi-2.0-SNAPSHOT.war
