@@ -9,7 +9,7 @@ UID := $(shell id -u)
 GID := $(shell id -g)
 
 URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/1.5.5-SNAPSHOT/ala-collectory-1.5.5-SNAPSHOT.war
-URL_NAMESDIST = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.1/ala-name-matching-3.1-distribution.zip
+URL_NAMESDIST = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.3/ala-name-matching-3.3-distribution.zip
 URL_BIOCACHE_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.1/biocache-service-2.1.1.war
 URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/3.0.10-SNAPSHOT/ala-hub-3.0.10-SNAPSHOT.war
 URL_BIOCACHE_CLI = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.2/biocache-store-2.2-distribution.zip
