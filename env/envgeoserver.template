@@ -1,0 +1,10 @@
+USERNAME=admin
+PASS=geoserver
+GEOSERVER_URL=https://bioatlas.se/geoserver
+GEOSERVER_DATA_DIR=/data/ala/data/geoserver_data_dir
+RELINQUISH_LOG4J_CONTROL=true
+LAYERS_DB_HOST=postgis
+LAYERS_DB_PORT=5432
+LAYERS_DB_NAME=layersdb
+LAYERS_DB_USERNAME=layers
+LAYERS_DB_PASSWORD=$SECRET_POSTGRES_PASSWORD
