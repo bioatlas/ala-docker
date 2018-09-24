@@ -1,4 +1,4 @@
-FROM tomcat:8-alpine
+FROM tomcat:7-jre8-alpine
 
 RUN mkdir -p /data/spatial-hub/config \
   /data/ala/runtime/files

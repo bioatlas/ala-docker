@@ -1,4 +1,4 @@
-FROM tomcat:8-alpine
+FROM tomcat:7-jre8-alpine
 
 RUN mkdir -m 0775 -p /data/ala-bie/config
 COPY biehub-files/*.json /data/ala-bie/config/

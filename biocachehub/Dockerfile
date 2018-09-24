@@ -1,4 +1,4 @@
-FROM tomcat:8-alpine
+FROM tomcat:7-jre8-alpine
 
 #biocache-hub role or the ala-hub app deployment section
 
