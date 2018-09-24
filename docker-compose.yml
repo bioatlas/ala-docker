@@ -282,25 +282,21 @@ services:
 
   postgis:
     image: mdillon/postgis:9.6-alpine
+    #image: kartoza/postgis:9.6-2.4
     container_name: postgis
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file: ./env/.envpostgis
     volumes:
       - db_data_postgis:/var/lib/postgresql/data
-      - ./postgis/pg_hba.conf:/etc/pg_hba.conf:ro
+      - ./postgis/pg_hba.conf:/etc/postgresql/9.6/main/pg_hba.conf
       - ./postgis/layersdb.sql:/docker-entrypoint-initdb.d/layersdb.sql
 
   geoserver:
     #image: kartoza/geoserver:2.11.2
     image: bioatlas/ala-geoserver:v0.2
     container_name: geoserver
-    environment:
-      - USERNAME=admin
-      - PASS=geoserver
-      - GEOSERVER_URL=http://localhost:8080/geoserver
+    env_file: ./env/.envgeoserver
     volumes:
-      - data_geoserver:/opt/geoserver/data_dir
+      - data_geoserver:/data
     #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver.sh"
 
   layersservice:
@@ -311,14 +307,16 @@ services:
     links:
       - postgis
       - geoserver
+    env_file: env/.envlayersservice
     volumes:
       - ./layersservice/log4j.properties:/data/layers-store/config/log4j.properties:ro
       - ./layersservice/log4j.properties:/data/layers-service/config/log4j.properties:ro
-      - ./config/layers-store-config.properties:/data/layers-store/config/layers-store-config.properties:ro
       - ./config/layers-service-config.properties:/data/layers-service/config/layers-service-config.properties:ro
-      - ./config/data.xml:/data/layers-service/config/layers-service-data-config.xml:ro
-      - ./config/data.xml:/data/layers-store/config/layers-store-data-config.xml:ro
+      - ./config/layers-store-config.properties:/tmp/layers-store-config.properties
+      - ./config/layers-data.xml:/tmp/layers-service-data-config.xml
+      - ./config/layers-data.xml:/tmp/layers-store-data-config.xml
       - data_layersservice:/data
+    command: /bin/ash -c "envsubst < /tmp/layers-store-config.properties > /data/layers-store/config/layers-store-config.properties && envsubst < /tmp/layers-service-data-config.xml > /data/layers-service/config/layers-service-data-config.xml && envsubst < /tmp/layers-store-data-config.xml > /data/layers-store/config/layers-store-data-config.xml && catalina.sh run"
 
   layeringestion:
     image: bioatlas/ala-layeringestion:v0.2
@@ -337,16 +335,14 @@ services:
       - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/regions-config.properties:/data/regions/config/regions-config.properties:ro
+      - ./regions/regions-files/menu-config.json:/data/regions/config/menu-config.json:ro
+      - ./regions/regions-files/state-emblems.json:/data/regions/config/state-emblems.json:ro
+      - ./regions/regions-files/stateEmblems.txt:/data/regions/config/stateEmblems.txt:ro
 
   geonetwork:
     image: geonetwork:3.4.1
     container_name: geonetwork
-    environment:
-      - DATA_DIR=/data/ala/data/geonetwork/
-      - POSTGRES_DB_USERNAME=postgres
-      - POSTGRES_DB_PASSWORD=password
-      - POSTGRES_DB_HOST=geonetworkdb
-      - POSTGRES_DB_PORT=5432
+    env_file: ./env/.envgeonetwork
     volumes:
       - data_geonetwork:/data/ala/data/geonetwork/
 #      - ./geonetwork/geonetwork-files/postgres-postgis.xml:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/postgres-postgis.xml
@@ -358,10 +354,7 @@ services:
   geonetworkdb:
     image: mdillon/postgis:9.6-alpine
     container_name: geonetworkdb
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=geonetwork
+    env_file: ./env/.envgeonetworkdb
     volumes:
       - db_data_geonetworkdb:/var/lib/postgresql/data
       - ./geonetwork/pg_hba.conf:/etc/pg_hba.conf:ro
@@ -369,6 +362,8 @@ services:
   spatialhub:
     image: bioatlas/ala-spatialhub:v0.2
     container_name: spatialhub
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
       - data_spatialhub:/data/ala/runtime/files
       - ./config/spatial-hub-config.properties:/data/spatial-hub/config/spatial-hub-config.properties
@@ -376,10 +371,15 @@ services:
   spatialservice:
     image: bioatlas/ala-spatialservice:v0.2
     container_name: spatialservice
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file:
+      - ./env/.envspatial
     volumes:
       - data_spatialservice:/data
-      - ./config/spatial-service-config.properties:/data/spatial-service/config/spatial-service-config.properties
-      - ./config/spatial-service-data-config.xml:/data/spatial-service/config/spatial-service-data-config.xml
+      - ./config/spatial-service-config.properties:/tmp/spatial-service-config.properties
+      - ./config/spatial-service-data-config.xml:/tmp/spatial-service-data-config.xml
+    command: /bin/bash -c "envsubst < /tmp/spatial-service-config.properties > /data/spatial-service/config/spatial-service-config.properties && envsubst < /tmp/spatial-service-data-config.xml > /data/spatial-service/config/spatial-service-data-config.xml && catalina.sh run"
 
   mysqldbcas:
     image: mysql:5.7
@@ -392,23 +392,27 @@ services:
   casserver:
     image: bioatlas/ala-cas:v0.2
     container_name: casserver
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envcas
     volumes:
-      - ./config/cas.properties:/data/cas/config/cas.properties
+      - ./config/cas.properties:/tmp/cas.properties
+    command: /bin/ash -c "envsubst < /tmp/cas.properties > /data/cas/config/cas.properties && catalina.sh run"
 
   userdetails:
     image: bioatlas/ala-userdetails:v0.2
     container_name: userdetails
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envcas
     volumes:
-      - ./config/userdetails-config.properties:/data/userdetails/config/userdetails-config.properties
+      - ./config/userdetails-config.properties:/tmp/userdetails-config.properties
+    command: /bin/ash -c "envsubst < /tmp/userdetails-config.properties > /data/userdetails/config/userdetails-config.properties && catalina.sh run"
 
   mysqldbapikey:
     image: mysql:5.7
     container_name: mysqldbapikey
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=apikey
-      - MYSQL_USER=apikey
-      - MYSQL_PASSWORD=apikey
+    env_file: ./env/.envapikey
     volumes:
       - ./apikey/db:/docker-entrypoint-initdb.d
       - db_data_mysqldbapikey:/var/lib/mysql
@@ -416,8 +420,12 @@ services:
   apikey:
     image: bioatlas/ala-apikey:v0.2
     container_name: apikey
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envapikey
     volumes:
-      - ./config/apikey-config.properties:/data/apikey/config/apikey-config.properties
+      - ./config/apikey-config.properties:/tmp/apikey-config.properties
+    command: /bin/ash -c "envsubst < /tmp/apikey-config.properties > /data/apikey/config/apikey-config.properties && catalina.sh run"
 
   mailhog:
     image: mailhog/mailhog:v1.0.0
