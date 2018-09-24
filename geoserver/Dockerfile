@@ -1,4 +1,4 @@
-FROM kartoza/geoserver:2.11.2
+FROM kartoza/geoserver:2.13.0
 
 RUN apt-get install -y netcat
 RUN mkdir -p /data/ala/data/geoserver_data_dir \
