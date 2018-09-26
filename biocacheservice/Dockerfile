@@ -29,7 +29,7 @@ COPY biocache-service-files/facets.json\
 COPY biocache-service-files/log4j.xml \
 	/data/biocache/config/log4j.xml
 COPY biocache-service-files/*.html \
-		/data/biocache/
+		/data/biocache/config/
 
 COPY biocache-service.war $CATALINA_HOME/webapps/
 
