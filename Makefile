@@ -192,27 +192,27 @@ clean:
 
 build:
 	@echo "Building images..."
-	@docker build -t bioatlas/ala-biocachebackend:v0.2 biocachebackend
-	@docker build -t bioatlas/ala-nameindex:v0.2 nameindex
-	@docker build -t bioatlas/ala-biocachehub:v0.2 biocachehub
-	@docker build -t bioatlas/ala-collectory:v0.2 collectory
-	@docker build -t bioatlas/ala-biocacheservice:v0.2 biocacheservice
-	@docker build -t bioatlas/ala-loggerservice:v0.2 loggerservice
-	@docker build -t bioatlas/ala-imageservice:v0.2 imageservice
-	@docker build -t bioatlas/ala-imagestore:v0.2 imagestore
-	@docker build -t bioatlas/ala-api:v0.2 api
-	@docker build -t bioatlas/ala-specieslists:v0.2 specieslists
-	@docker build -t bioatlas/ala-bieindex:v0.2 bieindex
-	@docker build -t bioatlas/ala-biehub:v0.2 biehub
-	@docker build -t bioatlas/ala-layersservice:v0.2 layersservice
-	@docker build -t bioatlas/ala-layeringestion:v0.2 layeringestion
-	@docker build -t bioatlas/ala-regions:v0.2 regions
-	@docker build -t bioatlas/ala-spatialhub:v0.2 spatialhub
-	@docker build -t bioatlas/ala-spatialservice:v0.2 spatialservice
-	@docker build -t bioatlas/ala-geoserver:v0.2 geoserver
-	@docker build -t bioatlas/ala-cas:v0.2 cas2
-	@docker build -t bioatlas/ala-userdetails:v0.2 userdetails
-	@docker build -t bioatlas/ala-apikey:v0.2 apikey
+	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.3 biocachebackend
+	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.3 nameindex
+	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v0.3 biocachehub
+	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.3 collectory
+	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.3 biocacheservice
+	@docker build -t bioatlas/ala-loggerservice -t bioatlas/ala-loggerservice:v0.3 loggerservice
+	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.3 imageservice
+	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v0.3 imagestore
+	@docker build -t bioatlas/ala-api -t bioatlas/ala-api:v0.3 api
+	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.3 specieslists
+	@docker build -t bioatlas/ala-bieindex -t bioatlas/ala-bieindex:v0.3 bieindex
+	@docker build -t bioatlas/ala-biehub -t bioatlas/ala-biehub:v0.3 biehub
+	@docker build -t bioatlas/ala-layersservice -t bioatlas/ala-layersservice:v0.3 layersservice
+	@docker build -t bioatlas/ala-layeringestion -t bioatlas/ala-layeringestion:v0.3 layeringestion
+	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.3 regions
+	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.3 spatialhub
+	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.3 spatialservice
+	@docker build -t bioatlas/ala-geoserver -t bioatlas/ala-geoserver:v0.3 geoserver
+	@docker build -t bioatlas/ala-cas -t bioatlas/ala-cas:v0.3 cas2
+	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails
+	@docker build -t bioatlas/ala-apikey -t bioatlas/ala-apikey:v0.3 apikey
 
 up:
 	@echo "Starting services..."
@@ -224,27 +224,27 @@ stop:
 
 pull:
 	@echo "Downloading docker images for ALA modules..."
-	@docker pull bioatlas/ala-biocachebackend:v0.2
-	@docker pull bioatlas/ala-nameindex:v0.2
-	@docker pull bioatlas/ala-biocachehub:v0.2
-	@docker pull bioatlas/ala-collectory:v0.2
-	@docker pull bioatlas/ala-biocacheservice:v0.2
-	@docker pull bioatlas/ala-loggerservice:v0.2
-	@docker pull bioatlas/ala-imageservice:v0.2
-	@docker pull bioatlas/ala-imagestore:v0.2
-	@docker pull bioatlas/ala-api:v0.2
-	@docker pull bioatlas/ala-specieslists:v0.2
-	@docker pull bioatlas/ala-bieindex:v0.2
-	@docker pull bioatlas/ala-biehub:v0.2
-	@docker pull bioatlas/ala-layersservice:v0.2
-	@docker pull bioatlas/ala-layeringestion:v0.2
-	@docker pull bioatlas/ala-regions:v0.2
-	@docker pull bioatlas/ala-spatialhub:v0.2
-	@docker pull bioatlas/ala-spatialservice:v0.2
-	@docker pull bioatlas/ala-geoserver:v0.2
-	@docker pull bioatlas/ala-cas:v0.2
-	@docker pull bioatlas/ala-userdetails:v0.2
-	@docker pull bioatlas/ala-apikey:v0.2
+	@docker pull bioatlas/ala-biocachebackend:v0.3
+	@docker pull bioatlas/ala-nameindex:v0.3
+	@docker pull bioatlas/ala-biocachehub:v0.3
+	@docker pull bioatlas/ala-collectory:v0.3
+	@docker pull bioatlas/ala-biocacheservice:v0.3
+	@docker pull bioatlas/ala-loggerservice:v0.3
+	@docker pull bioatlas/ala-imageservice:v0.3
+	@docker pull bioatlas/ala-imagestore:v0.3
+	@docker pull bioatlas/ala-api:v0.3
+	@docker pull bioatlas/ala-specieslists:v0.3
+	@docker pull bioatlas/ala-bieindex:v0.3
+	@docker pull bioatlas/ala-biehub:v0.3
+	@docker pull bioatlas/ala-layersservice:v0.3
+	@docker pull bioatlas/ala-layeringestion:v0.3
+	@docker pull bioatlas/ala-regions:v0.3
+	@docker pull bioatlas/ala-spatialhub:v0.3
+	@docker pull bioatlas/ala-spatialservice:v0.3
+	@docker pull bioatlas/ala-geoserver:v0.3
+	@docker pull bioatlas/ala-cas:v0.3
+	@docker pull bioatlas/ala-userdetails:v0.3
+	@docker pull bioatlas/ala-apikey:v0.3
 
 pull2:
 	@echo "Downloading other official docker images ..."
@@ -258,27 +258,28 @@ pull2:
 	@docker pull jwilder/nginx-proxy
 
 push:
-	@docker push bioatlas/ala-biocachebackend:v0.2
-	@docker push bioatlas/ala-nameindex:v0.2
-	@docker push bioatlas/ala-biocachehub:v0.2
-	@docker push bioatlas/ala-collectory:v0.2
-	@docker push bioatlas/ala-biocacheservice:v0.2
-	@docker push bioatlas/ala-loggerservice:v0.2
-	@docker push bioatlas/ala-imageservice:v0.2
-	@docker push bioatlas/ala-imagestore:v0.2
-	@docker push bioatlas/ala-api:v0.2
-	@docker push bioatlas/ala-specieslists:v0.2
-	@docker push bioatlas/ala-bieindex:v0.2
-	@docker push bioatlas/ala-biehub:v0.2
-	@docker push bioatlas/ala-layersservice:v0.2
-	@docker push bioatlas/ala-layeringestion:v0.2
-	@docker push bioatlas/ala-regions:v0.2
-	@docker push bioatlas/ala-spatialhub:v0.2
-	@docker push bioatlas/ala-spatialservice:v0.2
-	@docker push bioatlas/ala-geoserver:v0.2
-	@docker push bioatlas/ala-cas:v0.2
-	@docker push bioatlas/ala-userdetails:v0.2
-	@docker push bioatlas/ala-apikey:v0.2
+	@echo "Pushing images to Dockerhub..."
+	@docker push bioatlas/ala-biocachebackend:v0.3
+	@docker push bioatlas/ala-nameindex:v0.3
+	@docker push bioatlas/ala-biocachehub:v0.3
+	@docker push bioatlas/ala-collectory:v0.3
+	@docker push bioatlas/ala-biocacheservice:v0.3
+	@docker push bioatlas/ala-loggerservice:v0.3
+	@docker push bioatlas/ala-imageservice:v0.3
+	@docker push bioatlas/ala-imagestore:v0.3
+	@docker push bioatlas/ala-api:v0.3
+	@docker push bioatlas/ala-specieslists:v0.3
+	@docker push bioatlas/ala-bieindex:v0.3
+	@docker push bioatlas/ala-biehub:v0.3
+	@docker push bioatlas/ala-layersservice:v0.3
+	@docker push bioatlas/ala-layeringestion:v0.3
+	@docker push bioatlas/ala-regions:v0.3
+	@docker push bioatlas/ala-spatialhub:v0.3
+	@docker push bioatlas/ala-spatialservice:v0.3
+	@docker push bioatlas/ala-geoserver:v0.3
+	@docker push bioatlas/ala-cas:v0.3
+	@docker push bioatlas/ala-userdetails:v0.3
+	@docker push bioatlas/ala-apikey:v0.3
 
 release: build push
 
@@ -300,3 +301,6 @@ ssl-certs-clean:
 
 ssl-certs-show:
 	openssl x509 -noout -text -in nginx-proxy-certs/bioatlas.se.crt
+
+test-nameindex:
+	docker run --rm -it bioatlas/ala-nameindex nameindexer -testSearch "Rattus norvegicus"
