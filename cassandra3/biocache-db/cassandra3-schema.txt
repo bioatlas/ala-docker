@@ -1,4 +1,4 @@
-CREATE KEYSPACE  IF NOT EXISTS occ WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '2'}  AND durable_writes = true;
+CREATE KEYSPACE IF NOT EXISTS occ WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '2'}  AND durable_writes = true;
 
 CREATE TABLE IF NOT EXISTS occ.loc (
     rowkey text PRIMARY KEY,
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS occ.occ (
     "abcdTypeStatus" text,
     "acceptedNameUsage" text,
     "acceptedNameUsageID" text,
-    "accessRights" text,
+    "accessrights" text,
     "alaUserId" text,
     "associatedMedia" text,
     "associatedOccurrences" text,
@@ -322,6 +322,8 @@ CREATE TABLE IF NOT EXISTS occ.occ (
     "institutionName_p" text,
     "institutionUid" text,
     "institutionUid_p" text,
+    "identification_qa" text,
+    "datePrecision_p" text,
     interactions text,
     interactions_p text,
     island text,
