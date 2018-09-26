@@ -25,9 +25,9 @@ COPY biocache-cli-files/log4j.xml /usr/lib/biocache/log4j.xml
 COPY biocache-cli-files/vocab /data/biocache/vocab
 COPY biocache.zip /usr/lib/biocache/biocache.zip
 RUN unzip /usr/lib/biocache/biocache.zip -d /usr/lib/biocache/
-RUN ln -s /usr/lib/biocache/biocache-store-2.2/bin/biocache /usr/bin/biocache
-COPY biocache-cli-files/environmentSetupFile.sh /usr/lib/biocache/biocache-store-2.2/bin/environmentSetupFile.sh
-RUN chmod 755 /usr/lib/biocache/biocache-store-2.2/bin/environmentSetupFile.sh
+RUN ln -s /usr/lib/biocache/biocache-store-2.3.7/bin/biocache /usr/bin/biocache
+COPY biocache-cli-files/environmentSetupFile.sh /usr/lib/biocache/biocache-store-2.3.7/bin/environmentSetupFile.sh
+RUN chmod 755 /usr/lib/biocache/biocache-store-2.3.7/bin/environmentSetupFile.sh
 
 RUN mkdir -m 777 -p \
     /data/biocache-reindex/solr-template \
