@@ -1,0 +1,531 @@
+version: '3.7'
+
+networks:
+  basenet:
+
+volumes:
+  db_data_collectory:
+  db_data_cassandra:
+  db_data_loggerservice:
+  db_data_imageservice:
+  db_data_apiservice:
+  data_nameindex:
+  data_images:
+  data_biocachebackend:
+  data_solr:
+  data_images_elasticsearch:
+  db_data_wordpress:
+  db_data_specieslists:
+  db_data_postgis:
+  data_geoserver:
+  data_layersservice:
+  data_geonetwork:
+  db_data_geonetworkdb:
+  data_spatialhub:
+  data_spatialservice:
+  db_data_mysqldbcas:
+  db_data_mysqldbapikey:
+
+services:
+
+  proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    init: true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+      - ./nginx-proxy-certs:/etc/nginx/certs:ro
+      - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf
+    networks:
+      - basenet
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    environment:
+      - VIRTUAL_HOST=bioatlas.se,auth.bioatlas.se
+    volumes:
+      #- ./env/.htpasswd:/etc/nginx/htpasswd
+      - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
+    networks:
+      - basenet
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    environment:
+      - VIRTUAL_HOST=visualizer.bioatlas.se
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - basenet
+
+  mysqldb:
+    image: mysql:5.7
+    env_file: ./env/.envcollectory
+    container_name: mysqldb
+    volumes:
+      - db_data_collectory:/var/lib/mysql
+    networks:
+      - basenet
+
+  cassandradb:
+    image: cassandra:3.11.2
+    container_name: cassandradb
+    volumes:
+      - ./cassandra3/entrypoint-wrap.sh:/entrypoint-wrap.sh:z
+      - ./cassandra3/biocache-db/cassandra3-schema.txt:/docker-entrypoint-initdb.d/cassandra3-schema.cql
+      - ./cassandra3/cassandra-files/cassandra-env.sh:/tmp/cassandra-env.sh
+      - ./cassandra3/cassandra-files/cassandra.yaml:/tmp/cassandra.yaml
+      - db_data_cassandra:/var/lib/cassandra
+    entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
+    networks:
+      - basenet
+    deploy:
+      placement:
+        constraint: [node == bas-cassandra]
+
+  biocacheservice:
+    image: bioatlas/ala-biocacheservice:v0.3
+    container_name: biocacheservice
+    depends_on:
+      - cassandradb
+      - solr
+    links:
+      - cassandradb
+      - solr
+    environment:
+      JAVA_OPTS: -Xmx2g -Xms256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+      - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
+      - ./config/logger-client.properties:/data/logger-client/config/logger-client.properties:ro
+    networks:
+      - basenet
+
+  biocachehub:
+    image: bioatlas/ala-biocachehub:v0.3
+    container_name: biocachehub
+    depends_on:
+      - biocacheservice
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - ./config/ala-hub-config.properties:/data/ala-hub/config/ala-hub-config.properties:ro
+    networks:
+      - basenet
+
+  collectory:
+    image: bioatlas/ala-collectory:v0.3
+    container_name: collectory
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envcollectory
+    volumes:
+      - ./config/ala-collectory-config.properties:/tmp/ala-collectory-config.properties:ro
+    command: /bin/ash -c "envsubst < /tmp/ala-collectory-config.properties > /data/ala-collectory/config/ala-collectory-config.properties && catalina.sh run"
+    networks:
+      - basenet
+
+  nameindex:
+    image: bioatlas/ala-nameindex:v0.3
+    command: /bin/ash
+    container_name: nameindex
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+    networks:
+      - basenet
+
+  biocachebackend:
+    image: bioatlas/ala-biocachebackend:v0.3
+    container_name: biocachebackend
+    links:
+      - biocachehub
+      - biocacheservice
+      - collectory
+      - cassandradb
+      - solr
+    command: /bin/ash
+    environment:
+      biocache_opts: -Xmx1g -Xms256m
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+      - data_biocachebackend:/data
+      - ./config/blacklistMediaUrls.txt:/data/biocache/config/blacklistMediaUrls.txt
+      - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
+    networks:
+      - basenet
+
+  solr:
+    image: solr:7.3-alpine
+    container_name: solr
+    environment:
+      SOLR_HEAP: 4g
+    volumes:
+      - ./solr7/mycores:/opt/solr/server/solr/mycores
+      - ./solr7/solr.xml:/opt/solr/server/solr/solr.xml
+      - ./solr7/zoo.cfg:/opt/solr/server/solr/zoo.cfg
+      - ./solr7/lib/jts-core-1.15.0.jar:/opt/solr/server/solr-webapp/webapp/WEB-INF/lib/jts-core-1.15.0.jar
+      - ./solr7/solr.in.sh:/etc/default/solr.in.sh:ro
+      - data_solr:/opt/solr
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - biocache
+      - bie
+      - bie-offline
+    networks:
+      - basenet
+    deploy:
+      placement:
+        constraint: [node == bas-solr]
+
+  loggerservice:
+    image: bioatlas/ala-loggerservice:v0.3
+    container_name: loggerservice
+    depends_on:
+      - mysqldblogger
+    links:
+      - mysqldblogger
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envlogger
+    volumes:
+      - ./config/logger-config.properties:/tmp/logger-config.properties:ro
+    command: /bin/ash -c "envsubst < /tmp/logger-config.properties > /data/logger/config/logger-config.properties && catalina.sh run"
+    networks:
+      - basenet
+
+  mysqldblogger:
+    image: mysql:5.7
+    env_file: ./env/.envlogger
+    container_name: mysqldblogger
+    volumes:
+      - ./loggerservice/db:/docker-entrypoint-initdb.d
+      - db_data_loggerservice:/var/lib/mysql
+    networks:
+      - basenet
+
+  imageservice:
+    image: bioatlas/ala-imageservice:v0.3
+    container_name: imageservice
+    depends_on:
+      - psqldbimage
+    links:
+      - psqldbimage
+    environment:
+      JAVA_OPTS: -Xmx2g -Xms256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envimage
+    volumes:
+      - ./config/images-config.properties:/tmp/images-config.properties
+      - data_images:/data/images/store
+      - data_images_elasticsearch:/data/images/elasticsearch
+    command: /bin/ash -c "envsubst < /tmp/images-config.properties > /data/images/config/images-config.properties && catalina.sh run"
+    networks:
+      - basenet
+
+  static:
+    image: nginx:alpine
+    volumes:
+      - ./static:/usr/share/nginx/html
+    container_name: static
+    networks:
+      - basenet
+
+  imagestore:
+    image: bioatlas/ala-imagestore:v0.3
+    volumes:
+      - data_images:/data/images/store
+    container_name: imagestore
+    networks:
+      - basenet
+
+  psqldbimage:
+    image: postgres:9.6.8-alpine
+    env_file: ./env/.envimage
+    container_name: psqldbimage
+    volumes:
+      - db_data_imageservice:/var/lib/postgresql/data
+    networks:
+      - basenet
+
+  apiservice:
+    image: bioatlas/ala-api:v0.3
+    container_name: apiservice
+    depends_on:
+      - mysqldbapi
+    links:
+      - mysqldbapi
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envapi
+    volumes:
+      - ./config/webapi-config.properties:/tmp/webapi-config.properties:ro
+    command: /bin/ash -c "envsubst < /tmp/webapi-config.properties > /data/webapi/config/webapi-config.properties && catalina.sh run"
+    networks:
+      - basenet
+
+  mysqldbapi:
+    image: mysql:5.7
+    env_file: ./env/.envapi
+    container_name: mysqldbapi
+    volumes:
+      - db_data_apiservice:/var/lib/mysql
+    networks:
+      - basenet
+
+  mysqldbwordpress:
+    image: mysql:5.7
+    container_name: mysqldbwordpress
+    env_file: ./env/.envwordpress
+    volumes:
+      - db_data_wordpress:/var/lib/mysql
+    networks:
+      - basenet
+
+  wordpress:
+    image: wordpress:4.9.5-apache
+    container_name: wordpress
+    ports:
+      - 8080:80
+    env_file: ./env/.envwordpress
+    volumes:
+      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
+      - ./wordpress/wp-config-sample.php:/usr/src/wordpress/wp-config-sample.php:ro
+    networks:
+      - basenet
+
+  specieslists:
+    image: bioatlas/ala-specieslists:v0.3
+    container_name: specieslists
+    links:
+      - mysqldbspecieslist
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envspecieslists
+    volumes:
+      - ./config/specieslist-webapp-config.properties:/tmp/specieslist-webapp-config.properties:ro
+      - data_nameindex:/data/lucene/namematching
+    command: /bin/ash -c "envsubst < /tmp/specieslist-webapp-config.properties > /data/specieslist-webapp/config/specieslist-webapp-config.properties && catalina.sh run"
+    networks:
+      - basenet
+
+  mysqldbspecieslist:
+    image: mysql:5.7
+    env_file: ./env/.envspecieslists
+    container_name: mysqldbspecieslist
+    command: --sql_mode=""
+    volumes:
+      - ./specieslists/db:/docker-entrypoint-initdb.d
+      - db_data_specieslists:/var/lib/mysql
+    networks:
+      - basenet
+
+  bieindex:
+    image: bioatlas/ala-bieindex:v0.3
+    container_name: bieindex
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - ./config/bie-index-config.properties:/data/bie-index/config/bie-index-config.properties
+    networks:
+      - basenet
+
+  biehub:
+    image: bioatlas/ala-biehub:v0.3
+    container_name: biehub
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - ./config/ala-bie-config.properties:/data/ala-bie/config/ala-bie-config.properties:ro
+    networks:
+      - basenet
+
+  postgis:
+    image: mdillon/postgis:9.6-alpine
+    #image: kartoza/postgis:9.6-2.4
+    container_name: postgis
+    env_file: ./env/.envpostgis
+    volumes:
+      - db_data_postgis:/var/lib/postgresql/data
+      - ./postgis/pg_hba.conf:/etc/postgresql/9.6/main/pg_hba.conf
+      - ./postgis/layersdb.sql:/docker-entrypoint-initdb.d/layersdb.sql
+    networks:
+      - basenet
+
+  geoserver:
+    #image: kartoza/geoserver:2.11.2
+    image: bioatlas/ala-geoserver:v0.3
+    container_name: geoserver
+    env_file: ./env/.envgeoserver
+    volumes:
+      - data_geoserver:/data
+    #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver.sh"
+    networks:
+      - basenet
+
+  layersservice:
+    image: bioatlas/ala-layersservice:v0.3
+    container_name: layersservice
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    links:
+      - postgis
+      - geoserver
+    env_file: env/.envlayersservice
+    volumes:
+      - ./layersservice/log4j.properties:/data/layers-store/config/log4j.properties:ro
+      - ./layersservice/log4j.properties:/data/layers-service/config/log4j.properties:ro
+      - ./config/layers-service-config.properties:/data/layers-service/config/layers-service-config.properties:ro
+      - ./config/layers-store-config.properties:/tmp/layers-store-config.properties
+      - ./config/layers-data.xml:/tmp/layers-service-data-config.xml
+      - ./config/layers-data.xml:/tmp/layers-store-data-config.xml
+      - data_layersservice:/data
+    command: /bin/ash -c "envsubst < /tmp/layers-store-config.properties > /data/layers-store/config/layers-store-config.properties && envsubst < /tmp/layers-service-data-config.xml > /data/layers-service/config/layers-service-data-config.xml && envsubst < /tmp/layers-store-data-config.xml > /data/layers-store/config/layers-store-data-config.xml && catalina.sh run"
+    networks:
+      - basenet
+
+  layeringestion:
+    image: bioatlas/ala-layeringestion:v0.3
+    container_name: layeringestion
+    volumes:
+      - data_layersservice:/data
+    links:
+      - layersservice
+      - postgis
+      - geoserver
+    networks:
+      - basenet
+
+  regions:
+    image: bioatlas/ala-regions:v0.3
+    container_name: regions
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - ./config/regions-config.properties:/data/regions/config/regions-config.properties:ro
+      - ./regions/regions-files/menu-config.json:/data/regions/config/menu-config.json:ro
+      - ./regions/regions-files/state-emblems.json:/data/regions/config/state-emblems.json:ro
+      - ./regions/regions-files/stateEmblems.txt:/data/regions/config/stateEmblems.txt:ro
+    networks:
+      - basenet
+
+  geonetwork:
+    image: geonetwork:3.4.1
+    container_name: geonetwork
+    env_file: ./env/.envgeonetwork
+    volumes:
+      - data_geonetwork:/data/ala/data/geonetwork/
+#      - ./geonetwork/geonetwork-files/postgres-postgis.xml:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/postgres-postgis.xml
+#      - ./geonetwork/geonetwork-files/postgis-alternate-datasource.xml:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/postgis-alternate-datasource.xml
+#      - ./geonetwork/geonetwork-files/jdbc.properties:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/jdbc.properties
+    depends_on:
+      - geonetworkdb
+    networks:
+      - basenet
+
+  geonetworkdb:
+    image: mdillon/postgis:9.6-alpine
+    container_name: geonetworkdb
+    env_file: ./env/.envgeonetworkdb
+    volumes:
+      - db_data_geonetworkdb:/var/lib/postgresql/data
+      - ./geonetwork/pg_hba.conf:/etc/pg_hba.conf:ro
+    networks:
+      - basenet
+
+  spatialhub:
+    image: bioatlas/ala-spatialhub:v0.3
+    container_name: spatialhub
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - data_spatialhub:/data/ala/runtime/files
+      - ./config/spatial-hub-config.properties:/data/spatial-hub/config/spatial-hub-config.properties
+    networks:
+      - basenet
+
+  spatialservice:
+    image: bioatlas/ala-spatialservice:v0.3
+    container_name: spatialservice
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file:
+      - ./env/.envspatial
+    volumes:
+      - data_spatialservice:/data
+      - ./config/spatial-service-config.properties:/tmp/spatial-service-config.properties
+      - ./config/spatial-service-data-config.xml:/tmp/spatial-service-data-config.xml
+    command: /bin/bash -c "envsubst < /tmp/spatial-service-config.properties > /data/spatial-service/config/spatial-service-config.properties && envsubst < /tmp/spatial-service-data-config.xml > /data/spatial-service/config/spatial-service-data-config.xml && catalina.sh run"
+    networks:
+      - basenet
+
+  mysqldbcas:
+    image: mysql:5.7
+    env_file: ./env/.envcas
+    container_name: mysqldbcas
+    volumes:
+      - ./cas2/db:/docker-entrypoint-initdb.d
+      - db_data_mysqldbcas:/var/lib/mysql
+    networks:
+      - basenet
+
+  casserver:
+    image: bioatlas/ala-cas:v0.3
+    container_name: casserver
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envcas
+    volumes:
+      - ./config/cas.properties:/tmp/cas.properties
+    command: /bin/ash -c "envsubst < /tmp/cas.properties > /data/cas/config/cas.properties && catalina.sh run"
+    networks:
+      - basenet
+
+  userdetails:
+    image: bioatlas/ala-userdetails:v0.3
+    container_name: userdetails
+    domainname: auth.bioatlas.se
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envcas
+    volumes:
+      - ./config/userdetails-config.properties:/tmp/userdetails-config.properties
+    command: /bin/ash -c "envsubst < /tmp/userdetails-config.properties > /data/userdetails/config/userdetails-config.properties && catalina.sh run"
+    networks:
+      - basenet
+
+  mysqldbapikey:
+    image: mysql:5.7
+    container_name: mysqldbapikey
+    env_file: ./env/.envapikey
+    volumes:
+      - ./apikey/db:/docker-entrypoint-initdb.d
+      - db_data_mysqldbapikey:/var/lib/mysql
+    networks:
+      - basenet
+
+  apikey:
+    image: bioatlas/ala-apikey:v0.3
+    container_name: apikey
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    env_file: ./env/.envapikey
+    volumes:
+      - ./config/apikey-config.properties:/tmp/apikey-config.properties
+    command: /bin/ash -c "envsubst < /tmp/apikey-config.properties > /data/apikey/config/apikey-config.properties && catalina.sh run"
+    networks:
+      - basenet
+
