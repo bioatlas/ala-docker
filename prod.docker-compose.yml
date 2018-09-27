@@ -43,7 +43,8 @@ services:
       - basenet
     deploy:
       placement:
-        constraints: [node.role == manager]
+        constraints:
+          - node.role == manager
 
   webserver:
     image: nginx:alpine
@@ -62,11 +63,12 @@ services:
       - VIRTUAL_HOST=visualizer.bioatlas.se
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    deploy:
-      placement:
-        constraints: [node.role == manager]
     networks:
       - basenet
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
   mysqldb:
     image: mysql:5.7
@@ -91,7 +93,8 @@ services:
       - basenet
     deploy:
       placement:
-        constraint: [node == bas-cassandra]
+        constraints:
+          - node.hostname == bas-cassandra
 
   biocacheservice:
     image: bioatlas/ala-biocacheservice:v0.3
@@ -190,7 +193,8 @@ services:
       - basenet
     deploy:
       placement:
-        constraint: [node == bas-solr]
+        constraints:
+          - node.hostname == bas-solr
 
   loggerservice:
     image: bioatlas/ala-loggerservice:v0.3
