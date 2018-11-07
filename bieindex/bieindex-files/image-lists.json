@@ -1,10 +1,6 @@
 {
-  "boosts": [
-    "record_type:Image^10",
-    "record_type:HumanObservaton^20",
-    "record_type:Observation^20",
-    "-record_type:PreservedSpecimen^20",
-    "data_resource_uid:dr660^500"
+  "filters": [
+    "-record_type:PreservedSpecimen"
   ],
   "ranks": [
     {
@@ -39,10 +35,6 @@
     }
   ],
   "lists": [
-    {
-      "uid": "dr4778",
-      "imageId": "imageId"
-    }
   ],
   "imageFields":"taxon_concept_lsid,kingdom,phylum,class,order,family,genus,species,taxon_name,image_url,data_resource_uid"
 }
