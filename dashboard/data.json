@@ -18,11 +18,11 @@
     "": 0
   },
   "collections": {
-    "total": 10,
-    "micro": 1,
-    "plants": 2,
-    "otherFauna": 3,
-    "insects": 4
+    "total": 0,
+    "plants": 0,
+    "micro": 0,
+    "insects": 0,
+    "otherFauna": 0
   },
   "datasets": {
     "total": 0,
@@ -49,22 +49,22 @@
   },
   "recordsByDate": {
     "earliest": {
-      "uuid": "9061b0a1-293f-4c45-881c-830879ce5824",
-      "display": "4 June 1629"
+      "uuid": "",
+      "display": ""
     },
     "latest": {
-      "uuid": "495fe8bc-4a39-4cc0-9f81-6b86dd3b889b",
-      "display": "20 April 2018"
+      "uuid": "",
+      "display": ""
     },
     "latestImage": {
-      "uuid": "c5fff4dd-ae67-409b-933c-0b3a67e6e5a6",
-      "display": "18 April 2018"
+      "uuid": "",
+      "display": ""
     },
-    "c1600": 67,
-    "c1700": 31075,
-    "c1800": 421581,
-    "c1900": 29314059,
-    "c2000": 39870123
+    "c1600": 0,
+    "c1700": 0,
+    "c1800": 0,
+    "c1900": 0,
+    "c2000": 0
   },
   "recordsByState": {
     "": 0
@@ -277,9 +277,9 @@
       "syntype|paralectotype": 0,
       "holotype|lectotype": 0,
       "holotype|type": 0,
-      "paratype|cotype": ,
+      "paratype|cotype": 0,
       "paratype|type": 0,
-      "topotype|paratype": ,
+      "topotype|paratype": 0,
       "type|syntype": 0,
       "": 0,
       "total": 0
@@ -349,7 +349,7 @@
       "userId": "",
       "email": ""
     }, {
-      "total": ,
+      "total": 0,
       "validated": 0,
       "displayName": "",
       "transcribed": 0,
@@ -440,28 +440,16 @@
     "Events": "",
     "Records": ""
   }],
-  "mostRecordedAll": {
-  },
-  "mostRecordedPlants": {
-  },
-  "mostRecordedMammals": {
-  },
-  "mostRecordedReptiles": {
-  },
-  "mostRecordedBirds": {
-  },
-  "mostRecordedAnimals": {
-  },
-  "mostRecordedArthropods": {
-  },
-  "mostRecordedFishes": {
-  },
-  "mostRecordedInsects": {
-  },
-  "mostRecordedAmphibians": {
-  },
-  "mostRecordedBacteria": {
-  },
-  "mostRecordedFungi": {
-  }
+  "mostRecordedAll": {},
+  "mostRecordedPlants": {},
+  "mostRecordedMammals": {},
+  "mostRecordedReptiles": {},
+  "mostRecordedBirds": {},
+  "mostRecordedAnimals": {},
+  "mostRecordedArthropods": {},
+  "mostRecordedFishes": {},
+  "mostRecordedInsects": {},
+  "mostRecordedAmphibians": {},
+  "mostRecordedBacteria": {},
+  "mostRecordedFungi": {}
 }
