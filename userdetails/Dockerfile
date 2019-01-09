@@ -14,6 +14,8 @@ RUN \
     cp /usr/bin/envsubst /usr/local/bin/envsubst && \
     apk del build_deps
 
+RUN apk add --update fontconfig ttf-dejavu
+
 RUN apk add --update tini
 ENTRYPOINT ["tini", "--"]
 CMD ["catalina.sh", "run"]
