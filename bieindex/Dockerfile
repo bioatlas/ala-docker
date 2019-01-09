@@ -7,6 +7,7 @@ COPY bieindex-files/*.json \
   	/data/bie-index/config/
 
 COPY bie-index.war $CATALINA_HOME/webapps/
+COPY server.xml $CATALINA_HOME/conf/server.xml
 
 RUN apk add --update tini
 ENTRYPOINT ["tini", "--"]

@@ -32,6 +32,7 @@ COPY biocache-service-files/*.html \
 		/data/biocache/config/
 
 COPY biocache-service.war $CATALINA_HOME/webapps/
+COPY server.xml $CATALINA_HOME/conf/server.xml
 
 RUN chmod 755 /data/biocache-download
 RUN chmod 777 /data/biocache-media

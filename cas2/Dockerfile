@@ -4,6 +4,7 @@ RUN mkdir -p /data/cas/config
 
 COPY log4j.xml /data/cas/config/log4j.xml
 COPY cas.war $CATALINA_HOME/webapps/cas.war
+COPY server.xml $CATALINA_HOME/conf/server.xml
 
 ENV \
 	BUILD_DEPS="gettext" \
@@ -14,9 +15,6 @@ RUN \
     apk add --virtual build_deps $BUILD_DEPS &&  \
     cp /usr/bin/envsubst /usr/local/bin/envsubst && \
     apk del build_deps
-
-EXPOSE 8080
-EXPOSE 8443
 
 RUN apk add --update tini
 ENTRYPOINT ["tini", "--"]

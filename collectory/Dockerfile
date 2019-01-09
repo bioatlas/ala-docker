@@ -14,6 +14,7 @@ COPY ala-collectory-data/ala-collectory/data \
 	/data/ala-collectory/data
 
 COPY collectory.war $CATALINA_HOME/webapps/
+COPY server.xml $CATALINA_HOME/conf/server.xml
 
 ENV \
 	BUILD_DEPS="gettext" \

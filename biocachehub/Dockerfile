@@ -10,6 +10,7 @@ RUN mkdir -m 0774 -p \
 
 COPY biocache-hub-files/config/*.json /data/ala-hub/config/
 COPY ala-hub.war $CATALINA_HOME/webapps/
+COPY server.xml $CATALINA_HOME/conf/server.xml
 
 RUN apk add --update tini
 ENTRYPOINT ["tini", "--"]
