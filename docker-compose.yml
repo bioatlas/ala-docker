@@ -32,14 +32,6 @@ services:
     container_name: webserver
     environment:
       - VIRTUAL_HOST=bioatlas.se,auth.bioatlas.se
-    links:
-      - biocachehub
-      - biocacheservice
-      - collectory
-      - wordpress
-      - loggerservice
-      - imageservice
-      - imagestore
     volumes:
       #- ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
@@ -72,7 +64,7 @@ services:
       - cassandradb
       - solr
     environment:
-      JAVA_OPTS: -Xmx2g -Xms256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true
     volumes:
       - data_nameindex:/data/lucene/namematching
       - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
@@ -84,7 +76,7 @@ services:
     depends_on:
       - biocacheservice
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/ala-hub-config.properties:/data/ala-hub/config/ala-hub-config.properties:ro
 
@@ -96,21 +88,22 @@ services:
     links:
       - mysqldb
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envcollectory
     volumes:
       - ./config/ala-collectory-config.properties:/tmp/ala-collectory-config.properties:ro
     command: /bin/ash -c "envsubst < /tmp/ala-collectory-config.properties > /data/ala-collectory/config/ala-collectory-config.properties && catalina.sh run"
 
   nameindex:
-    image: bioatlas/ala-nameindex:v0.3
+    #image: bioatlas/ala-nameindex:v0.3
+    image: bioatlas/ala-dyntaxaindex:v0.3
     command: /bin/ash
     container_name: nameindex
     volumes:
       - data_nameindex:/data/lucene/namematching
 
   biocachebackend:
-    image: bioatlas/ala-biocachebackend:v0.3
+    image: bioatlas/ala-biocachebackend:v0.4
     container_name: biocachebackend
     links:
       - biocachehub
@@ -120,7 +113,7 @@ services:
       - solr
     command: /bin/ash
     environment:
-      biocache_opts: -Xmx1g -Xms256m
+      biocache_opts: -Xmx1g -Xms128m
     volumes:
       - data_nameindex:/data/lucene/namematching
       - data_biocachebackend:/data
@@ -128,7 +121,7 @@ services:
       - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
 
   solr:
-    image: solr:7.3-alpine
+    image: solr:7.4-alpine
     container_name: solr
     environment:
       SOLR_HEAP: 4g
@@ -156,7 +149,7 @@ services:
     links:
       - mysqldblogger
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envlogger
     volumes:
       - ./config/logger-config.properties:/tmp/logger-config.properties:ro
@@ -178,7 +171,7 @@ services:
     links:
       - psqldbimage
     environment:
-      JAVA_OPTS: -Xmx2g -Xms256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envimage
     volumes:
       - ./config/images-config.properties:/tmp/images-config.properties
@@ -213,7 +206,7 @@ services:
     links:
       - mysqldbapi
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envapi
     volumes:
       - ./config/webapi-config.properties:/tmp/webapi-config.properties:ro
@@ -242,6 +235,7 @@ services:
     volumes:
       - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
       - ./wordpress/wp-config-sample.php:/usr/src/wordpress/wp-config-sample.php:ro
+      - data_wordpress:/var/www/html
 
   specieslists:
     image: bioatlas/ala-specieslists:v0.3
@@ -249,7 +243,7 @@ services:
     links:
       - mysqldbspecieslist
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envspecieslists
     volumes:
       - ./config/specieslist-webapp-config.properties:/tmp/specieslist-webapp-config.properties:ro
@@ -269,7 +263,7 @@ services:
     image: bioatlas/ala-bieindex:v0.3
     container_name: bieindex
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/bie-index-config.properties:/data/bie-index/config/bie-index-config.properties
     links:
@@ -279,7 +273,7 @@ services:
     image: bioatlas/ala-biehub:v0.3
     container_name: biehub
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/ala-bie-config.properties:/data/ala-bie/config/ala-bie-config.properties:ro
 
@@ -297,19 +291,19 @@ services:
     #image: kartoza/geoserver:2.11.2
     image: bioatlas/ala-geoserver:v0.3
     container_name: geoserver
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envgeoserver
     volumes:
-      - data_geoserver:/data
-    #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver.sh"
+      - data_geoserver:/data/ala/data/geoserver_data_dir
+      - data_spatialservice:/data/spatial-data
+    #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver-files/geoserver.sh"
 
   layersservice:
-    image: bioatlas/ala-layersservice:v0.3
+    image: bioatlas/ala-layersservice:v0.4
     container_name: layersservice
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
-    links:
-      - postgis
-      - geoserver
+      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: env/.envlayersservice
     volumes:
       - ./layersservice/log4j.properties:/data/layers-store/config/log4j.properties:ro
@@ -319,7 +313,8 @@ services:
       - ./config/layers-data.xml:/tmp/layers-service-data-config.xml
       - ./config/layers-data.xml:/tmp/layers-store-data-config.xml
       - data_layersservice:/data
-    command: /bin/ash -c "envsubst < /tmp/layers-store-config.properties > /data/layers-store/config/layers-store-config.properties && envsubst < /tmp/layers-service-data-config.xml > /data/layers-service/config/layers-service-data-config.xml && envsubst < /tmp/layers-store-data-config.xml > /data/layers-store/config/layers-store-data-config.xml && catalina.sh run"
+      - data_spatialservice:/data/spatial-data
+    command: /bin/bash -c "envsubst < /tmp/layers-store-config.properties > /data/layers-store/config/layers-store-config.properties && envsubst < /tmp/layers-service-data-config.xml > /data/layers-service/config/layers-service-data-config.xml && envsubst < /tmp/layers-store-data-config.xml > /data/layers-store/config/layers-store-data-config.xml && catalina.sh run"
 
   layeringestion:
     image: bioatlas/ala-layeringestion:v0.3
@@ -335,7 +330,7 @@ services:
     image: bioatlas/ala-regions:v0.3
     container_name: regions
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/regions-config.properties:/data/regions/config/regions-config.properties:ro
       - ./regions/regions-files/menu-config.json:/data/regions/config/menu-config.json:ro
@@ -351,6 +346,8 @@ services:
 #      - ./geonetwork/geonetwork-files/postgres-postgis.xml:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/postgres-postgis.xml
 #      - ./geonetwork/geonetwork-files/postgis-alternate-datasource.xml:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/postgis-alternate-datasource.xml
 #      - ./geonetwork/geonetwork-files/jdbc.properties:/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-db/jdbc.properties
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     depends_on:
       - geonetworkdb
 
@@ -366,20 +363,20 @@ services:
     image: bioatlas/ala-spatialhub:v0.3
     container_name: spatialhub
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
       - data_spatialhub:/data/ala/runtime/files
       - ./config/spatial-hub-config.properties:/data/spatial-hub/config/spatial-hub-config.properties
 
   spatialservice:
-    image: bioatlas/ala-spatialservice:v0.3
+    image: bioatlas/ala-spatialservice:v0.4
     container_name: spatialservice
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx4g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file:
       - ./env/.envspatial
     volumes:
-      - data_spatialservice:/data
+      - data_spatialservice:/data/spatial-data
       - ./config/spatial-service-config.properties:/tmp/spatial-service-config.properties
       - ./config/spatial-service-data-config.xml:/tmp/spatial-service-data-config.xml
     command: /bin/bash -c "envsubst < /tmp/spatial-service-config.properties > /data/spatial-service/config/spatial-service-config.properties && envsubst < /tmp/spatial-service-data-config.xml > /data/spatial-service/config/spatial-service-data-config.xml && catalina.sh run"
@@ -396,7 +393,7 @@ services:
     image: bioatlas/ala-cas:v0.3
     container_name: casserver
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envcas
     volumes:
       - ./config/cas.properties:/tmp/cas.properties
@@ -407,7 +404,7 @@ services:
     container_name: userdetails
     domainname: auth.bioatlas.se
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envcas
     volumes:
       - ./config/userdetails-config.properties:/tmp/userdetails-config.properties
@@ -425,7 +422,7 @@ services:
     image: bioatlas/ala-apikey:v0.3
     container_name: apikey
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envapikey
     volumes:
       - ./config/apikey-config.properties:/tmp/apikey-config.properties
@@ -442,7 +439,7 @@ services:
     image: bioatlas/ala-dashboard:v0.3
     container_name: dashboard
     environment:
-      JAVA_OPTS: -Xmx1g -Xms256m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      JAVA_OPTS: -Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
       - ./dashboard/data.json:/data/dashboard/data.json:rw
@@ -459,6 +456,7 @@ volumes:
   data_solr:
   data_images_elasticsearch:
   db_data_wordpress:
+  data_wordpress:
   db_data_specieslists:
   db_data_postgis:
   data_geoserver:
