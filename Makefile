@@ -12,7 +12,7 @@ URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/1.
 URL_NAMESDIST = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.3/ala-name-matching-3.3-distribution.zip
 URL_BIOCACHE_SERVICE = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.12/biocache-service-2.1.12.war
 URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/3.0.10-SNAPSHOT/ala-hub-3.0.10-SNAPSHOT.war
-URL_BIOCACHE_CLI = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.3.7/biocache-store-2.3.7-distribution.zip
+URL_BIOCACHE_CLI = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.3.10/biocache-store-2.3.10-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
 URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/0.9.1-SNAPSHOT/ala-images.war
 URL_API = https://github.com/bioatlas/webapi/releases/download/v0.3/webapi-2.0-SNAPSHOT.war
@@ -31,7 +31,7 @@ URL_CAS2 = https://github.com/bioatlas/ala-cas-2.0/releases/download/v0.1/cas.wa
 URL_USERDETAILS = https://github.com/bioatlas/userdetails/releases/download/bioatlas-1.0.0/userdetails-1.0.0.war
 URL_APIKEY = https://github.com/bioatlas/apikey/releases/download/1.4-SNAPSHOT/apikey-1.4-SNAPSHOT.war
 URL_JTS = http://central.maven.org/maven2/org/locationtech/jts/jts-core/1.15.0/jts-core-1.15.0.jar
-
+URL_DYNTAXA = https://api.artdatabanken.se/taxonservice/v1/DarwinCore/DarwinCoreArchiveFile?Subscription-Key=4b068709e7f2427d9fc76bf42d8e2b57
 
 all: init build up
 .PHONY: all
@@ -109,6 +109,9 @@ init: theme-dl
 
 	@test -f solr7/lib/jts-core-1.15.0.jar || \
 		wget -q --show-progress -O solr7/lib/jts-core-1.15.0.jar $(URL_JTS)
+
+	@@test -f dyntaxa-index/dyntaxa.dwca.zip || \
+			wget -q --show-progress -O dyntaxa-index/dyntaxa.dwca.zip $(URL_DYNTAXA)
 
 theme-dl:
 	@echo "Downloading bioatlas wordpress theme..."
@@ -213,6 +216,7 @@ build:
 	@docker build -t bioatlas/ala-cas -t bioatlas/ala-cas:v0.3 cas2
 	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails
 	@docker build -t bioatlas/ala-apikey -t bioatlas/ala-apikey:v0.3 apikey
+	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.3 dyntaxa-index
 
 up:
 	@echo "Starting services..."
