@@ -908,6 +908,13 @@
     <field name="water_body" type="string" indexed="true" stored="true" omitNorms="true" />
     <field name="zone" type="string" indexed="true" stored="true" omitNorms="true" />
 
+    <!--  catches all the environment and contextual layers that are being indexed -->
+    <!-- They are being stored just in case they need to be faceted on -->
+    <dynamicField name="el*" type="double" indexed="true" stored="true" omitNorms="true" />
+    <dynamicField name="cl*" type="string" indexed="true" stored="true" omitNorms="true" />
+    <dynamicField name="dr*" type="string" indexed="true" stored="false" omitNorms="true" />
+
+    <dynamicField name="*_dt" type="tdate" indexed="true" stored="true" omitNorms="true" />
 
     <!-- catchall text field that indexes tokens both normally and in reverse for efficient
          leading wildcard queries. -->
