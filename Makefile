@@ -19,7 +19,7 @@ URL_API = https://github.com/bioatlas/webapi/releases/download/v0.3/webapi-2.0-S
 URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/backbone-current.zip
 URL_BIEHUB = https://github.com/bioatlas/ala-bie/releases/download/BAS-1.4.12-SNAPSHOT/ala-bie-1.4.12-SNAPSHOT.war
 URL_BIEINDEX = https://github.com/bioatlas/bie-index/releases/download/BAS-1.4.3-SNAPSHOT/bie-index-1.4.3-SNAPSHOT.war
-URL_SPECIESLIST = https://github.com/bioatlas/specieslist-webapp/releases/download/bas-3.0/specieslist-webapp-3.0.war
+URL_SPECIESLIST = https://github.com/bioatlas/specieslist-webapp/releases/download/BAS-3.1/specieslist-webapp-3.1.war
 URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/master.zip
 URL_LAYERS_SERVICE = https://github.com/bioatlas/layers-service/releases/download/2.1-SNAPSHOT/layers-service.war
 URL_LAYER_INGESTION = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/layer-ingestion/1.0-SNAPSHOT/layer-ingestion-1.0-20160224.160123-13-bin.zip
@@ -204,7 +204,7 @@ build:
 	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.3 imageservice
 	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v0.3 imagestore
 	@docker build -t bioatlas/ala-api -t bioatlas/ala-api:v0.3 api
-	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.3 specieslists
+	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.4 specieslists
 	@docker build -t bioatlas/ala-bieindex -t bioatlas/ala-bieindex:v0.4 bieindex
 	@docker build -t bioatlas/ala-biehub -t bioatlas/ala-biehub:v0.4 biehub
 	@docker build -t bioatlas/ala-layersservice -t bioatlas/ala-layersservice:v0.3 layersservice
@@ -237,7 +237,7 @@ pull:
 	@docker pull bioatlas/ala-imageservice:v0.3
 	@docker pull bioatlas/ala-imagestore:v0.3
 	@docker pull bioatlas/ala-api:v0.3
-	@docker pull bioatlas/ala-specieslists:v0.3
+	@docker pull bioatlas/ala-specieslists:v0.4
 	@docker pull bioatlas/ala-bieindex:v0.4
 	@docker pull bioatlas/ala-biehub:v0.4
 	@docker pull bioatlas/ala-layersservice:v0.3
@@ -272,7 +272,7 @@ push:
 	@docker push bioatlas/ala-imageservice:v0.3
 	@docker push bioatlas/ala-imagestore:v0.3
 	@docker push bioatlas/ala-api:v0.3
-	@docker push bioatlas/ala-specieslists:v0.3
+	@docker push bioatlas/ala-specieslists:v0.4
 	@docker push bioatlas/ala-bieindex:v0.4
 	@docker push bioatlas/ala-biehub:v0.4
 	@docker push bioatlas/ala-layersservice:v0.3

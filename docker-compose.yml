@@ -238,7 +238,7 @@ services:
       - data_wordpress:/var/www/html
 
   specieslists:
-    image: bioatlas/ala-specieslists:v0.3
+    image: bioatlas/ala-specieslists:v0.4
     container_name: specieslists
     links:
       - mysqldbspecieslist
