@@ -25,8 +25,8 @@ URL_LAYERS_SERVICE = https://github.com/bioatlas/layers-service/releases/downloa
 URL_LAYER_INGESTION = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/layer-ingestion/1.0-SNAPSHOT/layer-ingestion-1.0-20160224.160123-13-bin.zip
 URL_REGIONS = https://github.com/bioatlas/regions/releases/download/BAS-3.1-SNAPSHOT/regions-3.1-SNAPSHOT.war
 URL_GEONETWORK = https://jaist.dl.sourceforge.net/project/geonetwork/GeoNetwork_opensource/v3.4.1/geonetwork.war
-URL_SPATIAL_SERVICE = https://github.com/bioatlas/spatial-service/releases/download/0.3-SNAPSHOT/spatial-service-0.3-SNAPSHOT.war
-URL_SPATIAL_HUB = https://github.com/bioatlas/spatial-hub/releases/download/0.3-SNAPSHOT/spatial-hub-0.3-SNAPSHOT.war
+URL_SPATIAL_SERVICE = https://github.com/bioatlas/spatial-service/releases/download/BAS-0.3-SNAPSHOT/spatial-service-0.3-SNAPSHOT.war
+URL_SPATIAL_HUB = https://github.com/bioatlas/spatial-hub/releases/download/BAS-0.3-SNAPSHOT/spatial-hub-0.3-SNAPSHOT.war
 URL_CAS2 = https://github.com/bioatlas/ala-cas-2.0/releases/download/v0.1/cas.war
 URL_USERDETAILS = https://github.com/bioatlas/userdetails/releases/download/bioatlas-1.0.0/userdetails-1.0.0.war
 URL_APIKEY = https://github.com/bioatlas/apikey/releases/download/1.4-SNAPSHOT/apikey-1.4-SNAPSHOT.war
@@ -210,8 +210,8 @@ build:
 	@docker build -t bioatlas/ala-layersservice -t bioatlas/ala-layersservice:v0.3 layersservice
 	@docker build -t bioatlas/ala-layeringestion -t bioatlas/ala-layeringestion:v0.3 layeringestion
 	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.4 regions
-	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.3 spatialhub
-	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.3 spatialservice
+	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.4 spatialhub
+	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.4 spatialservice
 	@docker build -t bioatlas/ala-geoserver -t bioatlas/ala-geoserver:v0.3 geoserver
 	@docker build -t bioatlas/ala-cas -t bioatlas/ala-cas:v0.3 cas2
 	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails
@@ -243,8 +243,8 @@ pull:
 	@docker pull bioatlas/ala-layersservice:v0.3
 	@docker pull bioatlas/ala-layeringestion:v0.3
 	@docker pull bioatlas/ala-regions:v0.4
-	@docker pull bioatlas/ala-spatialhub:v0.3
-	@docker pull bioatlas/ala-spatialservice:v0.3
+	@docker pull bioatlas/ala-spatialhub:v0.4
+	@docker pull bioatlas/ala-spatialservice:v0.4
 	@docker pull bioatlas/ala-geoserver:v0.3
 	@docker pull bioatlas/ala-cas:v0.3
 	@docker pull bioatlas/ala-userdetails:v0.3
@@ -278,8 +278,8 @@ push:
 	@docker push bioatlas/ala-layersservice:v0.3
 	@docker push bioatlas/ala-layeringestion:v0.3
 	@docker push bioatlas/ala-regions:v0.4
-	@docker push bioatlas/ala-spatialhub:v0.3
-	@docker push bioatlas/ala-spatialservice:v0.3
+	@docker push bioatlas/ala-spatialhub:v0.4
+	@docker push bioatlas/ala-spatialservice:v0.4
 	@docker push bioatlas/ala-geoserver:v0.3
 	@docker push bioatlas/ala-cas:v0.3
 	@docker push bioatlas/ala-userdetails:v0.3

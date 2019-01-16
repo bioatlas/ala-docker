@@ -360,7 +360,7 @@ services:
       - ./geonetwork/pg_hba.conf:/etc/pg_hba.conf:ro
 
   spatialhub:
-    image: bioatlas/ala-spatialhub:v0.3
+    image: bioatlas/ala-spatialhub:v0.4
     container_name: spatialhub
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
