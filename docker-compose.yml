@@ -44,13 +44,9 @@ services:
       - db_data_collectory:/var/lib/mysql
 
   cassandradb:
-    image: cassandra:3.11.2
+    image: bioatlas/ala-cassandra:v0.3
     container_name: cassandradb
     volumes:
-      - ./cassandra3/entrypoint-wrap.sh:/entrypoint-wrap.sh:z
-      - ./cassandra3/biocache-db/cassandra3-schema.txt:/docker-entrypoint-initdb.d/cassandra3-schema.cql
-      - ./cassandra3/cassandra-files/cassandra-env.sh:/tmp/cassandra-env.sh
-      - ./cassandra3/cassandra-files/cassandra.yaml:/tmp/cassandra.yaml
       - db_data_cassandra:/var/lib/cassandra
     entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
 
@@ -121,16 +117,11 @@ services:
       - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
 
   solr:
-    image: solr:7.4-alpine
+    image: bioatlas/ala-solr:v0.3
     container_name: solr
     environment:
       SOLR_HEAP: 4g
     volumes:
-      - ./solr7/mycores:/opt/solr/server/solr/mycores
-      - ./solr7/solr.xml:/opt/solr/server/solr/solr.xml
-      - ./solr7/zoo.cfg:/opt/solr/server/solr/zoo.cfg
-      - ./solr7/lib/jts-core-1.15.0.jar:/opt/solr/server/solr-webapp/webapp/WEB-INF/lib/jts-core-1.15.0.jar
-      - ./solr7/solr.in.sh:/etc/default/solr.in.sh:ro
       - data_solr:/opt/solr
     entrypoint:
       - docker-entrypoint.sh

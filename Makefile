@@ -217,6 +217,8 @@ build:
 	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails
 	@docker build -t bioatlas/ala-apikey -t bioatlas/ala-apikey:v0.3 apikey
 	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.3 dyntaxa-index
+	@docker build -t bioatlas/ala-cassandra -t bioatlas/ala-cassandra:v0.3 cassandra3
+	@docker build -t bioatlas/ala-solr -t bioatlas/ala-solr:v0.3 solr7
 
 up:
 	@echo "Starting services..."
@@ -250,6 +252,8 @@ pull:
 	@docker pull bioatlas/ala-userdetails:v0.3
 	@docker pull bioatlas/ala-apikey:v0.3
 	@docker pull bioatlas/ala-dyntaxaindex:v0.3
+	@docker pull bioatlas/ala-cassandra:v0.3
+	@docker pull bioatlas/ala-solr:v0.3
 
 pull2:
 	@echo "Downloading other official docker images ..."
@@ -286,6 +290,8 @@ push:
 	@docker push bioatlas/ala-userdetails:v0.3
 	@docker push bioatlas/ala-apikey:v0.3
 	@docker push bioatlas/ala-dyntaxaindex:v0.3
+	@docker push bioatlas/ala-cassandra:v0.3
+	@docker push bioatlas/ala-solr:v0.3
 
 release: build push
 
