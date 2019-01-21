@@ -12,3 +12,4 @@ COPY server.xml $CATALINA_HOME/conf/server.xml
 RUN apk add --update tini
 ENTRYPOINT ["tini", "--"]
 CMD ["catalina.sh", "run"]
+VOLUME /data

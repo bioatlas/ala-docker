@@ -260,12 +260,13 @@ services:
       - db_data_specieslists:/var/lib/mysql
 
   bieindex:
-    image: bioatlas/ala-bieindex:v0.3
+    image: bioatlas/ala-bieindex:v0.5
     container_name: bieindex
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     volumes:
       - ./config/bie-index-config.properties:/data/bie-index/config/bie-index-config.properties
+      - data_bieindex:/data
     links:
       - solr
 
@@ -467,3 +468,4 @@ volumes:
   data_spatialservice:
   db_data_mysqldbcas:
   db_data_mysqldbapikey:
+  data_bieindex:
