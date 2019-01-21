@@ -13,6 +13,9 @@ RUN mkdir -p /data/layers-store/config \
   /data/ala/runtime/output
 
 COPY layers-service.war $CATALINA_HOME/webapps/
+COPY log4j.properties /data/layers-store/config/log4j.properties
+COPY log4j.properties /data/layers-service/config/log4j.properties
+
 VOLUME /data
 
 CMD ["catalina.sh", "run"]

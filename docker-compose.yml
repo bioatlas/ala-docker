@@ -298,8 +298,6 @@ services:
       - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: env/.envlayersservice
     volumes:
-      - ./layersservice/log4j.properties:/data/layers-store/config/log4j.properties:ro
-      - ./layersservice/log4j.properties:/data/layers-service/config/log4j.properties:ro
       - ./config/layers-service-config.properties:/data/layers-service/config/layers-service-config.properties:ro
       - ./config/layers-store-config.properties:/tmp/layers-store-config.properties
       - ./config/layers-data.xml:/tmp/layers-service-data-config.xml
