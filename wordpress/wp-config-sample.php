@@ -18,8 +18,8 @@
  * @package WordPress
  */
 
-define('WP_HOME','https://bioatlas.se');
-define('WP_SITEURL','https://bioatlas.se');
+define('WP_HOME','https://beta.bioatlas.se');
+define('WP_SITEURL','https://beta.bioatlas.se');
 define('ADMIN_COOKIE_PATH','/');
 
 // ** MySQL settings - You can get this info from your web host ** //

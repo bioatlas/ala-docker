@@ -12,7 +12,7 @@ services:
       - 172.17.0.1:53:53/tcp
       - 172.17.0.1:53:53/udp
     external_links:
-      - proxy:bioatlas.se
+      - proxy:beta.bioatlas.se
       - proxy:auth.bioatlas.se
 
   proxy:
@@ -31,7 +31,7 @@ services:
     image: nginx:alpine
     container_name: webserver
     environment:
-      - VIRTUAL_HOST=bioatlas.se,auth.bioatlas.se
+      - VIRTUAL_HOST=beta.bioatlas.se,auth.bioatlas.se
     volumes:
       #- ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro

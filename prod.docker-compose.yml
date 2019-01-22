@@ -50,7 +50,7 @@ services:
     image: nginx:alpine
     container_name: webserver
     environment:
-      - VIRTUAL_HOST=bioatlas.se,auth.bioatlas.se
+      - VIRTUAL_HOST=beta.bioatlas.se,auth.bioatlas.se
     volumes:
       #- ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
@@ -532,4 +532,3 @@ services:
     command: /bin/ash -c "envsubst < /tmp/apikey-config.properties > /data/apikey/config/apikey-config.properties && catalina.sh run"
     networks:
       - basenet
-
