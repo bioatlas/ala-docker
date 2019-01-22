@@ -11,7 +11,7 @@ GID := $(shell id -g)
 URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/1.5.5-SNAPSHOT/ala-collectory-1.5.5-SNAPSHOT.war
 URL_NAMESDIST = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.3/ala-name-matching-3.3-distribution.zip
 URL_BIOCACHE_SERVICE = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.14/biocache-service-2.1.14.war
-URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/3.0.13-SNAPSHOT/ala-hub-3.0.13-SNAPSHOT.war
+URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/BAS-3.0.13-SNAPSHOT/ala-hub-3.0.13-SNAPSHOT.war
 URL_BIOCACHE_CLI = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.4.1/biocache-store-2.4.1-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
 URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/0.9.1-SNAPSHOT/ala-images.war
@@ -197,7 +197,7 @@ build:
 	@echo "Building images..."
 	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.4 biocachebackend
 	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.3 nameindex
-	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v0.4 biocachehub
+	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v0.5 biocachehub
 	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.3 collectory
 	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.4 biocacheservice
 	@docker build -t bioatlas/ala-loggerservice -t bioatlas/ala-loggerservice:v0.3 loggerservice
@@ -232,7 +232,7 @@ pull:
 	@echo "Downloading docker images for ALA modules..."
 	@docker pull bioatlas/ala-biocachebackend:v0.4
 	@docker pull bioatlas/ala-nameindex:v0.3
-	@docker pull bioatlas/ala-biocachehub:v0.4
+	@docker pull bioatlas/ala-biocachehub:v0.5
 	@docker pull bioatlas/ala-collectory:v0.3
 	@docker pull bioatlas/ala-biocacheservice:v0.4
 	@docker pull bioatlas/ala-loggerservice:v0.3
@@ -270,7 +270,7 @@ push:
 	@echo "Pushing images to Dockerhub..."
 	@docker push bioatlas/ala-biocachebackend:v0.4
 	@docker push bioatlas/ala-nameindex:v0.3
-	@docker push bioatlas/ala-biocachehub:v0.4
+	@docker push bioatlas/ala-biocachehub:v0.5
 	@docker push bioatlas/ala-collectory:v0.3
 	@docker push bioatlas/ala-biocacheservice:v0.4
 	@docker push bioatlas/ala-loggerservice:v0.3
