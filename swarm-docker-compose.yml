@@ -16,6 +16,10 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock
       - ./nginx-proxy-certs:/etc/nginx/certs:ro
       - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
   webserver:
     image: nginx:alpine
@@ -24,6 +28,10 @@ services:
     volumes:
       #- ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
   mysqldb:
     image: mysql:5.7
@@ -137,6 +145,10 @@ services:
     image: nginx:alpine
     volumes:
       - ./static:/usr/share/nginx/html
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
   imagestore:
     image: bioatlas/ala-imagestore:v0.3
@@ -181,6 +193,10 @@ services:
       - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
       - ./wordpress/wp-config-sample.php:/usr/src/wordpress/wp-config-sample.php:ro
       - data_wordpress:/var/www/html
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
   specieslists:
     image: bioatlas/ala-specieslists:v0.4
