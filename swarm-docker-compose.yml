@@ -4,6 +4,18 @@ networks:
   default:
     driver: overlay
 
+secrets:
+  bioatlas.se.crt:
+    file: ./nginx-proxy-certs/bioatlas.se.crt
+  bioatlas.se.key:
+    file: ./nginx-proxy-certs/bioatlas.se.key
+
+configs:
+  config_nginx-proxy:
+    file: ./nginx-proxy/nginx-proxy.conf
+  config_webserver:
+    file: ./webserver/app.conf
+
 services:
 
   proxy:
@@ -14,8 +26,14 @@ services:
       - 443:443
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-      - ./nginx-proxy-certs:/etc/nginx/certs:ro
-      - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf
+    secrets:
+      - source: bioatlas.se.crt
+        target: /etc/nginx/certs/bioatlas.se.crt
+      - source: bioatlas.se.key
+        target: /etc/nginx/certs/bioatlas.se.key
+    configs:
+      - source: config_nginx-proxy
+        target: /etc/nginx/conf.d/nginx-proxy.conf
     deploy:
       placement:
         constraints:
@@ -25,9 +43,10 @@ services:
     image: nginx:alpine
     environment:
       - VIRTUAL_HOST=beta.bioatlas.se,auth.bioatlas.se
-    volumes:
+    configs:
       #- ./env/.htpasswd:/etc/nginx/htpasswd
-      - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
+      - source: config_webserver
+        target: /etc/nginx/conf.d/app.conf
     deploy:
       placement:
         constraints:
