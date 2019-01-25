@@ -378,12 +378,6 @@ services:
       - ./config/apikey-config.properties:/tmp/apikey-config.properties
     command: /bin/ash -c "envsubst < /tmp/apikey-config.properties > /data/apikey/config/apikey-config.properties && catalina.sh run"
 
-  mailhog:
-    image: mailhog/mailhog:v1.0.0
-    ports:
-      - 1025:1025
-      - 8025:8025
-
 #  dashboard:
 #    image: bioatlas/ala-dashboard:v0.3
 #    environment:
