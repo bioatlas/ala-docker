@@ -309,8 +309,9 @@ services:
       - 8080:80
     env_file: ./env/.envwordpress
     volumes:
-      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
+#      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
       - data_wordpress:/var/www/html
+      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-beta:/var/www/html/wp-content/themes/atlas
     configs:
       - source: config_wordpress
         target: /usr/src/wordpress/wp-config-sample.php
