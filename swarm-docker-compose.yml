@@ -1,8 +1,8 @@
 version: '3.7'
 
 networks:
-  default:
-    driver: overlay
+  basnet:
+    external: true
 
 secrets:
   bioatlas.se.crt:
@@ -88,6 +88,8 @@ services:
       placement:
         constraints:
           - node.role == manager
+    networks:
+      - basnet
 
   webserver:
     image: nginx:alpine
@@ -101,18 +103,24 @@ services:
       placement:
         constraints:
           - node.role == manager
+    networks:
+      - basnet
 
   mysqldb:
     image: mysql:5.7
     env_file: ./env/.envcollectory
     volumes:
       - db_data_collectory:/var/lib/mysql
+    networks:
+      - basnet
 
   cassandradb:
     image: bioatlas/ala-cassandra:v0.3
     volumes:
       - db_data_cassandra:/var/lib/cassandra
     entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
+    networks:
+      - basnet
 
   biocacheservice:
     image: bioatlas/ala-biocacheservice:v0.4
@@ -128,6 +136,8 @@ services:
         target: /data/biocache/config/biocache-config.properties
       - source: config_logger-client
         target: /data/logger-client/config/logger-client.properties
+    networks:
+      - basnet
 
   biocachehub:
     image: bioatlas/ala-biocachehub:v0.5
@@ -138,6 +148,8 @@ services:
     configs:
       - source: config_ala_hub
         target: /data/ala-hub/config/ala-hub-config.properties
+    networks:
+      - basnet
 
   collectory:
     image: bioatlas/ala-collectory:v0.3
@@ -150,6 +162,8 @@ services:
       - source: config_collectory
         target: /tmp/ala-collectory-config.properties
     command: /bin/ash -c "envsubst < /tmp/ala-collectory-config.properties > /data/ala-collectory/config/ala-collectory-config.properties && catalina.sh run"
+    networks:
+      - basnet
 
   nameindex:
     #image: bioatlas/ala-nameindex:v0.3
@@ -157,6 +171,8 @@ services:
     command: /bin/ash
     volumes:
       - data_nameindex:/data/lucene/namematching
+    networks:
+      - basnet
 
   biocachebackend:
     image: bioatlas/ala-biocachebackend:v0.4
@@ -171,6 +187,8 @@ services:
         target: /data/biocache/config/blacklistMediaUrls.txt
       - source: config_biocache
         target: /data/biocache/config/biocache-config.properties
+    networks:
+      - basnet
 
   solr:
     image: bioatlas/ala-solr:v0.3
@@ -186,6 +204,8 @@ services:
       - bie-offline
     ports:
       - 8983:8983
+    networks:
+      - basnet
 
   loggerservice:
     image: bioatlas/ala-loggerservice:v0.3
@@ -198,6 +218,8 @@ services:
       - source: config_logger
         target: /tmp/logger-config.properties
     command: /bin/ash -c "envsubst < /tmp/logger-config.properties > /data/logger/config/logger-config.properties && catalina.sh run"
+    networks:
+      - basnet
 
   mysqldblogger:
     image: mysql:5.7
@@ -205,6 +227,8 @@ services:
     volumes:
       - ./loggerservice/db:/docker-entrypoint-initdb.d
       - db_data_loggerservice:/var/lib/mysql
+    networks:
+      - basnet
 
   imageservice:
     image: bioatlas/ala-imageservice:v0.3
@@ -220,6 +244,8 @@ services:
       - source: config_imageservice
         target: /tmp/images-config.properties
     command: /bin/ash -c "envsubst < /tmp/images-config.properties > /data/images/config/images-config.properties && catalina.sh run"
+    networks:
+      - basnet
 
   static:
     image: nginx:alpine
@@ -229,17 +255,23 @@ services:
       placement:
         constraints:
           - node.role == manager
+    networks:
+      - basnet
 
   imagestore:
     image: bioatlas/ala-imagestore:v0.3
     volumes:
       - data_images:/data/images/store
+    networks:
+      - basnet
 
   psqldbimage:
     image: postgres:9.6.8-alpine
     env_file: ./env/.envimage
     volumes:
       - db_data_imageservice:/var/lib/postgresql/data
+    networks:
+      - basnet
 
   apiservice:
     image: bioatlas/ala-api:v0.3
@@ -252,18 +284,24 @@ services:
       - source: config_apiservice
         target: /tmp/webapi-config.properties
     command: /bin/ash -c "envsubst < /tmp/webapi-config.properties > /data/webapi/config/webapi-config.properties && catalina.sh run"
+    networks:
+      - basnet
 
   mysqldbapi:
     image: mysql:5.7
     env_file: ./env/.envapi
     volumes:
       - db_data_apiservice:/var/lib/mysql
+    networks:
+      - basnet
 
   mysqldbwordpress:
     image: mysql:5.7
     env_file: ./env/.envwordpress
     volumes:
       - db_data_wordpress:/var/lib/mysql
+    networks:
+      - basnet
 
   wordpress:
     image: wordpress:4.9.5-apache
@@ -280,6 +318,8 @@ services:
       placement:
         constraints:
           - node.role == manager
+    networks:
+      - basnet
 
   specieslists:
     image: bioatlas/ala-specieslists:v0.4
@@ -292,6 +332,8 @@ services:
     volumes:
       - data_nameindex:/data/lucene/namematching
     command: /bin/ash -c "envsubst < /tmp/specieslist-webapp-config.properties > /data/specieslist-webapp/config/specieslist-webapp-config.properties && catalina.sh run"
+    networks:
+      - basnet
 
   mysqldbspecieslist:
     image: mysql:5.7
@@ -300,6 +342,8 @@ services:
     volumes:
       - ./specieslists/db:/docker-entrypoint-initdb.d
       - db_data_specieslists:/var/lib/mysql
+    networks:
+      - basnet
 
   bieindex:
     image: bioatlas/ala-bieindex:v0.5
@@ -310,6 +354,8 @@ services:
         target: /data/bie-index/config/bie-index-config.properties
     volumes:
       - data_bieindex:/data
+    networks:
+      - basnet
 
   biehub:
     image: bioatlas/ala-biehub:v0.4
@@ -318,6 +364,8 @@ services:
     configs:
       - source: config_biehub
         target: /data/ala-bie/config/ala-bie-config.properties
+    networks:
+      - basnet
 
   postgis:
     image: mdillon/postgis:9.6-alpine
@@ -329,6 +377,8 @@ services:
     configs:
       - source: config_postgis
         target: /etc/postgresql/9.6/main/pg_hba.conf
+    networks:
+      - basnet
 
   geoserver:
     #image: kartoza/geoserver:2.11.2
@@ -340,6 +390,8 @@ services:
       - data_geoserver:/data/ala/data/geoserver_data_dir
       - data_spatialservice:/data/spatial-data
     #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver-files/geoserver.sh"
+    networks:
+      - basnet
 
   layersservice:
     image: bioatlas/ala-layersservice:v0.4
@@ -359,11 +411,15 @@ services:
       - data_layersservice:/data
       - data_spatialservice:/data/spatial-data
     command: /bin/bash -c "envsubst < /tmp/layers-store-config.properties > /data/layers-store/config/layers-store-config.properties && envsubst < /tmp/layers-service-data-config.xml > /data/layers-service/config/layers-service-data-config.xml && envsubst < /tmp/layers-store-data-config.xml > /data/layers-store/config/layers-store-data-config.xml && catalina.sh run"
+    networks:
+      - basnet
 
   layeringestion:
     image: bioatlas/ala-layeringestion:v0.3
     volumes:
       - data_layersservice:/data
+    networks:
+      - basnet
 
   regions:
     image: bioatlas/ala-regions:v0.4
@@ -376,6 +432,12 @@ services:
       - ./regions/regions-files/menu-config.json:/data/regions/config/menu-config.json:ro
       - ./regions/regions-files/state-emblems.json:/data/regions/config/state-emblems.json:ro
       - ./regions/regions-files/stateEmblems.txt:/data/regions/config/stateEmblems.txt:ro
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - basnet
 
   geonetwork:
     image: geonetwork:3.4.1
@@ -386,6 +448,8 @@ services:
       - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     depends_on:
       - geonetworkdb
+    networks:
+      - basnet
 
   geonetworkdb:
     image: mdillon/postgis:9.6-alpine
@@ -395,6 +459,8 @@ services:
     configs:
       - source: config_geonetworkdb
         target: /etc/pg_hba.conf
+    networks:
+      - basnet
 
   spatialhub:
     image: bioatlas/ala-spatialhub:v0.4
@@ -405,6 +471,8 @@ services:
     configs:
       - source: config_spatial-hub
         target: /data/spatial-hub/config/spatial-hub-config.properties
+    networks:
+      - basnet
 
   spatialservice:
     image: bioatlas/ala-spatialservice:v0.4
@@ -420,6 +488,8 @@ services:
       - source: config_spatial-service-data
         target: /tmp/spatial-service-data-config.xml
     command: /bin/bash -c "envsubst < /tmp/spatial-service-config.properties > /data/spatial-service/config/spatial-service-config.properties && envsubst < /tmp/spatial-service-data-config.xml > /data/spatial-service/config/spatial-service-data-config.xml && catalina.sh run"
+    networks:
+      - basnet
 
   mysqldbcas:
     image: mysql:5.7
@@ -427,6 +497,8 @@ services:
     volumes:
       - ./cas2/db:/docker-entrypoint-initdb.d
       - db_data_mysqldbcas:/var/lib/mysql
+    networks:
+      - basnet
 
   casserver:
     image: bioatlas/ala-cas:v0.3
@@ -437,6 +509,8 @@ services:
       - source: config_cas
         target: /tmp/cas.properties
     command: /bin/ash -c "envsubst < /tmp/cas.properties > /data/cas/config/cas.properties && catalina.sh run"
+    networks:
+      - basnet
 
   userdetails:
     image: bioatlas/ala-userdetails:v0.3
@@ -448,6 +522,8 @@ services:
       - source: config_userdetails
         target: /tmp/userdetails-config.properties
     command: /bin/ash -c "envsubst < /tmp/userdetails-config.properties > /data/userdetails/config/userdetails-config.properties && catalina.sh run"
+    networks:
+      - basnet
 
   mysqldbapikey:
     image: mysql:5.7
@@ -455,6 +531,8 @@ services:
     volumes:
       - ./apikey/db:/docker-entrypoint-initdb.d
       - db_data_mysqldbapikey:/var/lib/mysql
+    networks:
+      - basnet
 
   apikey:
     image: bioatlas/ala-apikey:v0.3
@@ -465,6 +543,8 @@ services:
       - source: config_apikey
         target: /tmp/apikey-config.properties
     command: /bin/ash -c "envsubst < /tmp/apikey-config.properties > /data/apikey/config/apikey-config.properties && catalina.sh run"
+    networks:
+      - basnet
 
 #  dashboard:
 #    image: bioatlas/ala-dashboard:v0.3
@@ -475,6 +555,8 @@ services:
 #        target: /data/dashboard/config/dashboard-config.properties
 #    volumes:
 #      - ./dashboard/data.json:/data/dashboard/data.json:rw
+#    networks:
+#      - basnet
 
 volumes:
   db_data_collectory:
