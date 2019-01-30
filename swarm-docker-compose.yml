@@ -178,7 +178,7 @@ services:
     image: bioatlas/ala-biocachebackend:v0.4
     command: /bin/ash
     environment:
-      biocache_opts: -Xmx1g -Xms128m
+      BIOCACHE_MEMORY_OPTS=-Xmx1g -Xms1g
     volumes:
       - data_nameindex:/data/lucene/namematching
       - data_biocachebackend:/data
