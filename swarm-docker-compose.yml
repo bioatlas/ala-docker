@@ -439,28 +439,28 @@ services:
     networks:
       - basnet
 
-  geonetwork:
-    image: geonetwork:3.4.1
-    env_file: ./env/.envgeonetwork
-    volumes:
-      - data_geonetwork:/data/ala/data/geonetwork/
-    environment:
-      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
-    depends_on:
-      - geonetworkdb
-    networks:
-      - basnet
+#  geonetwork:
+#    image: geonetwork:3.4.1
+#    env_file: ./env/.envgeonetwork
+#    volumes:
+#      - data_geonetwork:/data/ala/data/geonetwork/
+#    environment:
+#      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+#    depends_on:
+#      - geonetworkdb
+#    networks:
+#      - basnet
 
-  geonetworkdb:
-    image: mdillon/postgis:9.6-alpine
-    env_file: ./env/.envgeonetworkdb
-    volumes:
-      - db_data_geonetworkdb:/var/lib/postgresql/data
-    configs:
-      - source: config_geonetworkdb
-        target: /etc/pg_hba.conf
-    networks:
-      - basnet
+#  geonetworkdb:
+#    image: mdillon/postgis:9.6-alpine
+#    env_file: ./env/.envgeonetworkdb
+#    volumes:
+#      - db_data_geonetworkdb:/var/lib/postgresql/data
+#    configs:
+#      - source: config_geonetworkdb
+#        target: /etc/pg_hba.conf
+#    networks:
+#      - basnet
 
   spatialhub:
     image: bioatlas/ala-spatialhub:v0.4
