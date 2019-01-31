@@ -121,6 +121,10 @@ services:
     entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
     networks:
       - basnet
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == bas-cassandra
 
   biocacheservice:
     image: bioatlas/ala-biocacheservice:v0.4
@@ -173,6 +177,9 @@ services:
       - data_nameindex:/data/lucene/namematching
     networks:
       - basnet
+    deploy:
+      restart_policy:
+        condition: none
 
   biocachebackend:
     image: bioatlas/ala-biocachebackend:v0.4
@@ -189,6 +196,9 @@ services:
         target: /data/biocache/config/biocache-config.properties
     networks:
       - basnet
+    deploy:
+      restart_policy:
+        condition: none
 
   solr:
     image: bioatlas/ala-solr:v0.3
@@ -206,6 +216,10 @@ services:
       - 8983:8983
     networks:
       - basnet
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == bas-solr
 
   loggerservice:
     image: bioatlas/ala-loggerservice:v0.3
@@ -421,6 +435,9 @@ services:
       - data_layersservice:/data
     networks:
       - basnet
+    deploy:
+      restart_policy:
+        condition: none
 
   regions:
     image: bioatlas/ala-regions:v0.4
