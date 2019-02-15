@@ -257,7 +257,7 @@ services:
       - basnet
 
   imageservice:
-    image: bioatlas/ala-imageservice:v0.3
+    image: bioatlas/ala-imageservice:v0.4
     depends_on:
       - psqldbimage
     environment:

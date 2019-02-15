@@ -155,7 +155,7 @@ services:
       - db_data_loggerservice:/var/lib/mysql
 
   imageservice:
-    image: bioatlas/ala-imageservice:v0.3
+    image: bioatlas/ala-imageservice:v0.4
     container_name: imageservice
     depends_on:
       - psqldbimage
