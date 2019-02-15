@@ -191,7 +191,7 @@ services:
           - node.hostname == bas-main
 
   biocachebackend:
-    image: bioatlas/ala-biocachebackend:v0.4
+    image: bioatlas/ala-biocachebackend:v0.5
     command: /bin/ash
     environment:
       - BIOCACHE_MEMORY_OPTS=-Xmx16g -Xms1g

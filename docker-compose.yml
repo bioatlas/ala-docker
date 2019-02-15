@@ -99,7 +99,7 @@ services:
       - data_nameindex:/data/lucene/namematching
 
   biocachebackend:
-    image: bioatlas/ala-biocachebackend:v0.4
+    image: bioatlas/ala-biocachebackend:v0.5
     container_name: biocachebackend
     links:
       - biocachehub
