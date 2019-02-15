@@ -172,8 +172,8 @@ services:
       - basnet
 
   nameindex:
-    #image: bioatlas/ala-nameindex:v0.3
-    image: bioatlas/ala-dyntaxaindex:v0.3
+    image: bioatlas/ala-nameindex:v0.3
+    #image: bioatlas/ala-dyntaxaindex:v0.3
     command: /bin/ash
     volumes:
       - data_nameindex:/data/lucene/namematching
