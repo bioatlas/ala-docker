@@ -12,7 +12,7 @@ services:
       - 172.17.0.1:53:53/tcp
       - 172.17.0.1:53:53/udp
     external_links:
-      - proxy:bioatlas.se
+      - proxy:beta.bioatlas.se
       - proxy:auth.bioatlas.se
 
   proxy:
@@ -31,7 +31,7 @@ services:
     image: nginx:alpine
     container_name: webserver
     environment:
-      - VIRTUAL_HOST=bioatlas.se,auth.bioatlas.se
+      - VIRTUAL_HOST=beta.bioatlas.se,auth.bioatlas.se
     volumes:
       #- ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
@@ -99,7 +99,7 @@ services:
       - data_nameindex:/data/lucene/namematching
 
   biocachebackend:
-    image: bioatlas/ala-biocachebackend:v0.4
+    image: bioatlas/ala-biocachebackend:v0.5
     container_name: biocachebackend
     links:
       - biocachehub
@@ -109,7 +109,7 @@ services:
       - solr
     command: /bin/ash
     environment:
-      biocache_opts: -Xmx1g -Xms128m
+      - BIOCACHE_MEMORY_OPTS=-Xmx1g -Xms1g
     volumes:
       - data_nameindex:/data/lucene/namematching
       - data_biocachebackend:/data
@@ -123,12 +123,6 @@ services:
       SOLR_HEAP: 4g
     volumes:
       - data_solr:/opt/solr
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - biocache
-      - bie
-      - bie-offline
     ports:
       - 8983:8983
 
@@ -155,7 +149,7 @@ services:
       - db_data_loggerservice:/var/lib/mysql
 
   imageservice:
-    image: bioatlas/ala-imageservice:v0.3
+    image: bioatlas/ala-imageservice:v0.4
     container_name: imageservice
     depends_on:
       - psqldbimage

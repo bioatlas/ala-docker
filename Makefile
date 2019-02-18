@@ -8,6 +8,7 @@ PWD := $(shell pwd)
 UID := $(shell id -u)
 GID := $(shell id -g)
 
+URL_NAMEIDX = https://s3.amazonaws.com/ala-nameindexes/20140610
 URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/1.5.5-SNAPSHOT/ala-collectory-1.5.5-SNAPSHOT.war
 URL_NAMESDIST = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.3/ala-name-matching-3.3-distribution.zip
 URL_BIOCACHE_SERVICE = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.14/biocache-service-2.1.14.war
@@ -20,7 +21,8 @@ URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/backbone-current.zip
 URL_BIEHUB = https://github.com/bioatlas/ala-bie/releases/download/BAS-1.4.12-SNAPSHOT/ala-bie-1.4.12-SNAPSHOT.war
 URL_BIEINDEX = https://github.com/bioatlas/bie-index/releases/download/BAS-1.4.3-SNAPSHOT/bie-index-1.4.3-SNAPSHOT.war
 URL_SPECIESLIST = https://github.com/bioatlas/specieslist-webapp/releases/download/BAS-3.1/specieslist-webapp-3.1.war
-URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/master.zip
+#URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/master.zip
+URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/beta.zip
 URL_LAYERS_SERVICE = https://github.com/bioatlas/layers-service/releases/download/2.1-SNAPSHOT/layers-service.war
 URL_LAYER_INGESTION = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/layer-ingestion/1.0-SNAPSHOT/layer-ingestion-1.0-20160224.160123-13-bin.zip
 URL_REGIONS = https://github.com/bioatlas/regions/releases/download/BAS-3.1-SNAPSHOT/regions-3.1-SNAPSHOT.war
@@ -52,6 +54,9 @@ init: theme-dl
 
 	@test -f nameindex/backbone.zip || \
 		wget -q --show-progress -O nameindex/backbone.zip $(URL_GBIF_BACKBONE)
+
+	@test -f nameindex/IRMNG_DWC_HOMONYMS.zip || \
+		curl --progress -o nameindex/IRMNG_DWC_HOMONYMS.zip $(URL_NAMEIDX)/IRMNG_DWC_HOMONYMS.zip
 
 	@test -f biocacheservice/biocache-service.war || \
 		wget -q --show-progress -O biocacheservice/biocache-service.war $(URL_BIOCACHE_SERVICE)
@@ -110,15 +115,19 @@ init: theme-dl
 	@test -f solr7/lib/jts-core-1.15.0.jar || \
 		wget -q --show-progress -O solr7/lib/jts-core-1.15.0.jar $(URL_JTS)
 
-	@@test -f dyntaxa-index/dyntaxa.dwca.zip || \
-			wget -q --show-progress -O dyntaxa-index/dyntaxa.dwca.zip $(URL_DYNTAXA)
+	@test -f dyntaxa-index/dyntaxa.dwca.zip || \
+		wget -q --show-progress -O dyntaxa-index/dyntaxa.dwca.zip $(URL_DYNTAXA)
+
+	@test -f dyntaxa-index/nameindexer.zip || \
+		wget -q --show-progress -O dyntaxa-index/nameindexer.zip $(URL_NAMESDIST)
+
 
 theme-dl:
 	@echo "Downloading bioatlas wordpress theme..."
-	@test -f wordpress/themes/atlas/master.zip || \
+	@test -f wordpress/themes/atlas/beta.zip || \
 		mkdir -p wordpress/themes/atlas && \
-		wget -q --show-progress -O wordpress/themes/atlas/master.zip $(URL_BIOATLAS_WORDPRESS_THEME) && \
-		unzip -q -o wordpress/themes/atlas/master.zip -d wordpress/themes/atlas/
+		wget -q --show-progress -O wordpress/themes/atlas/beta.zip $(URL_BIOATLAS_WORDPRESS_THEME) && \
+		unzip -q -o wordpress/themes/atlas/beta.zip -d wordpress/themes/atlas/
 
 secrets:
 	docker run --rm -it -v $(PWD):/tmp -u $(UID):$(GID) httpd:alpine bash -c \
@@ -191,17 +200,16 @@ dotfiles-clean:
 
 clean:
 	docker-compose down
-	docker volume rm aladocker_data_biocachebackend aladocker_data_images aladocker_data_images_elasticsearch aladocker_data_nameindex aladocker_data_solr aladocker_db_data_apiservice aladocker_db_data_cassandra aladocker_db_data_collectory aladocker_db_data_imageservice aladocker_db_data_loggerservice aladocker_db_data_loggerservice aladocker_db_data_wordpress aladocker_db_data_specieslists
+	docker volume rm ala-docker_data_bieindex ala-docker_data_biocachebackend ala-docker_data_geonetwork ala-docker_data_geoserver ala-docker_data_images ala-docker_data_images_elasticsearch ala-docker_data_layersservice ala-docker_data_nameindex ala-docker_data_solr ala-docker_data_spatialhub ala-docker_data_spatialservice ala-docker_data_wordpress ala-docker_db_data_apiservice ala-docker_db_data_cassandra ala-docker_db_data_collectory ala-docker_db_data_geonetworkdb ala-docker_db_data_imageservice ala-docker_db_data_loggerservice ala-docker_db_data_mysqldbapikey ala-docker_db_data_mysqldbcas ala-docker_db_data_postgis ala-docker_db_data_specieslists ala-docker_db_data_wordpress
 
 build:
 	@echo "Building images..."
-	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.4 biocachebackend
-	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.3 nameindex
+	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.5 biocachebackend
 	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v0.5 biocachehub
 	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.3 collectory
 	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.4 biocacheservice
 	@docker build -t bioatlas/ala-loggerservice -t bioatlas/ala-loggerservice:v0.3 loggerservice
-	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.3 imageservice
+	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.4 imageservice
 	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v0.3 imagestore
 	@docker build -t bioatlas/ala-api -t bioatlas/ala-api:v0.3 api
 	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.4 specieslists
@@ -216,9 +224,11 @@ build:
 	@docker build -t bioatlas/ala-cas -t bioatlas/ala-cas:v0.3 cas2
 	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails
 	@docker build -t bioatlas/ala-apikey -t bioatlas/ala-apikey:v0.3 apikey
-	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.3 dyntaxa-index
 	@docker build -t bioatlas/ala-cassandra -t bioatlas/ala-cassandra:v0.3 cassandra3
 	@docker build -t bioatlas/ala-solr -t bioatlas/ala-solr:v0.3 solr7
+	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.3 dyntaxa-index
+	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.3 nameindex
+	@docker build -t bioatlas/ala-dashboard -t bioatlas/ala-dashboard:v0.3 dashboard
 
 up:
 	@echo "Starting services..."
@@ -230,13 +240,12 @@ stop:
 
 pull:
 	@echo "Downloading docker images for ALA modules..."
-	@docker pull bioatlas/ala-biocachebackend:v0.4
-	@docker pull bioatlas/ala-nameindex:v0.3
+	@docker pull bioatlas/ala-biocachebackend:v0.5
 	@docker pull bioatlas/ala-biocachehub:v0.5
 	@docker pull bioatlas/ala-collectory:v0.3
 	@docker pull bioatlas/ala-biocacheservice:v0.4
 	@docker pull bioatlas/ala-loggerservice:v0.3
-	@docker pull bioatlas/ala-imageservice:v0.3
+	@docker pull bioatlas/ala-imageservice:v0.4
 	@docker pull bioatlas/ala-imagestore:v0.3
 	@docker pull bioatlas/ala-api:v0.3
 	@docker pull bioatlas/ala-specieslists:v0.4
@@ -251,9 +260,10 @@ pull:
 	@docker pull bioatlas/ala-cas:v0.3
 	@docker pull bioatlas/ala-userdetails:v0.3
 	@docker pull bioatlas/ala-apikey:v0.3
-	@docker pull bioatlas/ala-dyntaxaindex:v0.3
 	@docker pull bioatlas/ala-cassandra:v0.3
 	@docker pull bioatlas/ala-solr:v0.3
+	@docker pull bioatlas/ala-dyntaxaindex:v0.3
+	@docker pull bioatlas/ala-nameindex:v0.3
 
 pull2:
 	@echo "Downloading other official docker images ..."
@@ -268,13 +278,12 @@ pull2:
 
 push:
 	@echo "Pushing images to Dockerhub..."
-	@docker push bioatlas/ala-biocachebackend:v0.4
-	@docker push bioatlas/ala-nameindex:v0.3
+	@docker push bioatlas/ala-biocachebackend:v0.5
 	@docker push bioatlas/ala-biocachehub:v0.5
 	@docker push bioatlas/ala-collectory:v0.3
 	@docker push bioatlas/ala-biocacheservice:v0.4
 	@docker push bioatlas/ala-loggerservice:v0.3
-	@docker push bioatlas/ala-imageservice:v0.3
+	@docker push bioatlas/ala-imageservice:v0.4
 	@docker push bioatlas/ala-imagestore:v0.3
 	@docker push bioatlas/ala-api:v0.3
 	@docker push bioatlas/ala-specieslists:v0.4
@@ -289,9 +298,10 @@ push:
 	@docker push bioatlas/ala-cas:v0.3
 	@docker push bioatlas/ala-userdetails:v0.3
 	@docker push bioatlas/ala-apikey:v0.3
-	@docker push bioatlas/ala-dyntaxaindex:v0.3
 	@docker push bioatlas/ala-cassandra:v0.3
 	@docker push bioatlas/ala-solr:v0.3
+	@docker push bioatlas/ala-dyntaxaindex:v0.3
+	@docker push bioatlas/ala-nameindex:v0.3
 
 release: build push
 
@@ -316,3 +326,10 @@ ssl-certs-show:
 
 test-nameindex:
 	docker run --rm -it bioatlas/ala-nameindex nameindexer -testSearch "Rattus norvegicus"
+
+test-dc:
+	docker-compose run --rm nameindex
+	docker-compose run --rm nameindex nameindexer -testSearch "Rattus norvegicus"
+	docker-compose run --rm biocachebackend
+
+

@@ -1,4 +1,12 @@
 [{
- "label": "Swedish Provinces",
- "fid": "cl2"
+ "label": "Collective Of Provinces",
+ "fid": "cl10000"
+},
+{
+ "label": "Provinces(Landskap)",
+ "fid": "cl10001"
+},
+{
+ "label": "Counties",
+ "fid": "cl10002"
 }]
