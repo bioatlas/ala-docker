@@ -419,14 +419,14 @@ services:
       - 1025:1025
       - 8025:8025
 
-  dashboard:
-    image: bioatlas/ala-dashboard:v0.3
-    container_name: dashboard
-    environment:
-      JAVA_OPTS: -Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
-    volumes:
-      - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
-      - ./dashboard/data.json:/data/dashboard/data.json:rw
+#  dashboard:
+#    image: bioatlas/ala-dashboard:v0.3
+#    container_name: dashboard
+#    environment:
+#      JAVA_OPTS: -Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+#    volumes:
+#      - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
+#      - ./dashboard/data.json:/data/dashboard/data.json:rw
 
 volumes:
   db_data_collectory:
