@@ -34,9 +34,12 @@ URL_USERDETAILS = https://github.com/bioatlas/userdetails/releases/download/bioa
 URL_APIKEY = https://github.com/bioatlas/apikey/releases/download/1.4-SNAPSHOT/apikey-1.4-SNAPSHOT.war
 URL_JTS = http://central.maven.org/maven2/org/locationtech/jts/jts-core/1.15.0/jts-core-1.15.0.jar
 URL_DYNTAXA = https://api.artdatabanken.se/taxonservice/v1/DarwinCore/DarwinCoreArchiveFile?Subscription-Key=4b068709e7f2427d9fc76bf42d8e2b57
+URL_DASHBOARD = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/dashboard/2.1.1/dashboard-2.1.1.war
 
-all: init build up
-.PHONY: all
+all: init build dotfiles up
+shortcut: pull pull2 dotfiles up
+
+.PHONY: all shortcut
 
 init: theme-dl
 	@echo "Caching files required for the build..."
@@ -121,6 +124,9 @@ init: theme-dl
 	@test -f dyntaxa-index/nameindexer.zip || \
 		wget -q --show-progress -O dyntaxa-index/nameindexer.zip $(URL_NAMESDIST)
 
+	@test -f dashboard/dashboard.war || \
+		wget -q --show-progress -O dashboard/dashboard.war $(URL_DASHBOARD)
+
 
 theme-dl:
 	@echo "Downloading bioatlas wordpress theme..."
@@ -191,7 +197,8 @@ init-clean:
 		cas2/cas.war \
 		userdetails/userdetails.war \
 		apikey/apikey.war \
-		solr7/lib/jts-core-1.15.0.jar
+		solr7/lib/jts-core-1.15.0.jar \
+		dashboard/dashboard.war
 
 dotfiles-clean:
 	rm -f secrets && \
@@ -228,7 +235,7 @@ build:
 	@docker build -t bioatlas/ala-solr -t bioatlas/ala-solr:v0.3 solr7
 	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.3 dyntaxa-index
 	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.3 nameindex
-	@docker build -t bioatlas/ala-dashboard -t bioatlas/ala-dashboard:v0.3 dashboard
+#	@docker build -t bioatlas/ala-dashboard -t bioatlas/ala-dashboard:v0.3 dashboard
 
 up:
 	@echo "Starting services..."
