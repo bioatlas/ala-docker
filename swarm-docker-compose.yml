@@ -49,8 +49,8 @@ configs:
     file: ./config/layers-data.xml
   config_regions:
     file: ./config/regions-config.properties
-  config_geonetworkdb:
-    file: ./geonetwork/pg_hba.conf
+#  config_geonetworkdb:
+#    file: ./geonetwork/pg_hba.conf
   config_spatial-hub:
     file: ./config/spatial-hub-config.properties
   config_spatial-service:
@@ -167,6 +167,8 @@ services:
       - mysqldb
     environment:
       JAVA_OPTS: -Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    volumes:
+      - data_collectory:/data/ala-collectory/data
     env_file: ./env/.envcollectory
     configs:
       - source: config_collectory
@@ -607,25 +609,146 @@ services:
 
 volumes:
   db_data_collectory:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_collectory"
+  data_collectory:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_collectory"
   db_data_cassandra:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_cassandra"
   db_data_loggerservice:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_loggerservice"
   db_data_imageservice:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_imageservice"
   db_data_apiservice:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_apiservice"
   data_nameindex:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_nameindex"
   data_images:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_images"
   data_biocachebackend:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_biocachebackend"
   data_solr:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_solr"
   data_images_elasticsearch:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_images_elasticsearch"
   db_data_wordpress:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_wordpress"
   data_wordpress:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_wordpress"
   db_data_specieslists:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_specieslists"
   db_data_postgis:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_postgis"
   data_geoserver:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_geoserver"
   data_layersservice:
-  data_geonetwork:
-  db_data_geonetworkdb:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_layersservice"
+ # data_geonetwork:
+ #   driver: local
+ #   driver_opts:
+ #     type: nfs
+ #     o: nfsvers=4,addr=beta.bioatlas.se,rw
+ #     device: ":/mnt/extvol/nfs/data/data_geonetwork"
+ # db_data_geonetworkdb:
+ #   driver: local
+ #   driver_opts:
+ #     type: nfs
+ #     o: nfsvers=4,addr=beta.bioatlas.se,rw
+ #     device: ":/mnt/extvol/nfs/data/db_data_geonetworkdb"
   data_spatialhub:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_spatialhub"
   data_spatialservice:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_spatialservice"
   db_data_mysqldbcas:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_mysqldbcas"
   db_data_mysqldbapikey:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_mysqldbapikey"
   data_bieindex:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_bieindex"
