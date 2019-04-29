@@ -168,7 +168,7 @@ services:
     environment:
       JAVA_OPTS: -Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     volumes:
-      - data_collectory:/data/ala-collectory/data
+      - data_collectory:/data/ala-collectory
     env_file: ./env/.envcollectory
     configs:
       - source: config_collectory
@@ -268,10 +268,6 @@ services:
     command: /bin/ash -c "envsubst < /tmp/images-config.properties > /data/images/config/images-config.properties && catalina.sh run"
     networks:
       - basnet
-    deploy:
-      placement:
-        constraints:
-          - node.hostname == bas-solr
 
   static:
     image: nginx:alpine
@@ -290,10 +286,6 @@ services:
       - data_images:/data/images/store
     networks:
       - basnet
-    deploy:
-      placement:
-        constraints:
-          - node.hostname == bas-solr
 
   psqldbimage:
     image: postgres:9.6.8-alpine
@@ -423,10 +415,6 @@ services:
     #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver-files/geoserver.sh"
     networks:
       - basnet
-    deploy:
-      placement:
-        constraints:
-          - node.hostname == bas-cassandra
 
   layersservice:
     image: bioatlas/ala-layersservice:v0.4
@@ -448,10 +436,6 @@ services:
     command: /bin/bash -c "envsubst < /tmp/layers-store-config.properties > /data/layers-store/config/layers-store-config.properties && envsubst < /tmp/layers-service-data-config.xml > /data/layers-service/config/layers-service-data-config.xml && envsubst < /tmp/layers-store-data-config.xml > /data/layers-store/config/layers-store-data-config.xml && catalina.sh run"
     networks:
       - basnet
-    deploy:
-      placement:
-        constraints:
-          - node.hostname == bas-cassandra
 
   layeringestion:
     image: bioatlas/ala-layeringestion:v0.3
@@ -462,9 +446,6 @@ services:
     deploy:
       restart_policy:
         condition: none
-      placement:
-        constraints:
-          - node.hostname == bas-cassandra
 
   regions:
     image: bioatlas/ala-regions:v0.4
@@ -535,10 +516,6 @@ services:
     command: /bin/bash -c "envsubst < /tmp/spatial-service-config.properties > /data/spatial-service/config/spatial-service-config.properties && envsubst < /tmp/spatial-service-data-config.xml > /data/spatial-service/config/spatial-service-data-config.xml && catalina.sh run"
     networks:
       - basnet
-    deploy:
-      placement:
-        constraints:
-          - node.hostname == bas-cassandra
 
   mysqldbcas:
     image: mysql:5.7
