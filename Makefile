@@ -9,30 +9,31 @@ UID := $(shell id -u)
 GID := $(shell id -g)
 
 URL_NAMEIDX = https://s3.amazonaws.com/ala-nameindexes/20140610
-URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/1.5.5-SNAPSHOT/ala-collectory-1.5.5-SNAPSHOT.war
-URL_NAMESDIST = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.3/ala-name-matching-3.3-distribution.zip
-URL_BIOCACHE_SERVICE = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.14/biocache-service-2.1.14.war
-URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/BAS-3.0.13-SNAPSHOT/ala-hub-3.0.13-SNAPSHOT.war
-URL_BIOCACHE_CLI = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.4.1/biocache-store-2.4.1-distribution.zip
+URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/bas-1.5.6/ala-collectory-1.5.6.war
+URL_NAMESDIST = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.4/ala-name-matching-3.4-distribution.zip
+URL_BIOCACHE_SERVICE = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.19/biocache-service-2.1.19.war
+URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/bas-3.1.0/ala-hub-3.1.0.war
+URL_BIOCACHE_CLI = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.4.4/biocache-store-2.4.4-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
 URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/0.9.1-SNAPSHOT/ala-images.war
 URL_API = https://github.com/bioatlas/webapi/releases/download/v0.3/webapi-2.0-SNAPSHOT.war
 URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/backbone-current.zip
-URL_BIEHUB = https://github.com/bioatlas/ala-bie/releases/download/BAS-1.4.12-SNAPSHOT/ala-bie-1.4.12-SNAPSHOT.war
-URL_BIEINDEX = https://github.com/bioatlas/bie-index/releases/download/BAS-1.4.3-SNAPSHOT/bie-index-1.4.3-SNAPSHOT.war
-URL_SPECIESLIST = https://github.com/bioatlas/specieslist-webapp/releases/download/BAS-3.1/specieslist-webapp-3.1.war
+URL_BIEHUB = https://github.com/bioatlas/ala-bie/releases/download/bas-1.4.16-SNAPSHOT/ala-bie-1.4.16-SNAPSHOT.war
+URL_BIEINDEX = https://github.com/bioatlas/bie-index/releases/download/BAS-1.4.6-SNAPSHOT/bie-index-1.4.6-SNAPSHOT.war
+URL_SPECIESLIST = https://github.com/bioatlas/specieslist-webapp/releases/download/BAS-3.3-SNAPSHOT/specieslist-webapp-3.3-SNAPSHOT.war
 #URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/master.zip
 URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/beta.zip
 URL_LAYERS_SERVICE = https://github.com/bioatlas/layers-service/releases/download/2.1-SNAPSHOT/layers-service.war
 URL_LAYER_INGESTION = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/layer-ingestion/1.0-SNAPSHOT/layer-ingestion-1.0-20160224.160123-13-bin.zip
-URL_REGIONS = https://github.com/bioatlas/regions/releases/download/BAS-3.1-SNAPSHOT/regions-3.1-SNAPSHOT.war
+URL_REGIONS = https://github.com/bioatlas/regions/releases/download/BAS-3.3-SNAPSHOT/regions-3.3-SNAPSHOT.war
 URL_GEONETWORK = https://jaist.dl.sourceforge.net/project/geonetwork/GeoNetwork_opensource/v3.4.1/geonetwork.war
 URL_SPATIAL_SERVICE = https://github.com/bioatlas/spatial-service/releases/download/BAS-0.3-SNAPSHOT/spatial-service-0.3-SNAPSHOT.war
-URL_SPATIAL_HUB = https://github.com/bioatlas/spatial-hub/releases/download/BAS-0.3-SNAPSHOT/spatial-hub-0.3-SNAPSHOT.war
+URL_SPATIAL_HUB = https://github.com/bioatlas/spatial-hub/releases/download/bioatlas-0.3-SNAPSHOT/spatial-hub-0.3-SNAPSHOT.war
 URL_CAS2 = https://github.com/bioatlas/ala-cas-2.0/releases/download/v0.1/cas.war
 URL_USERDETAILS = https://github.com/bioatlas/userdetails/releases/download/bioatlas-1.0.0/userdetails-1.0.0.war
 URL_APIKEY = https://github.com/bioatlas/apikey/releases/download/1.4-SNAPSHOT/apikey-1.4-SNAPSHOT.war
-URL_JTS = http://central.maven.org/maven2/org/locationtech/jts/jts-core/1.15.0/jts-core-1.15.0.jar
+URL_JTS = http://central.maven.org/maven2/org/locationtech/jts/jts-core/1.15.1/jts-core-1.15.1.jar
+URL_JTS_IO = http://central.maven.org/maven2/org/locationtech/jts/io/jts-io-common/1.15.1/jts-io-common-1.15.1.jar
 URL_DYNTAXA = https://api.artdatabanken.se/taxonservice/v1/DarwinCore/DarwinCoreArchiveFile?Subscription-Key=4b068709e7f2427d9fc76bf42d8e2b57
 URL_DASHBOARD = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/dashboard/2.1.1/dashboard-2.1.1.war
 
@@ -115,8 +116,11 @@ init: theme-dl
 	@test -f apikey/apikey.war || \
 			wget -q --show-progress -O apikey/apikey.war $(URL_APIKEY)
 
-	@test -f solr7/lib/jts-core-1.15.0.jar || \
-		wget -q --show-progress -O solr7/lib/jts-core-1.15.0.jar $(URL_JTS)
+	@test -f solr7/lib/jts-core-1.15.1.jar || \
+		wget -q --show-progress -O solr7/lib/jts-core-1.15.1.jar $(URL_JTS)
+
+	@test -f solr7/lib/jts-io-common-1.15.1.jar || \
+		wget -q --show-progress -O solr7/lib/jts-io-common-1.15.1.jar $(URL_JTS_IO)
 
 	@test -f dyntaxa-index/dyntaxa.dwca.zip || \
 		wget -q --show-progress -O dyntaxa-index/dyntaxa.dwca.zip $(URL_DYNTAXA)
@@ -338,5 +342,3 @@ test-dc:
 	docker-compose run --rm nameindex
 	docker-compose run --rm nameindex nameindexer -testSearch "Rattus norvegicus"
 	docker-compose run --rm biocachebackend
-
-
