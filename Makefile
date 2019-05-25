@@ -218,7 +218,7 @@ build:
 	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.5 biocachebackend
 	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v0.5 biocachehub
 	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.3 collectory
-	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.4 biocacheservice
+	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.5 biocacheservice
 	@docker build -t bioatlas/ala-loggerservice -t bioatlas/ala-loggerservice:v0.3 loggerservice
 	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.4 imageservice
 	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v0.3 imagestore
@@ -254,7 +254,7 @@ pull:
 	@docker pull bioatlas/ala-biocachebackend:v0.5
 	@docker pull bioatlas/ala-biocachehub:v0.5
 	@docker pull bioatlas/ala-collectory:v0.3
-	@docker pull bioatlas/ala-biocacheservice:v0.4
+	@docker pull bioatlas/ala-biocacheservice:v0.5
 	@docker pull bioatlas/ala-loggerservice:v0.3
 	@docker pull bioatlas/ala-imageservice:v0.4
 	@docker pull bioatlas/ala-imagestore:v0.3
@@ -292,7 +292,7 @@ push:
 	@docker push bioatlas/ala-biocachebackend:v0.5
 	@docker push bioatlas/ala-biocachehub:v0.5
 	@docker push bioatlas/ala-collectory:v0.3
-	@docker push bioatlas/ala-biocacheservice:v0.4
+	@docker push bioatlas/ala-biocacheservice:v0.5
 	@docker push bioatlas/ala-loggerservice:v0.3
 	@docker push bioatlas/ala-imageservice:v0.4
 	@docker push bioatlas/ala-imagestore:v0.3

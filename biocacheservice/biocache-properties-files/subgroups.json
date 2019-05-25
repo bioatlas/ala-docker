@@ -1,3 +1,4 @@
+
 [
     {
         "speciesGroup": "Mammals",
@@ -152,7 +153,7 @@
         ]
     },
     {
-        "speciesGroup": "Insects and Spiders",
+        "speciesGroup": "Insects",
         "taxonRank": "order",
         "taxa": [
             {
@@ -258,10 +259,6 @@
             {
                 "name": "ZYGENTOMA",
                 "common": "Silverfish"
-            },
-            {
-                "name": "ARANEAE",
-                "common": "Spiders"
             }
         ]
     },
