@@ -223,12 +223,12 @@ build:
 	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.4 imageservice
 	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v0.3 imagestore
 	@docker build -t bioatlas/ala-api -t bioatlas/ala-api:v0.3 api
-	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.4 specieslists
+	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.5 specieslists
 	@docker build -t bioatlas/ala-bieindex -t bioatlas/ala-bieindex:v0.6 bieindex
 	@docker build -t bioatlas/ala-biehub -t bioatlas/ala-biehub:v0.5 biehub
 	@docker build -t bioatlas/ala-layersservice -t bioatlas/ala-layersservice:v0.4 layersservice
 	@docker build -t bioatlas/ala-layeringestion -t bioatlas/ala-layeringestion:v0.3 layeringestion
-	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.4 regions
+	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.5 regions
 	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.4 spatialhub
 	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.4 spatialservice
 	@docker build -t bioatlas/ala-geoserver -t bioatlas/ala-geoserver:v0.3 geoserver
@@ -259,12 +259,12 @@ pull:
 	@docker pull bioatlas/ala-imageservice:v0.4
 	@docker pull bioatlas/ala-imagestore:v0.3
 	@docker pull bioatlas/ala-api:v0.3
-	@docker pull bioatlas/ala-specieslists:v0.4
+	@docker pull bioatlas/ala-specieslists:v0.5
 	@docker pull bioatlas/ala-bieindex:v0.6
 	@docker pull bioatlas/ala-biehub:v0.5
 	@docker pull bioatlas/ala-layersservice:v0.4
 	@docker pull bioatlas/ala-layeringestion:v0.3
-	@docker pull bioatlas/ala-regions:v0.4
+	@docker pull bioatlas/ala-regions:v0.5
 	@docker pull bioatlas/ala-spatialhub:v0.4
 	@docker pull bioatlas/ala-spatialservice:v0.4
 	@docker pull bioatlas/ala-geoserver:v0.3
@@ -297,12 +297,12 @@ push:
 	@docker push bioatlas/ala-imageservice:v0.4
 	@docker push bioatlas/ala-imagestore:v0.3
 	@docker push bioatlas/ala-api:v0.3
-	@docker push bioatlas/ala-specieslists:v0.4
+	@docker push bioatlas/ala-specieslists:v0.5
 	@docker push bioatlas/ala-bieindex:v0.6
 	@docker push bioatlas/ala-biehub:v0.5
 	@docker push bioatlas/ala-layersservice:v0.4
 	@docker push bioatlas/ala-layeringestion:v0.3
-	@docker push bioatlas/ala-regions:v0.4
+	@docker push bioatlas/ala-regions:v0.5
 	@docker push bioatlas/ala-spatialhub:v0.4
 	@docker push bioatlas/ala-spatialservice:v0.4
 	@docker push bioatlas/ala-geoserver:v0.3
