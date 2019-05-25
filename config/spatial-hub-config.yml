@@ -1,0 +1,270 @@
+grails.serverURL: "https://beta.bioatlas.se/spatial-hub"
+grails.app.context: "/spatial-hub"
+grails.assets.bundle: false
+grails.assets.minifyJs: false
+
+googleAnalyticsId: ""
+google.apikey: "AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk"
+
+security:
+  cas:
+    casServerName: "https://auth.bioatlas.se"
+    uriFilterPattern: "/portal.*,,/,/alaAdmin,/alaAdmin.*"
+    uriExclusionFilterPattern: "/portal/messages.*,/portal/sessionCache.*,/static.*,/assets.*"
+    authenticateOnlyIfLoggedInFilterPattern: ""
+    appServerName: "https://beta.bioatlas.se"
+    casServerUrlPrefix: "https://auth.bioatlas.se/cas"
+    loginUrl: "https://auth.bioatlas.se/cas/login"
+    logoutUrl: "https://auth.bioatlas.se/cas/logout"
+    contextPath: "/spatial-hub"
+    bypass: True
+    disableCAS: True
+    gateway: False
+
+autocompleteUrl: "https://beta.bioatlas.se/ala-bie/ws/search/auto.jsonp"
+
+auth:
+    admin_role: ROLE_ADMIN
+
+app:
+    http:
+        header:
+            userId: X-ALA-userId
+
+headerAndFooter.baseURL: "https://beta.bioatlas.se/static/bs3"
+ala.baseURL: "https://beta.bioatlas.se"
+bie.baseURL: "https://beta.bioatlas.se/ala-bie"
+bie.searchPath: "/search"
+
+bieService:
+    baseURL: "https://beta.bioatlas.se/bie-index"
+
+userdetails:
+    baseUrl: "https://auth.bioatlas.se/userdetails"
+
+favicon:
+    url: "https://beta.bioatlas.se/wp-content/themes/atlas/img/favicon/favicon.ico"
+
+layersService:
+    url: "https://beta.bioatlas.se/spatial-service"
+
+lists:
+    url: "https://beta.bioatlas.se/specieslists"
+    threatenedSpeciesUrl: '/ws/speciesList/?isThreatened=eq:true&isAuthoritative=eq:true'
+    invasiveSpeciesUrl: '/ws/speciesList/?isInvasive=eq:true&isAuthoritative=eq:true'
+    facets: True
+    migratoryDR: dr1005
+    iconicSpeciesDR: dr781
+
+journalmap:
+    url: "https://www.journalmap.org/"
+
+collections:
+    url: "https://beta.bioatlas.se/collectory"
+
+sandbox:
+    url: ""
+    uiUrl: ""
+
+sandboxService:
+    url: ""
+
+gazField: cl915
+
+userObjectsField: cl1083
+
+biocache:
+    url: "https://beta.bioatlas.se/ala-hub"
+
+biocacheService:
+    url: "https://beta.bioatlas.se/biocache-service"
+    #Facets to ignore in the biocache grouped/facets service
+    default_facets_ignored: "data_resource_uid,data_provider_uid,species,collection_uid,institution_code_name,institution_uid,uncertainty"
+    custom_facets:
+      Attribution: ['Data Provider;data_provider', 'Collection;collection_name', 'Data Resource;data_resource', 'Institution;institution_name']
+      Location: ['Coordinate Uncertainty;coordinate_uncertainty']
+      Occurrence: ['Year;occurrence_year']
+
+sampling:
+    url: "https://beta.bioatlas.se/spatial-service"
+
+geoserver:
+    url: "https://beta.bioatlas.se/geoserver"
+
+flickr:
+    url: "https://api.flickr.com/services/rest/?method="
+    searchPhotos: 'flickr.photos.search'
+    # licensesInfo: 'flickr.photos.licenses.getInfo'
+    # licenses data is found at https://api.flickr.com/services/rest/?method=flickr.photos.licenses.getInfo&api_key=<api_key>&format=json&nojsoncallback=1
+    licensesData: {'licenses': {'license': [{'id': '0', 'name': 'All Rights Reserved', 'url': ''}, {'id': '4', 'name': 'Attribution License', 'url': 'https://creativecommons.org/licenses/by/2.0/'}, {'id': '6', 'name': 'Attribution-NoDerivs License', 'url': 'https://creativecommons.org/licenses/by-nd/2.0/'}, {'id': '3', 'name': 'Attribution-NonCommercial-NoDerivs License', 'url': 'https://creativecommons.org/licenses/by-nc-nd/2.0/'}, {'id': '2', 'name': 'Attribution-NonCommercial License', 'url': 'https://creativecommons.org/licenses/by-nc/2.0/'}, {'id': '1', 'name': 'Attribution-NonCommercial-ShareAlike License', 'url': 'https://creativecommons.org/licenses/by-nc-sa/2.0/'}, {'id': '5', 'name': 'Attribution-ShareAlike License', 'url': 'https://creativecommons.org/licenses/by-sa/2.0/'}, {'id': '7', 'name': 'No known copyright restrictions', 'url': 'https://www.flickr.com/commons/usage/'}, {'id': '8', 'name': 'United States Government Work', 'url': 'http://www.usa.gov/copyright.shtml'}, {'id': '9', 'name': 'Public Domain Dedication (CC0)', 'url': 'https://creativecommons.org/publicdomain/zero/1.0/'}, {'id': '10', 'name': 'Public Domain Mark', 'url': 'https://creativecommons.org/publicdomain/mark/1.0/'}]}, 'stat': 'ok'}
+    apiKey: 
+    secret: 
+    tags: 
+    extra: "geo,date_taken,owner_name,license,url_t,url_s,url_m,title"
+    contentType: 
+    geoContext: 
+    filter: "&text=landscape"
+    nbrOfPhotosToDisplay: 15
+
+#viewConfig:
+#    json: 'view-config.json'
+
+sessions:
+    dir: '/data/spatial-hub/sessions'
+
+admin_role: ROLE_ADMIN
+
+skin.orgNameLong: "BioAtlas Sweden"
+skin.orgNameShort: "BioAtlas Sweden"
+skin.layout: "generic"
+
+grails.controllers.upload.maxFileSize: 524288000
+grails.controllers.upload.maxRequestSize: 524288000
+
+speciesDotSize: 5
+speciesDotOpacity: 60
+
+logger:
+    baseUrl: "https://beta.bioatlas.se/logger-service/service"
+
+phylolink:
+    url: ""
+
+apiKeyCheckUrlTemplate: "https://auth.bioatlas.se/apikey/ws/check?apikey={0}"
+
+biocollect:
+  url: ""
+
+bccvl:
+    login:
+        url: ""
+    post:
+        url: ""
+keep:
+    alive:
+        timeout:
+            ms: 10000
+
+startup:
+    lat: 62.2315
+    lng: 16.1932
+    zoom: 5
+    baselayer:
+        default: osm
+    baselayers:
+        google_roadmaps:
+            name: 'Streets'
+            layerType: 'ROADMAP'
+            type: 'google'
+            exportType: 'normal'
+            link: 'https://www.google.com/intl/en_au/help/terms_maps.html'
+            projections: ['3857']
+        google_hybrid:
+            name: 'Hybrid'
+            layerType: 'HYBRID'
+            type: 'google'
+            exportType: 'hybrid'
+            link: 'https://www.google.com/intl/en_au/help/terms_maps.html'
+            projections: ['3857']
+        outline:
+            name: 'Outline'
+            type: 'wms'
+            url: "https://spatial.ala.org.au/geoserver/wms?"
+            layerParams:
+                layers: 'ALA:world'
+                format: 'image/png'
+                continuousWorld: true
+            exportType: 'outline'
+        osm:
+            name: 'Open Street Map'
+            url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            type: 'xyz'
+            exportType: 'minimal'
+            link: 'https://www.openstreetmap.org/about'
+            projections: ['3857']
+        google_satellite:
+            name: 'Satellite'
+            layerType: 'SATELLITE'
+            type: 'google'
+            exportType: 'satellite'
+            link: 'https://www.google.com/intl/en_au/help/terms_maps.html'
+            projections: ['3857']
+
+defaultareas:
+    - name: 'Australia'
+      fqs: ['longitude:[112 TO 154]', 'latitude:[-44 TO -9]']
+      wkt: 'POLYGON((112.0 -44.0,154.0 -44.0,154.0 -9.0,112.0 -9.0,112.0 -44.0))'
+      areaSqKm: 16322156.76
+      bbox: [112, -44, 154, -9]
+    - name: 'World'
+      fqs: []
+      wkt: 'POLYGON((-180 -90.0,180.0 -90.0,180.0 90.0,-180 90.0,-180 -90.0))'
+      areaSqKm: 510000000
+      bbox: [-180, -90, 180, 90]
+
+presetWMSServers:
+    - name: "AusCover"
+      url: "http://data.auscover.org.au/geoserver/wms?request=getCapabilities"
+    - name: "Geoserver IMOS"
+      url: "http://geoserver.imos.org.au/geoserver/wms?REQUEST=GetCapabilities"
+    - name: "GA"
+      url: "https://www.ga.gov.au/gis/services/earth_science/GA_Surface_Geology_of_Australia/MapServer/WMSServer?request=GetCapabilities"
+    - name: "Geofabric BOM"
+      url: "http://geofabric.bom.gov.au/simplefeatures/ows?request=getcapabilities"
+
+allowProxy:
+    server: "data.auscover.org.au;data.auscover.org.au:80;geoserver.imos.org.au;www.ga.gov.au/gis;geofabric.bom.gov.au"
+
+getMapExamples:
+    - name: "Fractional Cover CLW - Non-PS Veg - 2012.297"
+      url: "http://data.auscover.org.au/geoserver/ows?SERVICE=WMS&REQUEST=GetMap&LAYERS=clw:FractCover.V2_2.NPV&FORMAT=image/png&SRS=epsg:3857&TRANSPARENT=true&VERSION=1.3.0&CRS=EPSG:3857&EXCEPTIONS=INIMAGE&STYLES="
+
+wms:
+    intersect: True
+
+fq:
+    excludeAbsent: "-occurrence_status_s:absent"
+
+# (mandatory) projections.#.definition - usage new L.Proj.CRS(code, proj4js, params)
+# projections.#.definition.code = code
+# projections.#.definition.proj4js = proj4js definition (mandatory when not 3857 or 4326)
+# projections.#.definition.params = parameters (optional)
+#
+# (optional) projections.#.origin  (startup lat, lon, zoom is used when origin is not defined)
+# projections.#.origin.latitude = default latitude
+# projections.#.origin.longitude = default longitude
+# projections.#.origin.zoom = default zoom
+projection:
+    default: 3857
+#projections:
+#    3857:
+#      label: 'Pseudo-Mercator -- Spherical Mercator'
+#      definition:
+#        code: 'EPSG:3857' # leaflet supported, uses startup lat,lon,zoom
+#    4326:
+#      label: 'World Geodetic System 1984'
+#      definition:
+#        code: 'EPSG:4326' # leaflet supported, uses startup lat,lon,zoom
+#    3031:
+#      label: 'Antarctic Polar Stereographic'
+#      definition:
+#        code: 'EPSG:3031'
+#        proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+#        params: { resolutions: [ 8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5 ] }
+#      origin:
+#        latitude: -80
+#        longitude: 0
+#        zoom: 1
+#    3575:
+#      label: 'North Pole LAEA Europe'
+#      definition:
+#        code: 'EPSG:3575'
+#        proj4js: '+proj=laea +lat_0=90 +lon_0=10 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+#        params:  { resolutions: [ 8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5 ]}
+#      origin:
+#        latitude: 60
+#        longitude: 0
+#        zoom: 1
+#
+header: true
+footer: true

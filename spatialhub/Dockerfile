@@ -1,6 +1,7 @@
-FROM tomcat:7-jre8-alpine
+FROM tomcat:8-jre8-alpine
 
 RUN mkdir -p /data/spatial-hub/config \
+  /data/spatial-hub/i18n \
   /data/ala/runtime/files
 COPY log4j.properties /data/spatial-hub/config/log4j.properties
 COPY spatial-hub.war $CATALINA_HOME/webapps/spatial-hub.war
