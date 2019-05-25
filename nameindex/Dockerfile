@@ -23,13 +23,6 @@ RUN chmod 777 /usr/lib/nameindexer/nameindexer && \
 
 RUN nameindexer --all --dwca /data/lucene/sources/backbone --irmng /data/lucene/sources/IRMNG_DWC_HOMONYMS --common /data/lucene/sources/backbone/VernacularName.tsv
 
-ADD http://central.maven.org/maven2/org/apache/lucene/lucene-core/6.6.5/lucene-core-6.6.5.jar /tmp/
-ADD http://central.maven.org/maven2/org/apache/lucene/lucene-backward-codecs/6.6.5/lucene-backward-codecs-6.6.5.jar /tmp/
-
-RUN java -cp /tmp/lucene-core-6.6.5.jar:/tmp/lucene-backward-codecs-6.6.5.jar org.apache.lucene.index.IndexUpgrader -delete-prior-commits /data/lucene/namematching/cb
-RUN java -cp /tmp/lucene-core-6.6.5.jar:/tmp/lucene-backward-codecs-6.6.5.jar org.apache.lucene.index.IndexUpgrader -delete-prior-commits /data/lucene/namematching/irmng
-RUN java -cp /tmp/lucene-core-6.6.5.jar:/tmp/lucene-backward-codecs-6.6.5.jar org.apache.lucene.index.IndexUpgrader -delete-prior-commits /data/lucene/namematching/vernacular
-
 RUN rm -rf /data/lucene/sources/*
 
 VOLUME /data/lucene/namematching
