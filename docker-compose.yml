@@ -345,13 +345,15 @@ services:
       - ./geonetwork/pg_hba.conf:/etc/pg_hba.conf:ro
 
   spatialhub:
-    image: bioatlas/ala-spatialhub:v0.4
+    image: bioatlas/ala-spatialhub:v0.5
     container_name: spatialhub
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     volumes:
       - data_spatialhub:/data/ala/runtime/files
-      - ./config/spatial-hub-config.properties:/data/spatial-hub/config/spatial-hub-config.properties
+      - ./config/spatial-hub-config.yml:/data/spatial-hub/config/spatial-hub-config.yml
+      - ./spatialhub/menu-config.json:/data/spatial-hub/config/menu-config.json
+      - ./spatialhub/view-config.json:/data/spatial-hub/config/view-config.json
 
   spatialservice:
     image: bioatlas/ala-spatialservice:v0.4
@@ -437,6 +439,7 @@ services:
     volumes:
       - data_nameindex:/data/lucene/namematching
       - ./config/sds-config.properties:/data/sds/config/sds-config.properties
+
 volumes:
   db_data_collectory:
   data_collectory:
