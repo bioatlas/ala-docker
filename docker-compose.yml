@@ -429,6 +429,14 @@ services:
 #      - ./config/dashboard-config.properties:/data/dashboard/config/dashboard-config.properties
 #      - ./dashboard/data.json:/data/dashboard/data.json:rw
 
+  sds:
+    image: bioatlas/ala-sds:v0.1
+    container_name: sds
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+      - ./config/sds-config.properties:/data/sds/config/sds-config.properties
 volumes:
   db_data_collectory:
   data_collectory:

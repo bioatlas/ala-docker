@@ -36,6 +36,7 @@ URL_JTS = http://central.maven.org/maven2/org/locationtech/jts/jts-core/1.15.1/j
 URL_JTS_IO = http://central.maven.org/maven2/org/locationtech/jts/io/jts-io-common/1.15.1/jts-io-common-1.15.1.jar
 URL_DYNTAXA = https://api.artdatabanken.se/taxonservice/v1/DarwinCore/DarwinCoreArchiveFile?Subscription-Key=4b068709e7f2427d9fc76bf42d8e2b57
 URL_DASHBOARD = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/dashboard/2.1.1/dashboard-2.1.1.war
+URL_SDS = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/sds-webapp2/1.6.1/sds-webapp2-1.6.1.war
 
 all: init build dotfiles up
 shortcut: pull pull2 dotfiles up
@@ -131,6 +132,8 @@ init: theme-dl
 	@test -f dashboard/dashboard.war || \
 		wget -q --show-progress -O dashboard/dashboard.war $(URL_DASHBOARD)
 
+	@test -f sds/sds-webapp.war || \
+		wget -q --show-progress -O sds/sds-webapp.war $(URL_SDS)
 
 theme-dl:
 	@echo "Downloading bioatlas wordpress theme..."
@@ -240,6 +243,7 @@ build:
 	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.4 dyntaxa-index
 	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.4 nameindex
 #	@docker build -t bioatlas/ala-dashboard -t bioatlas/ala-dashboard:v0.3 dashboard
+	@docker build -t bioatlas/ala-sds -t bioatlas/ala-sds:v0.1 sds
 
 up:
 	@echo "Starting services..."
@@ -275,6 +279,7 @@ pull:
 	@docker pull bioatlas/ala-solr:v0.4
 	@docker pull bioatlas/ala-dyntaxaindex:v0.4
 	@docker pull bioatlas/ala-nameindex:v0.4
+	@docker pull bioatlas/ala-sds:v0.1
 
 pull2:
 	@echo "Downloading other official docker images ..."
@@ -313,6 +318,7 @@ push:
 	@docker push bioatlas/ala-solr:v0.4
 	@docker push bioatlas/ala-dyntaxaindex:v0.4
 	@docker push bioatlas/ala-nameindex:v0.4
+	@docker push bioatlas/ala-sds:v0.1
 
 release: build push
 
