@@ -44,14 +44,14 @@ services:
       - db_data_collectory:/var/lib/mysql
 
   cassandradb:
-    image: bioatlas/ala-cassandra:v0.3
+    image: bioatlas/ala-cassandra:v0.4
     container_name: cassandradb
     volumes:
       - db_data_cassandra:/var/lib/cassandra
     entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
 
   biocacheservice:
-    image: bioatlas/ala-biocacheservice:v0.4
+    image: bioatlas/ala-biocacheservice:v0.5
     container_name: biocacheservice
     depends_on:
       - cassandradb
@@ -67,7 +67,7 @@ services:
       - ./config/logger-client.properties:/data/logger-client/config/logger-client.properties:ro
 
   biocachehub:
-    image: bioatlas/ala-biocachehub:v0.5
+    image: bioatlas/ala-biocachehub:v0.6
     container_name: biocachehub
     depends_on:
       - biocacheservice
@@ -77,7 +77,7 @@ services:
       - ./config/ala-hub-config.properties:/data/ala-hub/config/ala-hub-config.properties:ro
 
   collectory:
-    image: bioatlas/ala-collectory:v0.3
+    image: bioatlas/ala-collectory:v0.4
     container_name: collectory
     depends_on:
       - mysqldb
@@ -87,19 +87,20 @@ services:
       JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envcollectory
     volumes:
+      - data_collectory:/data/ala-collectory
       - ./config/ala-collectory-config.properties:/tmp/ala-collectory-config.properties:ro
     command: /bin/ash -c "envsubst < /tmp/ala-collectory-config.properties > /data/ala-collectory/config/ala-collectory-config.properties && catalina.sh run"
 
   nameindex:
-    #image: bioatlas/ala-nameindex:v0.3
-    image: bioatlas/ala-dyntaxaindex:v0.3
+    #image: bioatlas/ala-nameindex:v0.4
+    image: bioatlas/ala-dyntaxaindex:v0.4
     command: /bin/ash
     container_name: nameindex
     volumes:
       - data_nameindex:/data/lucene/namematching
 
   biocachebackend:
-    image: bioatlas/ala-biocachebackend:v0.5
+    image: bioatlas/ala-biocachebackend:v0.6
     container_name: biocachebackend
     links:
       - biocachehub
@@ -117,7 +118,7 @@ services:
       - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
 
   solr:
-    image: bioatlas/ala-solr:v0.3
+    image: bioatlas/ala-solr:v0.4
     container_name: solr
     environment:
       SOLR_HEAP: 4g
@@ -223,7 +224,7 @@ services:
       - data_wordpress:/var/www/html
 
   specieslists:
-    image: bioatlas/ala-specieslists:v0.4
+    image: bioatlas/ala-specieslists:v0.5
     container_name: specieslists
     links:
       - mysqldbspecieslist
@@ -245,7 +246,7 @@ services:
       - db_data_specieslists:/var/lib/mysql
 
   bieindex:
-    image: bioatlas/ala-bieindex:v0.5
+    image: bioatlas/ala-bieindex:v0.6
     container_name: bieindex
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
@@ -256,7 +257,7 @@ services:
       - solr
 
   biehub:
-    image: bioatlas/ala-biehub:v0.4
+    image: bioatlas/ala-biehub:v0.5
     container_name: biehub
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
@@ -311,7 +312,7 @@ services:
       - geoserver
 
   regions:
-    image: bioatlas/ala-regions:v0.4
+    image: bioatlas/ala-regions:v0.5
     container_name: regions
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
@@ -430,6 +431,7 @@ services:
 
 volumes:
   db_data_collectory:
+  data_collectory:
   db_data_cassandra:
   db_data_loggerservice:
   db_data_imageservice:
