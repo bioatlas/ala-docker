@@ -1,0 +1,5 @@
+DATA_DIR=/data/ala/data/geonetwork/
+POSTGRES_DB_USERNAME=postgres
+POSTGRES_DB_PASSWORD=pMDYegwWxgxejXLz7IVTFwxh8UBzkOY0rntgvzAW44Yn1QUEpr
+POSTGRES_DB_HOST=geonetworkdb
+POSTGRES_DB_PORT=5432

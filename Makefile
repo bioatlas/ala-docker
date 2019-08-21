@@ -233,8 +233,10 @@ build:
 	@docker build -t bioatlas/ala-apikey -t bioatlas/ala-apikey:v0.3 apikey
 	@docker build -t bioatlas/ala-cassandra -t bioatlas/ala-cassandra:v0.3 cassandra3
 	@docker build -t bioatlas/ala-solr -t bioatlas/ala-solr:v0.3 solr7
+
 	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.3 dyntaxa-index
 	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.3 nameindex
+
 #	@docker build -t bioatlas/ala-dashboard -t bioatlas/ala-dashboard:v0.3 dashboard
 
 up:

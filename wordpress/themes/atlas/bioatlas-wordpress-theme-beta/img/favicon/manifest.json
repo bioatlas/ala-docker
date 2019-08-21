@@ -1,0 +1,23 @@
+{
+ "name": "App",
+ "icons": [
+  {
+   "src": "\/favicon.ico",
+   "sizes": "16x16",
+   "type": "image\/png",
+   "density": "0.50"
+  },
+  {
+   "src": "\/favicon.ico",
+   "sizes": "32x32",
+   "type": "image\/png",
+   "density": "1.0"
+  },
+  {
+   "src": "\/favicon.ico",
+   "sizes": "96x96",
+   "type": "image\/png",
+   "density": "2.0"
+  }
+ ]
+}

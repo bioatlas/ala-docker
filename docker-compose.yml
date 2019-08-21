@@ -92,7 +92,7 @@ services:
 
   nameindex:
     #image: bioatlas/ala-nameindex:v0.3
-    image: bioatlas/ala-dyntaxaindex:v0.3
+    image: bioatlas/ala-dyntaxaindex:v0.3-Bifid-sh
     command: /bin/ash
     container_name: nameindex
     volumes:

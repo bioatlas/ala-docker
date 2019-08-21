@@ -1,0 +1,30 @@
+# Build new index from edited dyntaxa.dwca.zip
+# See dyntaxa-index folder
+docker build --no-cache -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.3-Bifid-sh dyntaxa-index
+
+# Test search for added taxon
+docker run --rm -it bioatlas/ala-dyntaxaindex:v0.3-Bifid-sh nameindexer -testSearch "Bifidobacteriaceae"
+
+# Switch to new index in docker-compose
+# nameindex:
+#    #image: bioatlas/ala-nameindex:v0.3
+#    image: bioatlas/ala-dyntaxaindex:v0.3-Bifid-sh
+
+# Stop & Restart services
+docker-compose stop
+make up
+docker-compose restart wordpress webserver
+
+# Ingest new data resource (added in Collectory admin page)
+docker-compose run --rm biocachebackend biocache
+load dr40
+process -dr dr40
+index -dr dr40
+
+docker-compose restart biocacheservice biocachehub
+
+docker inspect nameindex | grep Bifid
+# "Image": "bioatlas/ala-dyntaxaindex:v0.3-Bifid-sh"
+
+
+

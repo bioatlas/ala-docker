@@ -16,13 +16,7 @@ RUN chmod 777 /usr/lib/nameindexer/nameindexer && \
 	cat /usr/lib/nameindexer/nameindexer.jar >> /usr/lib/nameindexer/nameindexer && \
 	ln -s /usr/lib/nameindexer/nameindexer /usr/bin/nameindexer
 
-RUN nameindexer --all --dwca /data/lucene/sources/dyntaxa --common /data/lucene/sources/dyntaxa/VernacularName.tsv
-
-ADD http://central.maven.org/maven2/org/apache/lucene/lucene-core/6.6.5/lucene-core-6.6.5.jar /tmp/
-ADD http://central.maven.org/maven2/org/apache/lucene/lucene-backward-codecs/6.6.5/lucene-backward-codecs-6.6.5.jar /tmp/
-
-RUN java -cp /tmp/lucene-core-6.6.5.jar:/tmp/lucene-backward-codecs-6.6.5.jar org.apache.lucene.index.IndexUpgrader -delete-prior-commits /data/lucene/namematching/cb
-RUN java -cp /tmp/lucene-core-6.6.5.jar:/tmp/lucene-backward-codecs-6.6.5.jar org.apache.lucene.index.IndexUpgrader -delete-prior-commits /data/lucene/namematching/vernacular
+RUN nameindexer --all --dwca /data/lucene/sources/dyntaxa --common /data/lucene/sources/dyntaxa/VernacularName.csv
 
 RUN rm -rf /data/lucene/sources/*
 
