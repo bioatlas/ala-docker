@@ -4,16 +4,12 @@ RUN apk --update add apache2
 
 # service deployment section
 RUN mkdir -p /data \
-	/data/images \
-	/data/images/config \
-  /data/images/elasticsearch \
-  /data/images/store \
-  /data/images/incoming \
-  /data/images/bin/imgcnv
+  /data/image-service/config \
+  /data/image-service/store \
+  /data/image-service/incoming \
+  /data/image-service/bin/imgcnv
 
-VOLUME /data/images/store
-
-COPY images.war $CATALINA_HOME/webapps/
+COPY images.war $CATALINA_HOME/webapps/images.war
 
 ENV \
 	BUILD_DEPS="gettext" \
