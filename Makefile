@@ -225,17 +225,17 @@ build:
 	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.4 collectory
 	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.5 biocacheservice
 	@docker build -t bioatlas/ala-loggerservice -t bioatlas/ala-loggerservice:v0.3 loggerservice
-	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.4 imageservice
-	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v0.3 imagestore
+	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.5 imageservice
+	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v0.4 imagestore
 	@docker build -t bioatlas/ala-api -t bioatlas/ala-api:v0.3 api
 	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.5 specieslists
-	@docker build -t bioatlas/ala-bieindex -t bioatlas/ala-bieindex:v0.6 bieindex
+	@docker build -t bioatlas/ala-bieindex -t bioatlas/ala-bieindex:v0.7 bieindex
 	@docker build -t bioatlas/ala-biehub -t bioatlas/ala-biehub:v0.5 biehub
 	@docker build -t bioatlas/ala-layersservice -t bioatlas/ala-layersservice:v0.4 layersservice
 	@docker build -t bioatlas/ala-layeringestion -t bioatlas/ala-layeringestion:v0.3 layeringestion
 	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.5 regions
-	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.5 spatialhub
-	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.4 spatialservice
+	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.6 spatialhub
+	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.5 spatialservice
 	@docker build -t bioatlas/ala-geoserver -t bioatlas/ala-geoserver:v0.4 geoserver
 	@docker build -t bioatlas/ala-cas -t bioatlas/ala-cas:v0.3 cas2
 	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails

@@ -149,8 +149,18 @@ services:
       - ./loggerservice/db:/docker-entrypoint-initdb.d
       - db_data_loggerservice:/var/lib/mysql
 
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:7.0.0"
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - node.name=elasticsearch
+    volumes:
+      - data_images_elasticsearch:/usr/share/elasticsearch/data
+
   imageservice:
-    image: bioatlas/ala-imageservice:v0.4
+    image: bioatlas/ala-imageservice:v0.5
     container_name: imageservice
     depends_on:
       - psqldbimage
@@ -160,10 +170,9 @@ services:
       JAVA_OPTS: -Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envimage
     volumes:
-      - ./config/images-config.properties:/tmp/images-config.properties
-      - data_images:/data/images/store
-      - data_images_elasticsearch:/data/images/elasticsearch
-    command: /bin/ash -c "envsubst < /tmp/images-config.properties > /data/images/config/images-config.properties && catalina.sh run"
+      - ./config/image-service-config.yml:/tmp/image-service-config.yml
+      - data_images:/data/image-service/store
+    command: /bin/ash -c "envsubst < /tmp/image-service-config.yml > /data/image-service/config/image-service-config.yml && catalina.sh run"
 
   static:
     image: nginx:alpine
@@ -172,9 +181,9 @@ services:
     container_name: static
 
   imagestore:
-    image: bioatlas/ala-imagestore:v0.3
+    image: bioatlas/ala-imagestore:v0.4
     volumes:
-      - data_images:/data/images/store
+      - data_images:/data/image-service/store
     container_name: imagestore
 
   psqldbimage:
@@ -246,7 +255,7 @@ services:
       - db_data_specieslists:/var/lib/mysql
 
   bieindex:
-    image: bioatlas/ala-bieindex:v0.6
+    image: bioatlas/ala-bieindex:v0.7
     container_name: bieindex
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
@@ -275,14 +284,14 @@ services:
       - ./postgis/layersdb.sql:/docker-entrypoint-initdb.d/layersdb.sql
 
   geoserver:
-    #image: kartoza/geoserver:2.11.2
-    image: bioatlas/ala-geoserver:v0.3
+    #image: kartoza/geoserver:2.13.0
+    image: bioatlas/ala-geoserver:v0.4
     container_name: geoserver
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
     env_file: ./env/.envgeoserver
     volumes:
-      - data_geoserver:/data/ala/data/geoserver_data_dir
+      - data_geoserver:/data/geoserver_data_dir
       - data_spatialservice:/data/spatial-data
     #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver-files/geoserver.sh"
 
@@ -298,7 +307,7 @@ services:
       - ./config/layers-data.xml:/tmp/layers-service-data-config.xml
       - ./config/layers-data.xml:/tmp/layers-store-data-config.xml
       - data_layersservice:/data
-      - data_spatialservice:/data/spatial-data
+#      - data_spatialservice:/data/spatial-data
     command: /bin/bash -c "envsubst < /tmp/layers-store-config.properties > /data/layers-store/config/layers-store-config.properties && envsubst < /tmp/layers-service-data-config.xml > /data/layers-service/config/layers-service-data-config.xml && envsubst < /tmp/layers-store-data-config.xml > /data/layers-store/config/layers-store-data-config.xml && catalina.sh run"
 
   layeringestion:
@@ -345,7 +354,7 @@ services:
       - ./geonetwork/pg_hba.conf:/etc/pg_hba.conf:ro
 
   spatialhub:
-    image: bioatlas/ala-spatialhub:v0.5
+    image: bioatlas/ala-spatialhub:v0.6
     container_name: spatialhub
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
@@ -356,7 +365,7 @@ services:
       - ./spatialhub/view-config.json:/data/spatial-hub/config/view-config.json
 
   spatialservice:
-    image: bioatlas/ala-spatialservice:v0.4
+    image: bioatlas/ala-spatialservice:v0.5
     container_name: spatialservice
     environment:
       - JAVA_OPTS=-Xmx4g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
@@ -364,9 +373,10 @@ services:
       - ./env/.envspatial
     volumes:
       - data_spatialservice:/data/spatial-data
-      - ./config/spatial-service-config.properties:/tmp/spatial-service-config.properties
-      - ./config/spatial-service-data-config.xml:/tmp/spatial-service-data-config.xml
-    command: /bin/bash -c "envsubst < /tmp/spatial-service-config.properties > /data/spatial-service/config/spatial-service-config.properties && envsubst < /tmp/spatial-service-data-config.xml > /data/spatial-service/config/spatial-service-data-config.xml && catalina.sh run"
+      - ./config/spatial-service-config.yml:/tmp/spatial-service-config.yml
+#      - ./config/spatial-service-data-config.xml:/tmp/spatial-service-data-config.xml
+#    command: /bin/bash -c "envsubst < /tmp/spatial-service-config.properties > /data/spatial-service/config/spatial-service-config.properties && envsubst < /tmp/spatial-service-data-config.xml > /data/spatial-service/config/spatial-service-data-config.xml && catalina.sh run"
+    command: /bin/bash -c "envsubst < /tmp/spatial-service-config.yml > /data/spatial-service/config/spatial-service-config.yml && catalina.sh run"
 
   mysqldbcas:
     image: mysql:5.7
