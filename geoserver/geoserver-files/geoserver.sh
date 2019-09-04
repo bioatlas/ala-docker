@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#update geoserver password
+curl -v -u admin:geoserver -XPUT -H "Content-type: application/xml" -d "<userPassword><newPassword>$PASS</newPassword></userPassword>" $GEOSERVER_URL/rest/security/self/password
+
 mkdir -p $CATALINA_HOME/webapps/geoserver/data/layout
 wget -O $CATALINA_HOME/webapps/geoserver/data/layout/scale.xml https://github.com/AtlasOfLivingAustralia/spatial-database/raw/master/scale.xml
 
@@ -20,30 +23,28 @@ curl -v -u $USERNAME:$PASS -XPOST -H "Content-type: text/xml" -d "<dataStore><na
 curl -v -u $USERNAME:$PASS -XPOST -H "Content-type: text/xml" -d "<style><name>distributions_style</name><filename>distributions_style.sld</filename></style>" $GEOSERVER_URL/rest/styles
 curl -v -u $USERNAME:$PASS -XPOST -H "Content-type: text/xml" -d "<style><name>envelope_style</name><filename>envelope_style.sld</filename></style>" $GEOSERVER_URL/rest/styles
 curl -v -u $USERNAME:$PASS -XPOST -H "Content-type: text/xml" -d "<style><name>alastyles</name><filename>alastyles.sld</filename></style>" $GEOSERVER_URL/rest/styles
-#curl -v -u $USERNAME:$PASS -XPOST -H "Content-type: text/xml" -d "<style><name>points_style</name><filename>points_style.sld</filename></style>" $GEOSERVER_URL/rest/styles
+curl -v -u $USERNAME:$PASS -XPOST -H "Content-type: text/xml" -d "<style><name>points_style</name><filename>points_style.sld</filename></style>" $GEOSERVER_URL/rest/styles
 
 #upload styles
 wget -O /tmp/distributions_style.sld https://github.com/AtlasOfLivingAustralia/spatial-database/raw/master/distributions_style.sld
 wget -O /tmp/envelope_style.sld https://github.com/AtlasOfLivingAustralia/spatial-database/raw/master/envelope_style.sld
 wget -O /tmp/alastyles.sld https://github.com/AtlasOfLivingAustralia/spatial-database/raw/master/alastyles.sld
-#wget -O /tmp/points_style.sld https://github.com/AtlasOfLivingAustralia/spatial-database/raw/master/points_style.sld
+wget -O /tmp/points_style.sld https://github.com/AtlasOfLivingAustralia/spatial-database/raw/master/points_style.sld
 curl -v -u $USERNAME:$PASS -XPUT -H "Content-type: application/vnd.ogc.sld+xml" -d @/tmp/distributions_style.sld $GEOSERVER_URL/rest/styles/distributions_style
 curl -v -u $USERNAME:$PASS -XPUT -H "Content-type: application/vnd.ogc.sld+xml" -d @/tmp/envelope_style.sld $GEOSERVER_URL/rest/styles/envelope_style
 curl -v -u $USERNAME:$PASS -XPUT -H "Content-type: application/vnd.ogc.sld+xml" -d @/tmp/alastyles.sld $GEOSERVER_URL/rest/styles/alastyles
-#curl -v -u $USERNAME:$PASS -XPUT -H "Content-type: application/vnd.ogc.sld+xml" -d @/tmp/points_style.sld $GEOSERVER_URL/rest/styles/points_style
+curl -v -u $USERNAME:$PASS -XPUT -H "Content-type: application/vnd.ogc.sld+xml" -d @/tmp/points_style.sld $GEOSERVER_URL/rest/styles/points_style
 
 #create layer
 curl -u $USERNAME:$PASS -XPOST -H 'Content-type: text/xml' -T geoserver.objects.xml  $GEOSERVER_URL/rest/workspaces/ALA/datastores/LayersDB/featuretypes
 curl -u $USERNAME:$PASS -XPOST -H 'Content-type: text/xml' -T geoserver.distributions.xml  $GEOSERVER_URL/rest/workspaces/ALA/datastores/LayersDB/featuretypes
-#wget -O /tmp/geoserver.points.xml https://github.com/AtlasOfLivingAustralia/spatial-database/raw/master/geoserver.points.xml
-#curl -u $USERNAME:$PASS -XPOST -H 'Content-type: text/xml' -T /tmp/geoserver.points.xml  $GEOSERVER_URL/rest/workspaces/ALA/datastores/LayersDB/featuretypes
+curl -u $USERNAME:$PASS -XPOST -H 'Content-type: text/xml' -T geoserver.points.xml  $GEOSERVER_URL/rest/workspaces/ALA/datastores/LayersDB/featuretypes
 
 #assign styles to layers
 
 curl -u $USERNAME:$PASS -XPUT -H 'Content-type: text/xml' -d '<layer><defaultStyle><name>distributions_style</name><workspace>ALA</workspace></defaultStyle></layer>' $GEOSERVER_URL/rest/layers/ALA:Objects
 curl -u $USERNAME:$PASS -XPUT -H 'Content-type: text/xml' -d '<layer><defaultStyle><name>distributions_style</name><workspace>ALA</workspace></defaultStyle></layer>' $GEOSERVER_URL/rest/layers/ALA:Distributions
-#curl -u $USERNAME:$PASS -XPUT -H 'Content-type: text/xml' -d '<layer><defaultStyle><name>points_style</name><workspace>ALA</workspace></defaultStyle></layer>' $GEOSERVER_URL/rest/layers/ALA:Points
-
+curl -u $USERNAME:$PASS -XPUT -H 'Content-type: text/xml' -d '<layer><defaultStyle><name>points_style</name><workspace>ALA</workspace></defaultStyle></layer>' $GEOSERVER_URL/rest/layers/ALA:Points
 
 #additional actions
 

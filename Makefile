@@ -236,7 +236,7 @@ build:
 	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.5 regions
 	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.5 spatialhub
 	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.4 spatialservice
-	@docker build -t bioatlas/ala-geoserver -t bioatlas/ala-geoserver:v0.3 geoserver
+	@docker build -t bioatlas/ala-geoserver -t bioatlas/ala-geoserver:v0.4 geoserver
 	@docker build -t bioatlas/ala-cas -t bioatlas/ala-cas:v0.3 cas2
 	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails
 	@docker build -t bioatlas/ala-apikey -t bioatlas/ala-apikey:v0.3 apikey
@@ -273,7 +273,7 @@ pull:
 	@docker pull bioatlas/ala-regions:v0.5
 	@docker pull bioatlas/ala-spatialhub:v0.5
 	@docker pull bioatlas/ala-spatialservice:v0.4
-	@docker pull bioatlas/ala-geoserver:v0.3
+	@docker pull bioatlas/ala-geoserver:v0.4
 	@docker pull bioatlas/ala-cas:v0.3
 	@docker pull bioatlas/ala-userdetails:v0.3
 	@docker pull bioatlas/ala-apikey:v0.3
@@ -312,7 +312,7 @@ push:
 	@docker push bioatlas/ala-regions:v0.5
 	@docker push bioatlas/ala-spatialhub:v0.5
 	@docker push bioatlas/ala-spatialservice:v0.4
-	@docker push bioatlas/ala-geoserver:v0.3
+	@docker push bioatlas/ala-geoserver:v0.4
 	@docker push bioatlas/ala-cas:v0.3
 	@docker push bioatlas/ala-userdetails:v0.3
 	@docker push bioatlas/ala-apikey:v0.3
