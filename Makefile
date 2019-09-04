@@ -151,7 +151,9 @@ secrets:
 		printf "export SECRET_POSTGRES_PASSWORD=%b\n" \
 			$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> /tmp/secrets && \
 		printf "export SECRET_MIRROREUM_PASSWORD=%b\n" \
-			$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> /tmp/secrets'
+			$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> /tmp/secrets && \
+		printf "export GEOSERVER_ADMIN_PASSWORD=%b\n" \
+			$$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 50) >> /tmp/secrets '
 
 dotfiles: secrets htpasswd
 	docker run --rm -it \
