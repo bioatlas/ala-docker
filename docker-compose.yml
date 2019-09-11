@@ -77,7 +77,7 @@ services:
       - ./config/ala-hub-config.properties:/data/ala-hub/config/ala-hub-config.properties:ro
 
   collectory:
-    image: bioatlas/ala-collectory:v0.4
+    image: bioatlas/ala-collectory:v0.5
     container_name: collectory
     depends_on:
       - mysqldb
@@ -233,7 +233,7 @@ services:
       - data_wordpress:/var/www/html
 
   specieslists:
-    image: bioatlas/ala-specieslists:v0.5
+    image: bioatlas/ala-specieslists:v0.6
     container_name: specieslists
     links:
       - mysqldbspecieslist
@@ -266,7 +266,7 @@ services:
       - solr
 
   biehub:
-    image: bioatlas/ala-biehub:v0.5
+    image: bioatlas/ala-biehub:v0.6
     container_name: biehub
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
@@ -321,7 +321,7 @@ services:
       - geoserver
 
   regions:
-    image: bioatlas/ala-regions:v0.5
+    image: bioatlas/ala-regions:v0.6
     container_name: regions
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true

@@ -9,7 +9,7 @@ UID := $(shell id -u)
 GID := $(shell id -g)
 
 URL_NAMEIDX = https://s3.amazonaws.com/ala-nameindexes/20140610
-URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/bas-1.5.6/ala-collectory-1.5.6.war
+URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/bas-1.6.2/ala-collectory-1.6.2.war
 URL_NAMESDIST = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.4/ala-name-matching-3.4-distribution.zip
 URL_BIOCACHE_SERVICE = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.20/biocache-service-2.1.20.war
 URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/bas-3.1.0/ala-hub-3.1.0.war
@@ -18,17 +18,17 @@ URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases
 URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/0.9.1-SNAPSHOT/ala-images.war
 URL_API = https://github.com/bioatlas/webapi/releases/download/v0.3/webapi-2.0-SNAPSHOT.war
 URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/backbone-current.zip
-URL_BIEHUB = https://github.com/bioatlas/ala-bie/releases/download/bas-1.4.16-SNAPSHOT/ala-bie-1.4.16-SNAPSHOT.war
-URL_BIEINDEX = https://github.com/bioatlas/bie-index/releases/download/BAS-1.4.6-SNAPSHOT/bie-index-1.4.6-SNAPSHOT.war
-URL_SPECIESLIST = https://github.com/bioatlas/specieslist-webapp/releases/download/BAS-3.3-SNAPSHOT/specieslist-webapp-3.3-SNAPSHOT.war
+URL_BIEHUB = https://github.com/bioatlas/ala-bie/releases/download/bas-1.4.19/ala-bie-1.4.19.war
+URL_BIEINDEX = https://github.com/bioatlas/bie-index/releases/download/bas-1.4.8/bie-index-1.4.8.war
+URL_SPECIESLIST = https://github.com/bioatlas/specieslist-webapp/releases/download/bas-3.3/specieslist-webapp-3.3.war
 #URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/master.zip
 URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/beta.zip
 URL_LAYERS_SERVICE = https://github.com/bioatlas/layers-service/releases/download/2.1-SNAPSHOT/layers-service.war
 URL_LAYER_INGESTION = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/layer-ingestion/1.0-SNAPSHOT/layer-ingestion-1.0-20160224.160123-13-bin.zip
-URL_REGIONS = https://github.com/bioatlas/regions/releases/download/BAS-3.3-SNAPSHOT/regions-3.3-SNAPSHOT.war
+URL_REGIONS = https://github.com/bioatlas/regions/releases/download/bas-3.3.4-SNAPSHOT/regions-3.3.4-SNAPSHOT.war
 URL_GEONETWORK = https://jaist.dl.sourceforge.net/project/geonetwork/GeoNetwork_opensource/v3.4.1/geonetwork.war
-URL_SPATIAL_SERVICE = https://github.com/bioatlas/spatial-service/releases/download/BAS-0.3-SNAPSHOT/spatial-service-0.3-SNAPSHOT.war
-URL_SPATIAL_HUB = https://github.com/bioatlas/spatial-hub/releases/download/bioatlas-0.3-SNAPSHOT/spatial-hub-0.3-SNAPSHOT.war
+URL_SPATIAL_SERVICE = https://github.com/bioatlas/spatial-service/releases/download/bas-0.3/spatial-service-0.3.war
+URL_SPATIAL_HUB = https://github.com/bioatlas/spatial-hub/releases/download/bas-0.3.1-SNAPSHOT/spatial-hub-0.3.1-SNAPSHOT.war
 URL_CAS2 = https://github.com/bioatlas/ala-cas-2.0/releases/download/v0.1/cas.war
 URL_USERDETAILS = https://github.com/bioatlas/userdetails/releases/download/bioatlas-1.0.0/userdetails-1.0.0.war
 URL_APIKEY = https://github.com/bioatlas/apikey/releases/download/1.4-SNAPSHOT/apikey-1.4-SNAPSHOT.war
@@ -222,18 +222,18 @@ build:
 	@echo "Building images..."
 	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.6 biocachebackend
 	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v0.6 biocachehub
-	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.4 collectory
+	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.5 collectory
 	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.5 biocacheservice
 	@docker build -t bioatlas/ala-loggerservice -t bioatlas/ala-loggerservice:v0.3 loggerservice
 	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.5 imageservice
 	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v0.4 imagestore
 	@docker build -t bioatlas/ala-api -t bioatlas/ala-api:v0.3 api
-	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.5 specieslists
+	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.6 specieslists
 	@docker build -t bioatlas/ala-bieindex -t bioatlas/ala-bieindex:v0.7 bieindex
-	@docker build -t bioatlas/ala-biehub -t bioatlas/ala-biehub:v0.5 biehub
+	@docker build -t bioatlas/ala-biehub -t bioatlas/ala-biehub:v0.6 biehub
 	@docker build -t bioatlas/ala-layersservice -t bioatlas/ala-layersservice:v0.4 layersservice
 	@docker build -t bioatlas/ala-layeringestion -t bioatlas/ala-layeringestion:v0.3 layeringestion
-	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.5 regions
+	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.6 regions
 	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.6 spatialhub
 	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.5 spatialservice
 	@docker build -t bioatlas/ala-geoserver -t bioatlas/ala-geoserver:v0.4 geoserver
@@ -259,20 +259,20 @@ pull:
 	@echo "Downloading docker images for ALA modules..."
 	@docker pull bioatlas/ala-biocachebackend:v0.6
 	@docker pull bioatlas/ala-biocachehub:v0.6
-	@docker pull bioatlas/ala-collectory:v0.4
+	@docker pull bioatlas/ala-collectory:v0.5
 	@docker pull bioatlas/ala-biocacheservice:v0.5
 	@docker pull bioatlas/ala-loggerservice:v0.3
-	@docker pull bioatlas/ala-imageservice:v0.4
-	@docker pull bioatlas/ala-imagestore:v0.3
+	@docker pull bioatlas/ala-imageservice:v0.5
+	@docker pull bioatlas/ala-imagestore:v0.4
 	@docker pull bioatlas/ala-api:v0.3
-	@docker pull bioatlas/ala-specieslists:v0.5
-	@docker pull bioatlas/ala-bieindex:v0.6
-	@docker pull bioatlas/ala-biehub:v0.5
+	@docker pull bioatlas/ala-specieslists:v0.6
+	@docker pull bioatlas/ala-bieindex:v0.7
+	@docker pull bioatlas/ala-biehub:v0.6
 	@docker pull bioatlas/ala-layersservice:v0.4
 	@docker pull bioatlas/ala-layeringestion:v0.3
-	@docker pull bioatlas/ala-regions:v0.5
-	@docker pull bioatlas/ala-spatialhub:v0.5
-	@docker pull bioatlas/ala-spatialservice:v0.4
+	@docker pull bioatlas/ala-regions:v0.6
+	@docker pull bioatlas/ala-spatialhub:v0.6
+	@docker pull bioatlas/ala-spatialservice:v0.5
 	@docker pull bioatlas/ala-geoserver:v0.4
 	@docker pull bioatlas/ala-cas:v0.3
 	@docker pull bioatlas/ala-userdetails:v0.3
@@ -298,20 +298,20 @@ push:
 	@echo "Pushing images to Dockerhub..."
 	@docker push bioatlas/ala-biocachebackend:v0.6
 	@docker push bioatlas/ala-biocachehub:v0.6
-	@docker push bioatlas/ala-collectory:v0.4
+	@docker push bioatlas/ala-collectory:v0.5
 	@docker push bioatlas/ala-biocacheservice:v0.5
 	@docker push bioatlas/ala-loggerservice:v0.3
-	@docker push bioatlas/ala-imageservice:v0.4
-	@docker push bioatlas/ala-imagestore:v0.3
+	@docker push bioatlas/ala-imageservice:v0.5
+	@docker push bioatlas/ala-imagestore:v0.4
 	@docker push bioatlas/ala-api:v0.3
-	@docker push bioatlas/ala-specieslists:v0.5
-	@docker push bioatlas/ala-bieindex:v0.6
-	@docker push bioatlas/ala-biehub:v0.5
+	@docker push bioatlas/ala-specieslists:v0.6
+	@docker push bioatlas/ala-bieindex:v0.7
+	@docker push bioatlas/ala-biehub:v0.6
 	@docker push bioatlas/ala-layersservice:v0.4
 	@docker push bioatlas/ala-layeringestion:v0.3
-	@docker push bioatlas/ala-regions:v0.5
-	@docker push bioatlas/ala-spatialhub:v0.5
-	@docker push bioatlas/ala-spatialservice:v0.4
+	@docker push bioatlas/ala-regions:v0.6
+	@docker push bioatlas/ala-spatialhub:v0.6
+	@docker push bioatlas/ala-spatialservice:v0.5
 	@docker push bioatlas/ala-geoserver:v0.4
 	@docker push bioatlas/ala-cas:v0.3
 	@docker push bioatlas/ala-userdetails:v0.3
