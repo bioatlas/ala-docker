@@ -30,11 +30,16 @@ app:
     http:
         header:
             userId: X-ALA-userId
+# Header and footer
+headerAndFooter:
+    baseURL: 'https://beta.bioatlas.se/static/bs3'
+    version: '1'
+ala:
+  baseURL: "https://beta.bioatlas.se"
 
-headerAndFooter.baseURL: "https://beta.bioatlas.se/static/bs3"
-ala.baseURL: "https://beta.bioatlas.se"
-bie.baseURL: "https://beta.bioatlas.se/ala-bie"
-bie.searchPath: "/search"
+bie:
+  baseURL: "https://beta.bioatlas.se/ala-bie"
+  searchPath: "/search"
 
 bieService:
     baseURL: "https://beta.bioatlas.se/bie-index"
@@ -97,12 +102,12 @@ flickr:
     # licensesInfo: 'flickr.photos.licenses.getInfo'
     # licenses data is found at https://api.flickr.com/services/rest/?method=flickr.photos.licenses.getInfo&api_key=<api_key>&format=json&nojsoncallback=1
     licensesData: {'licenses': {'license': [{'id': '0', 'name': 'All Rights Reserved', 'url': ''}, {'id': '4', 'name': 'Attribution License', 'url': 'https://creativecommons.org/licenses/by/2.0/'}, {'id': '6', 'name': 'Attribution-NoDerivs License', 'url': 'https://creativecommons.org/licenses/by-nd/2.0/'}, {'id': '3', 'name': 'Attribution-NonCommercial-NoDerivs License', 'url': 'https://creativecommons.org/licenses/by-nc-nd/2.0/'}, {'id': '2', 'name': 'Attribution-NonCommercial License', 'url': 'https://creativecommons.org/licenses/by-nc/2.0/'}, {'id': '1', 'name': 'Attribution-NonCommercial-ShareAlike License', 'url': 'https://creativecommons.org/licenses/by-nc-sa/2.0/'}, {'id': '5', 'name': 'Attribution-ShareAlike License', 'url': 'https://creativecommons.org/licenses/by-sa/2.0/'}, {'id': '7', 'name': 'No known copyright restrictions', 'url': 'https://www.flickr.com/commons/usage/'}, {'id': '8', 'name': 'United States Government Work', 'url': 'http://www.usa.gov/copyright.shtml'}, {'id': '9', 'name': 'Public Domain Dedication (CC0)', 'url': 'https://creativecommons.org/publicdomain/zero/1.0/'}, {'id': '10', 'name': 'Public Domain Mark', 'url': 'https://creativecommons.org/publicdomain/mark/1.0/'}]}, 'stat': 'ok'}
-    apiKey: 
-    secret: 
-    tags: 
+    apiKey:
+    secret:
+    tags:
     extra: "geo,date_taken,owner_name,license,url_t,url_s,url_m,title"
-    contentType: 
-    geoContext: 
+    contentType:
+    geoContext:
     filter: "&text=landscape"
     nbrOfPhotosToDisplay: 15
 
@@ -114,10 +119,13 @@ sessions:
 
 admin_role: ROLE_ADMIN
 
-skin.orgNameLong: "BioAtlas Sweden"
-skin.orgNameShort: "BioAtlas Sweden"
-skin.layout: "generic"
-skin.fluidLayout: true
+skin:
+    header: true
+    footer: true
+    fluidLayout: true
+    layout: 'generic'
+    orgNameLong: 'BioAtlas Sweden'
+    orgNameShort: 'BioAtlas Sweden'
 
 grails.controllers.upload.maxFileSize: 524288000
 grails.controllers.upload.maxRequestSize: 524288000
@@ -225,47 +233,5 @@ wms:
 
 fq:
     excludeAbsent: "-occurrence_status_s:absent"
-
-# (mandatory) projections.#.definition - usage new L.Proj.CRS(code, proj4js, params)
-# projections.#.definition.code = code
-# projections.#.definition.proj4js = proj4js definition (mandatory when not 3857 or 4326)
-# projections.#.definition.params = parameters (optional)
-#
-# (optional) projections.#.origin  (startup lat, lon, zoom is used when origin is not defined)
-# projections.#.origin.latitude = default latitude
-# projections.#.origin.longitude = default longitude
-# projections.#.origin.zoom = default zoom
-projection:
-    default: 3857
-#projections:
-#    3857:
-#      label: 'Pseudo-Mercator -- Spherical Mercator'
-#      definition:
-#        code: 'EPSG:3857' # leaflet supported, uses startup lat,lon,zoom
-#    4326:
-#      label: 'World Geodetic System 1984'
-#      definition:
-#        code: 'EPSG:4326' # leaflet supported, uses startup lat,lon,zoom
-#    3031:
-#      label: 'Antarctic Polar Stereographic'
-#      definition:
-#        code: 'EPSG:3031'
-#        proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-#        params: { resolutions: [ 8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5 ] }
-#      origin:
-#        latitude: -80
-#        longitude: 0
-#        zoom: 1
-#    3575:
-#      label: 'North Pole LAEA Europe'
-#      definition:
-#        code: 'EPSG:3575'
-#        proj4js: '+proj=laea +lat_0=90 +lon_0=10 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-#        params:  { resolutions: [ 8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5 ]}
-#      origin:
-#        latitude: 60
-#        longitude: 0
-#        zoom: 1
-#
 header: true
 footer: true
