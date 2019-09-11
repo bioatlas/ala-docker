@@ -374,8 +374,6 @@ services:
     volumes:
       - data_spatialservice:/data/spatial-data
       - ./config/spatial-service-config.yml:/tmp/spatial-service-config.yml
-#      - ./config/spatial-service-data-config.xml:/tmp/spatial-service-data-config.xml
-#    command: /bin/bash -c "envsubst < /tmp/spatial-service-config.properties > /data/spatial-service/config/spatial-service-config.properties && envsubst < /tmp/spatial-service-data-config.xml > /data/spatial-service/config/spatial-service-data-config.xml && catalina.sh run"
     command: /bin/bash -c "envsubst < /tmp/spatial-service-config.yml > /data/spatial-service/config/spatial-service-config.yml && catalina.sh run"
 
   mysqldbcas:
