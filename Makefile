@@ -15,7 +15,7 @@ URL_BIOCACHE_SERVICE = https://nexus.ala.org.au/service/local/repositories/relea
 URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/bas-3.1.0/ala-hub-3.1.0.war
 URL_BIOCACHE_CLI = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.4.4/biocache-store-2.4.4-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
-URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/0.9.1-SNAPSHOT/ala-images.war
+URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/bas-1.0.8/image-service-1.0.8.war
 URL_API = https://github.com/bioatlas/webapi/releases/download/v0.3/webapi-2.0-SNAPSHOT.war
 URL_GBIF_BACKBONE = http://rs.gbif.org/datasets/backbone/backbone-current.zip
 URL_BIEHUB = https://github.com/bioatlas/ala-bie/releases/download/bas-1.4.19/ala-bie-1.4.19.war
@@ -241,7 +241,7 @@ build:
 	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails
 	@docker build -t bioatlas/ala-apikey -t bioatlas/ala-apikey:v0.3 apikey
 	@docker build -t bioatlas/ala-cassandra -t bioatlas/ala-cassandra:v0.4 cassandra3
-	@docker build -t bioatlas/ala-solr -t bioatlas/ala-solr:v0.4 solr7
+	@docker build -t bioatlas/ala-solr -t bioatlas/ala-solr:v0.5 solr7
 	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.4 dyntaxa-index
 	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.4 nameindex
 #	@docker build -t bioatlas/ala-dashboard -t bioatlas/ala-dashboard:v0.3 dashboard
@@ -278,7 +278,7 @@ pull:
 	@docker pull bioatlas/ala-userdetails:v0.3
 	@docker pull bioatlas/ala-apikey:v0.3
 	@docker pull bioatlas/ala-cassandra:v0.4
-	@docker pull bioatlas/ala-solr:v0.4
+	@docker pull bioatlas/ala-solr:v0.5
 	@docker pull bioatlas/ala-dyntaxaindex:v0.4
 	@docker pull bioatlas/ala-nameindex:v0.4
 	@docker pull bioatlas/ala-sds:v0.1
@@ -317,7 +317,7 @@ push:
 	@docker push bioatlas/ala-userdetails:v0.3
 	@docker push bioatlas/ala-apikey:v0.3
 	@docker push bioatlas/ala-cassandra:v0.4
-	@docker push bioatlas/ala-solr:v0.4
+	@docker push bioatlas/ala-solr:v0.5
 	@docker push bioatlas/ala-dyntaxaindex:v0.4
 	@docker push bioatlas/ala-nameindex:v0.4
 	@docker push bioatlas/ala-sds:v0.1

@@ -118,7 +118,7 @@ services:
       - ./config/biocache-config.properties:/data/biocache/config/biocache-config.properties:ro
 
   solr:
-    image: bioatlas/ala-solr:v0.4
+    image: bioatlas/ala-solr:v0.5
     container_name: solr
     environment:
       SOLR_HEAP: 4g
