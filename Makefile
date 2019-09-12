@@ -249,7 +249,7 @@ build:
 
 up:
 	@echo "Starting services..."
-	@docker-compose up -d
+	@COMPOSE_HTTP_TIMEOUT=200 docker-compose up -d
 
 stop:
 	@echo "Stopping services..."
@@ -291,6 +291,11 @@ pull2:
 	@docker pull nginx:alpine
 	@docker pull andyshinn/dnsmasq:2.76
 	@docker pull jwilder/nginx-proxy
+	@docker pull mailhog/mailhog:v1.0.0
+	@docker pull elasticsearch:7.0.0
+	@docker pull mdillon/postgis:9.6-alpine
+	@docker pull geonetwork:3.4.1
+
 
 push:
 	@echo "Pushing images to Dockerhub..."
