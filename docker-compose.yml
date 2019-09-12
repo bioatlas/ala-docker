@@ -329,7 +329,6 @@ services:
       - ./config/regions-config.properties:/data/regions/config/regions-config.properties:ro
       - ./regions/regions-files/menu-config.json:/data/regions/config/menu-config.json:ro
       - ./regions/regions-files/state-emblems.json:/data/regions/config/state-emblems.json:ro
-      - ./regions/regions-files/stateEmblems.txt:/data/regions/config/stateEmblems.txt:ro
 
   geonetwork:
     image: geonetwork:3.4.1
