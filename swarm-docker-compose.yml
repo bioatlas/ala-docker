@@ -609,6 +609,8 @@ services:
     configs:
       - source: config_sds
         target: /data/sds/config/sds-config.properties
+    networks:
+      - basnet
 
 volumes:
   db_data_collectory:
