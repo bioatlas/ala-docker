@@ -35,6 +35,7 @@ services:
     volumes:
       #- ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
+      - ./webserver/html/index.html:/usr/share/nginx/html/index.html:ro
 
   mysqldb:
     image: mysql:5.7

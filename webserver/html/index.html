@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="static/bs3/css/bootstrap.css">
+	<link rel="stylesheet" href="static/bs3/css/bootstrap-theme.css">
+  <script src="static/bs3/js/jquery.min.js"></script>
+	<script src="static/bs3/js/bootstrap.js"></script>
+    <style>
+        .code { font-family: "Courier New"; }
+    </style>
+</head>
+<body>
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Demo Bioatlas Sweden</h1>
+        <p>This is a landing page with links through to the components installed on this server. This is a test installation and consist of the basic ALA modules.
+          The modules running on this server have been deployed as Docker containers.
+          The source code for the installation can be found <a href="https://github.com/bioatlas/ala-docker/tree/basic">here</a>.
+        </p>
+       </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div id="occurrence-store" class="col-md-4">
+          <h2>Occurrence store</h2>
+          <p>
+          	The occurrence store should now be setup. This application consists of
+          	3 web applications :
+          	<ul>
+              <li><a href="/ala-hub">Occurrence search</a> - Reskinnable front end UI</li>
+              <li><a href="/ala-hub/explore/your-area?default=true">Explore your area</a>  - Reskinnable front end UI</li>
+          	  <li><a href="/solr">Apache SOLR</a>
+                  - the index used for searching
+                  <smaller>(note port 8983 needs to be open for this link to work) </smaller></li>
+          	</ul>
+			There is also a command line tool now installed that can be started with the command "biocache".
+			This tool can be used for loading data and running processes across the data.
+          </p>
+
+          <h4>Further information</h4>
+          <p>
+          	As part of the installation the following tools are installed:
+          		<ul>
+          			<li><a href="http://cassandra.apache.org/">Apache Cassandra</a></li>
+          		</ul>
+            Cassandra can be accessed directly using the command-line tool
+            <a class="code" href="https://docs.datastax.com/en/cql/3.1/cql/cql_reference/cqlsh.html">cqlsh</a>.
+          </p>
+        </div>
+        <div id="data-registry" class="col-md-4">
+          <h2>Data registry</h2>
+          <p>
+          	The Data registry (called the 'collectory') is installed.
+            This is an application for editing metadata
+          	for collections, institutions and data resources.
+      		<ul>
+				<li><a href="/collectory">Collections browser</a></li>
+        <li><a href="/collectory/datasets">Datasets browser</a></li>
+				<li><a href="/collectory/ws">Web services</a></li>
+				<li><a href="/collectory/admin">Admin interface</a></li>
+			</ul>
+           </p>
+          <h4>Further information</h4>
+          <p>
+          	As part of the installation the following tools are installed:
+            <ul>
+                <li><a class="code" href="http://www.mysql.com/">MySQL</a></li>
+            </ul>
+            MySQL can be accessed directly using the command-line tool <span class="code">mysql</span>.
+          </p>
+
+          <h2>Image Service</h2>
+          <p>The image service is 1 web application interacting with a PostgreSQL database and Elasticsearch backend.
+            <ul>
+                <li><a href="/image-service">Image Service</a> - Reskinnable front end UI</li>
+            </ul>
+          </p>
+       </div>
+
+        <div id="skinning" class="col-md-4">
+          <h2>Bootstrap 3</h2>
+          <p>
+              The applications use Bootstrap 3 for layout and styling.
+              For more information on Bootstrap see the Bootstrap documentation.
+          </p>
+          <h2>Styling these apps</h2>
+          <p>
+              These applications use a banner, footer and head html block that you can customise.
+          <ul>
+            <li><a class="code" href="static/bs3/banner.html">banner.html</a> - the top section added to all pages. Typically a navigation menu</li>
+            <li><a class="code" href="static/bs3/footer.html">footer.html</a> - the bottom section added to all pages. Typically a navigation menu</li>
+            <li><a class="code" href="static/bs3/head.html">head.html</a> - a block of html that is added to the <span class="code">&lt;head/&gt;</span> section added to all pages.  This could include references to custom CSS.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div id="species-list" class="col-md-4">
+              <h2>Species lists</h2>
+              <p>
+                  The Species lists component consists of 1 web application :
+                  <ul>
+                      <li><a href="/specieslists">Species lists</a> - Reskinnable front end UI</li>
+                  </ul>
+              </p>
+          </div>
+        <div id="bie" class="col-md-4">
+              <h2>Species pages</h2>
+              <p>
+                  The Species pages (BIE) consists of 2 web applications :
+                  <ul>
+                      <li><a href="/ala-bie">BIE UI</a> - Reskinnable front end UI</li>
+                      <li><a href="/bie-index">BIE web services</a>  - taxonomy search services</li>
+                  </ul>
+              </p>
+          </div>
+        <div id="name-indexes" class="col-md-4">
+              <h2>Name indexes</h2>
+              <p>
+                  Lucene name indexes have been installed in the
+                  <span class="code">/data/lucene</span> directory.
+                  Use the <span class="code">nameindexer</span> tool
+                  and your own DwCA to generate a new index. See
+                  <a href="https://github.com/AtlasOfLivingAustralia/ala-name-matching">here</a>
+                  for more details on the structure of the DwCA required.
+              </p>
+          </div>
+      </div>
+
+    </div> <!-- /container -->
+</body>
+</html>
