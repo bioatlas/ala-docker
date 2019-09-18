@@ -21,8 +21,8 @@ security:
         casServerUrlPrefix: 'https://auth.bioatlas.se/cas'
         loginUrl: 'https://auth.bioatlas.se/cas/login'
         logoutUrl: 'https://auth.bioatlas.se/cas/logout'
-        bypass: false
-        disableCAS: false
+        bypass: true
+        disableCAS: true
         contextPath: '/images'
 
 imageservice:
