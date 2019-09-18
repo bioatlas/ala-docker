@@ -1,8 +1,8 @@
 grails:
-    serverURL: 'https://beta.bioatlas.se/images'
+    serverURL: 'http://molecular.infrabas.se/images'
 server:
     contextPath: ''
-serverName: 'https://beta.bioatlas.se/images'
+serverName: 'http://molecular.infrabas.se/images'
 
 hibernate:
     dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -17,7 +17,7 @@ dataSource:
 security:
     cas:
         casServerName: 'https://auth.bioatlas.se'
-        appServerName: 'https://beta.bioatlas.se'
+        appServerName: 'http://molecular.infrabas.se'
         casServerUrlPrefix: 'https://auth.bioatlas.se/cas'
         loginUrl: 'https://auth.bioatlas.se/cas/login'
         logoutUrl: 'https://auth.bioatlas.se/cas/logout'
@@ -30,9 +30,9 @@ imageservice:
         root: '/data/image-service/store'
         inbox: '/data/image-service/incoming'
     apache:
-        root: 'https://beta.bioatlas.se/images/store/'
+        root: 'http://molecular.infrabas.se/images/store/'
         # space separated list
-        multiple_roots: 'https://beta.bioatlas.se/images/store/'
+        multiple_roots: 'http://molecular.infrabas.se/images/store/'
     exportDir: '/data/image-service/exports'
     thumbnail:
         size: 300
@@ -40,20 +40,20 @@ imageservice:
 skin:
     layout: main
     fluidLayout: false
-    favicon: "https://beta.bioatlas.se/wp-content/themes/atlas/img/favicon/favicon.ico"
+    favicon: "http://molecular.infrabas.se/wp-content/themes/atlas/img/favicon/favicon.ico"
     orgNameLong: Bioatlas Sweden
     orgNameShort: Bioatlas
-    homeUrl: "https://beta.bioatlas.se"
+    homeUrl: "http://molecular.infrabas.se"
 
 swagger:
     info:
         description: "API Documentation for Image Services"
         version: "2.0"
         title: "Image Service API"
-        termsOfServices: "https://beta.bioatlas.se/terms-of-use/"
+        termsOfServices: "http://molecular.infrabas.se/terms-of-use/"
         contact:
             name: "Support"
-            url: "https://beta.bioatlas.se"
+            url: "http://molecular.infrabas.se"
             email: "admin@mail.infrabas.se"
     schemes:
         - "HTTPS"
@@ -61,19 +61,19 @@ swagger:
 facets: ["recognisedLicence", "dataResourceUid", "creator", "imageSize", "fileType", "format", "dateUploadedYearMonth"]
 
 collectory:
-    baseURL: 'https://beta.bioatlas.se/collectory'
+    baseURL: 'http://molecular.infrabas.se/collectory'
 biocache:
-    baseURL: 'https://beta.bioatlas.se/ala-hub'
+    baseURL: 'http://molecular.infrabas.se/ala-hub'
 
 # Header and footer
 headerAndFooter:
-    baseURL: 'https://beta.bioatlas.se/static/bs3'
+    baseURL: 'http://molecular.infrabas.se/static/bs3'
 
 ala:
-    baseURL: 'https://beta.bioatlas.se'
+    baseURL: 'http://molecular.infrabas.se'
 
 bie:
-    baseURL: 'https://beta.bioatlas.se/ala-bie'
+    baseURL: 'http://molecular.infrabas.se/ala-bie'
     searchPath: '/search'
 
 analytics:

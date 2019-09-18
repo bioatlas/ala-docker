@@ -12,8 +12,7 @@ services:
       - 172.17.0.1:53:53/tcp
       - 172.17.0.1:53:53/udp
     external_links:
-      - proxy:beta.bioatlas.se
-      - proxy:auth.bioatlas.se
+      - proxy:beta.infrabas.se
 
   proxy:
     image: jwilder/nginx-proxy
@@ -24,14 +23,14 @@ services:
       - 443:443
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-      - ./nginx-proxy-certs:/etc/nginx/certs:ro
+      #- ./nginx-proxy-certs:/etc/nginx/certs:ro
       - ./nginx-proxy/nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf
 
   webserver:
     image: nginx:alpine
     container_name: webserver
     environment:
-      - VIRTUAL_HOST=beta.bioatlas.se,auth.bioatlas.se
+      - VIRTUAL_HOST=molecular.infrabas.se
     volumes:
       #- ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
