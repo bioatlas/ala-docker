@@ -12,7 +12,7 @@ services:
       - 172.17.0.1:53:53/tcp
       - 172.17.0.1:53:53/udp
     external_links:
-      - proxy:beta.infrabas.se
+      - proxy:molecular.infrabas.se
 
   proxy:
     image: jwilder/nginx-proxy
