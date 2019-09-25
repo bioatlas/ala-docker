@@ -182,6 +182,16 @@ dotfiles: secrets htpasswd
 htpasswd:
 	docker run --rm -it httpd:alpine htpasswd -nb admin admin > env/.htpasswd
 
+htpasswd-change:
+	@echo "use this target non-interactively with a syntax like 'make htpasswd-change pass=mychangedpass'"
+ifndef pass
+	@bash -c 'read -s -p "Please input the new htpasswd: " pass; \
+	docker run --rm -it httpd:alpine htpasswd -nb admin $$pass > env/.htpasswd'
+	@echo -n "\nDone\n"
+else
+	docker run --rm -it httpd:alpine htpasswd -nb admin $(pass) > env/.htpasswd
+endif
+
 init-clean:
 	@echo "Removing cached files from the build"
 	rm -f cassandra/wait-for-it.sh \
@@ -216,7 +226,7 @@ dotfiles-clean:
 
 clean:
 	docker-compose down
-	docker volume rm ala-docker_data_bieindex ala-docker_data_biocachebackend ala-docker_data_geonetwork ala-docker_data_geoserver ala-docker_data_images ala-docker_data_images_elasticsearch ala-docker_data_layersservice ala-docker_data_nameindex ala-docker_data_solr ala-docker_data_spatialhub ala-docker_data_spatialservice ala-docker_data_wordpress ala-docker_db_data_apiservice ala-docker_db_data_cassandra ala-docker_db_data_collectory ala-docker_db_data_geonetworkdb ala-docker_db_data_imageservice ala-docker_db_data_loggerservice ala-docker_db_data_mysqldbapikey ala-docker_db_data_mysqldbcas ala-docker_db_data_postgis ala-docker_db_data_specieslists ala-docker_db_data_wordpress
+	docker volume rm $$(docker volume ls -q | grep ala-docker | xargs)
 
 build:
 	@echo "Building images..."
