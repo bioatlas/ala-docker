@@ -425,7 +425,7 @@ services:
     #image: kartoza/geoserver:2.11.2
     image: bioatlas/ala-geoserver:v0.4
     environment:
-      - JAVA_OPTS=-Xmx4g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file: ./env/.envgeoserver
     volumes:
       - data_geoserver:/data/geoserver_data_dir
@@ -437,7 +437,7 @@ services:
 #  layersservice:
 #    image: bioatlas/ala-layersservice:v0.4
 #    environment:
-#      - JAVA_OPTS=-Xmx2g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+#      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
 #    env_file: env/.envlayersservice
 #    configs:
 #      - source: config_layers-service
@@ -468,7 +468,7 @@ services:
   regions:
     image: bioatlas/ala-regions:v0.6
     environment:
-      - JAVA_OPTS=-Xmx2g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     configs:
       - source: config_regions
         target: /data/regions/config/regions-config.properties
@@ -485,7 +485,7 @@ services:
 #    volumes:
 #      - data_geonetwork:/data/ala/data/geonetwork/
 #    environment:
-#      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+#      - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
 #    depends_on:
 #      - geonetworkdb
 #    networks:
@@ -505,7 +505,7 @@ services:
   spatialhub:
     image: bioatlas/ala-spatialhub:v0.6
     environment:
-      - JAVA_OPTS=-Xmx4g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     volumes:
       - data_spatialhub:/data/ala/runtime/files
     configs:
@@ -521,7 +521,7 @@ services:
   spatialservice:
     image: bioatlas/ala-spatialservice:v0.4
     environment:
-      - JAVA_OPTS=-Xmx8g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx8g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file:
       - ./env/.envspatial
     volumes:
@@ -545,7 +545,7 @@ services:
   casserver:
     image: bioatlas/ala-cas:v0.3
     environment:
-      - JAVA_OPTS=-Xmx2g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file: ./env/.envcas
     configs:
       - source: config_cas
@@ -558,7 +558,7 @@ services:
     image: bioatlas/ala-userdetails:v0.3
     domainname: auth.bioatlas.se
     environment:
-      - JAVA_OPTS=-Xmx2g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file: ./env/.envcas
     configs:
       - source: config_userdetails
@@ -579,7 +579,7 @@ services:
   apikey:
     image: bioatlas/ala-apikey:v0.3
     environment:
-      - JAVA_OPTS=-Xmx2g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file: ./env/.envapikey
     configs:
       - source: config_apikey
@@ -591,7 +591,7 @@ services:
 #  dashboard:
 #    image: bioatlas/ala-dashboard:v0.3
 #    environment:
-#      JAVA_OPTS: -Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+#      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
 #    configs:
 #      - source: config_dashboard
 #        target: /data/dashboard/config/dashboard-config.properties
@@ -603,7 +603,7 @@ services:
   sds:
     image: bioatlas/ala-sds:v0.1
     environment:
-      - JAVA_OPTS=-Xmx1g -Xms128m -XX:MaxPermSize=256m -Xss256k -Djava.awt.headless=true
+      - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     volumes:
       - data_nameindex:/data/lucene/namematching
     configs:
