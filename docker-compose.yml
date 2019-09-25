@@ -35,7 +35,7 @@ services:
     environment:
       - VIRTUAL_HOST=beta.bioatlas.se,auth.bioatlas.se
     volumes:
-      #- ./env/.htpasswd:/etc/nginx/htpasswd
+      - ./env/.htpasswd:/etc/nginx/htpasswd
       - ./webserver/app.conf:/etc/nginx/conf.d/app.conf:ro
 
   mysqldb:
