@@ -1,4 +1,4 @@
-FROM solr:7.4-alpine
+FROM solr:7.7.2-slim
 
 COPY mycores /opt/solr/server/solr/mycores
 COPY solr.xml /opt/solr/server/solr/solr.xml
