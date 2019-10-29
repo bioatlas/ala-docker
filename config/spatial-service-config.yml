@@ -1,5 +1,5 @@
 google:
-  apikey: ''
+  apikey: 'AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk'
 #
 # au.org.ala.spatial.service config
 #
@@ -81,8 +81,8 @@ spatialHubUrl: 'https://beta.bioatlas.se/spatial-hub'
 apiKeyCheckUrlTemplate: 'https://auth.bioatlas.se/apikey/ws/check?apikey={0}'
 spatialService.remote: ''
 
-gazField: 'cl915'
-userObjectsField: 'cl1083'
+gazField: ''
+userObjectsField: ''
 
 journalmap.api_key: ''
 journalmap.url: 'https://www.journalmap.org/'
@@ -149,12 +149,15 @@ distributions.cache.dir: "/data/spatial-service/mapCache/"
 distributions.geoserver.image.url: "/ALA/wms?service=WMS&version=1.1.0&request=GetMap&sld=https://fish.ala.org.au/data/dist.sld&layers=ALA:aus1,ALA:Distributions&styles=&bbox=109,-47,157,-7&srs=EPSG:4326&format=image/png&width=400&height=400&viewparams=s:"
 
 dataSource:
+    dbCreate: update
+    driverClassName: org.postgresql.Driver
     url: 'jdbc:postgresql://postgis/layersdb'
     username: $POSTGRES_USER
     password: $POSTGRES_PASS
 
 grails.serverURL: https://beta.bioatlas.se/spatial-service
 grails.app.context: /spatial-service
+grails.cors.enabled: true
 
 skin.layout: main
 skin.fluidLayout: false

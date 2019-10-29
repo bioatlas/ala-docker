@@ -2,6 +2,7 @@ grails.serverURL: "https://beta.bioatlas.se/spatial-hub"
 grails.app.context: "/spatial-hub"
 grails.assets.bundle: false
 grails.assets.minifyJs: false
+grails.cors.enabled: true
 
 googleAnalyticsId: ""
 google.apikey: "AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk"
@@ -21,7 +22,7 @@ security:
     disableCAS: True
     gateway: False
 
-autocompleteUrl: "https://beta.bioatlas.se/ala-bie/ws/search/auto.jsonp"
+autocompleteUrl: "https://beta.bioatlas.se/bie-index/search/auto.jsonp"
 
 auth:
     admin_role: ROLE_ADMIN
@@ -74,9 +75,9 @@ sandbox:
 sandboxService:
     url: ""
 
-gazField: cl915
+gazField:
 
-userObjectsField: cl1083
+userObjectsField:
 
 biocache:
     url: "https://beta.bioatlas.se/ala-hub"
