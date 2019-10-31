@@ -166,8 +166,10 @@ skin.orgNameShort: Bioatlas
 skin.favicon: https://beta.bioatlas.se/wp-content/themes/atlas/img/favicon/favicon.ico
 skin.homeUrl: https://beta.bioatlas.se
 
-grails.controllers.upload.maxFileSize: 524288000
-grails.controllers.upload.maxRequestSize: 524288000
+#grails.controllers.upload.maxFileSize: 524288000
+#grails.controllers.upload.maxRequestSize: 524288000
+grails.controllers.upload.maxFileSize: 2097152000
+grails.controllers.upload.maxRequestSize: 2097152000
 
 map.lat: 62
 map.lng: 16
