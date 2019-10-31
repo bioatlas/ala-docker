@@ -9,6 +9,8 @@ secrets:
     file: ./nginx-proxy-certs/bioatlas.se.crt
   bioatlas.se.key:
     file: ./nginx-proxy-certs/bioatlas.se.key
+  htpasswd:
+    file: ./env/.htpasswd
 
 configs:
   config_nginx-proxy:
@@ -104,9 +106,11 @@ services:
     environment:
       - VIRTUAL_HOST=beta.bioatlas.se,auth.bioatlas.se
     configs:
-      - ./env/.htpasswd:/etc/nginx/htpasswd
       - source: config_webserver
         target: /etc/nginx/conf.d/app.conf
+    secrets:
+      - source: htpasswd
+        target: /etc/nginx/htpasswd
     deploy:
       placement:
         constraints:
@@ -503,7 +507,7 @@ services:
 #      - basnet
 
   spatialhub:
-    image: bioatlas/ala-spatialhub:v0.6
+    image: bioatlas/ala-spatialhub:v0.7
     environment:
       - JAVA_OPTS=-Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     volumes:
@@ -519,7 +523,7 @@ services:
       - basnet
 
   spatialservice:
-    image: bioatlas/ala-spatialservice:v0.4
+    image: bioatlas/ala-spatialservice:v0.6
     environment:
       - JAVA_OPTS=-Xmx8g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file:

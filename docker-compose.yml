@@ -355,7 +355,7 @@ services:
       - ./geonetwork/pg_hba.conf:/etc/pg_hba.conf:ro
 
   spatialhub:
-    image: bioatlas/ala-spatialhub:v0.6
+    image: bioatlas/ala-spatialhub:v0.7
     container_name: spatialhub
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
@@ -366,7 +366,7 @@ services:
       - ./spatialhub/view-config.json:/data/spatial-hub/config/view-config.json
 
   spatialservice:
-    image: bioatlas/ala-spatialservice:v0.5
+    image: bioatlas/ala-spatialservice:v0.6
     container_name: spatialservice
     environment:
       - JAVA_OPTS=-Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true
