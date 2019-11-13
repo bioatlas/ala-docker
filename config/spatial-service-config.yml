@@ -150,6 +150,7 @@ distributions.geoserver.image.url: "/ALA/wms?service=WMS&version=1.1.0&request=G
 
 dataSource:
     dbCreate: update
+    dialect: org.hibernatespatial.postgis.PostgisDialect
     driverClassName: org.postgresql.Driver
     url: 'jdbc:postgresql://postgis/layersdb'
     username: $POSTGRES_USER
