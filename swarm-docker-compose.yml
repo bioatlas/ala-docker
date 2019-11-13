@@ -190,7 +190,7 @@ services:
       - basnet
 
   nameindex:
-    image: bioatlas/ala-nameindex:v0.4
+    image: bioatlas/ala-nameindex:v0.5
     #image: bioatlas/ala-dyntaxaindex:v0.4
     command: /bin/ash
     volumes:
@@ -525,7 +525,7 @@ services:
   spatialservice:
     image: bioatlas/ala-spatialservice:v0.6
     environment:
-      - JAVA_OPTS=-Xmx8g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx16g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file:
       - ./env/.envspatial
     volumes:

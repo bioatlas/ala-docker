@@ -198,7 +198,7 @@ services:
       - basnet
 
   nameindex:
-    image: bioatlas/ala-nameindex:v0.4
+    image: bioatlas/ala-nameindex:v0.5
     #image: bioatlas/ala-dyntaxaindex:v0.4
     command: /bin/ash
     volumes:

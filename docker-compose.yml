@@ -94,7 +94,7 @@ services:
     command: /bin/ash -c "envsubst < /tmp/ala-collectory-config.properties > /data/ala-collectory/config/ala-collectory-config.properties && catalina.sh run"
 
   nameindex:
-    #image: bioatlas/ala-nameindex:v0.4
+    #image: bioatlas/ala-nameindex:v0.5
     image: bioatlas/ala-dyntaxaindex:v0.4
     command: /bin/ash
     container_name: nameindex
