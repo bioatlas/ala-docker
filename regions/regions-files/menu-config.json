@@ -1,12 +1,8 @@
 [{
- "label": "Collective Of Provinces",
- "fid": "cl10000"
-},
-{
- "label": "Provinces(Landskap)",
- "fid": "cl10001"
-},
-{
  "label": "Counties",
- "fid": "cl10002"
+ "fid": "cl10039"
+},
+{
+ "label": "Municipalities",
+ "fid": "cl10040"
 }]
