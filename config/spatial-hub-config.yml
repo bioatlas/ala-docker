@@ -201,11 +201,11 @@ startup:
             projections: ['3857']
 
 defaultareas:
-    - name: 'Australia'
-      fqs: ['longitude:[112 TO 154]', 'latitude:[-44 TO -9]']
-      wkt: 'POLYGON((112.0 -44.0,154.0 -44.0,154.0 -9.0,112.0 -9.0,112.0 -44.0))'
-      areaSqKm: 16322156.76
-      bbox: [112, -44, 154, -9]
+#    - name: 'Australia'
+#      fqs: ['longitude:[112 TO 154]', 'latitude:[-44 TO -9]']
+#      wkt: 'POLYGON((112.0 -44.0,154.0 -44.0,154.0 -9.0,112.0 -9.0,112.0 -44.0))'
+#      areaSqKm: 16322156.76
+#      bbox: [112, -44, 154, -9]
     - name: 'World'
       fqs: []
       wkt: 'POLYGON((-180 -90.0,180.0 -90.0,180.0 90.0,-180 90.0,-180 -90.0))'
