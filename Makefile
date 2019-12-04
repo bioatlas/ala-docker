@@ -244,7 +244,7 @@ build:
 	@docker build -t bioatlas/ala-layersservice -t bioatlas/ala-layersservice:v0.4 layersservice
 	@docker build -t bioatlas/ala-layeringestion -t bioatlas/ala-layeringestion:v0.3 layeringestion
 	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.6 regions
-	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.6 spatialhub
+	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.7 spatialhub
 	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.8 spatialservice
 	@docker build -t bioatlas/ala-geoserver -t bioatlas/ala-geoserver:v0.4 geoserver
 	@docker build -t bioatlas/ala-cas -t bioatlas/ala-cas:v0.3 cas2
@@ -281,7 +281,7 @@ pull:
 	@docker pull bioatlas/ala-layersservice:v0.4
 	@docker pull bioatlas/ala-layeringestion:v0.3
 	@docker pull bioatlas/ala-regions:v0.6
-	@docker pull bioatlas/ala-spatialhub:v0.6
+	@docker pull bioatlas/ala-spatialhub:v0.7
 	@docker pull bioatlas/ala-spatialservice:v0.8
 	@docker pull bioatlas/ala-geoserver:v0.4
 	@docker pull bioatlas/ala-cas:v0.3
@@ -323,7 +323,7 @@ push:
 	@docker push bioatlas/ala-layersservice:v0.4
 	@docker push bioatlas/ala-layeringestion:v0.3
 	@docker push bioatlas/ala-regions:v0.6
-	@docker push bioatlas/ala-spatialhub:v0.6
+	@docker push bioatlas/ala-spatialhub:v0.7
 	@docker push bioatlas/ala-spatialservice:v0.8
 	@docker push bioatlas/ala-geoserver:v0.4
 	@docker push bioatlas/ala-cas:v0.3

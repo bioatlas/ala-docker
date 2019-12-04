@@ -102,7 +102,7 @@ services:
       - data_nameindex:/data/lucene/namematching
 
   biocachebackend:
-    image: bioatlas/ala-biocachebackend:v0.6
+    image: bioatlas/ala-biocachebackend:v0.7
     container_name: biocachebackend
     links:
       - biocachehub
