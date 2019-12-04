@@ -523,7 +523,7 @@ services:
       - basnet
 
   spatialservice:
-    image: bioatlas/ala-spatialservice:v0.6
+    image: bioatlas/ala-spatialservice:v0.8
     environment:
       - JAVA_OPTS=-Xmx16g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file:
