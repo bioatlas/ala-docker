@@ -13,7 +13,7 @@ URL_COLLECTORY = https://github.com/bioatlas/ala-collectory/releases/download/ba
 URL_NAMESDIST = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/ala-name-matching/3.4/ala-name-matching-3.4-distribution.zip
 URL_BIOCACHE_SERVICE = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-service/2.1.20/biocache-service-2.1.20.war
 URL_BIOCACHE_HUB = https://github.com/bioatlas/ala-hub/releases/download/bas-3.1.0/ala-hub-3.1.0.war
-URL_BIOCACHE_CLI = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.4.4/biocache-store-2.4.4-distribution.zip
+URL_BIOCACHE_CLI = https://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/biocache-store/2.4.5/biocache-store-2.4.5-distribution.zip
 URL_LOGGER_SERVICE = http://nexus.ala.org.au/service/local/repositories/releases/content/au/org/ala/logger-service/2.3.5/logger-service-2.3.5.war
 URL_IMAGE_SERVICE = https://github.com/bioatlas/image-service/releases/download/bas-1.0.8/image-service-1.0.8.war
 URL_API = https://github.com/bioatlas/webapi/releases/download/v0.3/webapi-2.0-SNAPSHOT.war
@@ -230,7 +230,7 @@ clean:
 
 build:
 	@echo "Building images..."
-	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.6 biocachebackend
+	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.7 biocachebackend
 	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v0.6 biocachehub
 	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.5 collectory
 	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.5 biocacheservice
@@ -267,7 +267,7 @@ stop:
 
 pull:
 	@echo "Downloading docker images for ALA modules..."
-	@docker pull bioatlas/ala-biocachebackend:v0.6
+	@docker pull bioatlas/ala-biocachebackend:v0.7
 	@docker pull bioatlas/ala-biocachehub:v0.6
 	@docker pull bioatlas/ala-collectory:v0.5
 	@docker pull bioatlas/ala-biocacheservice:v0.5
@@ -309,7 +309,7 @@ pull2:
 
 push:
 	@echo "Pushing images to Dockerhub..."
-	@docker push bioatlas/ala-biocachebackend:v0.6
+	@docker push bioatlas/ala-biocachebackend:v0.7
 	@docker push bioatlas/ala-biocachehub:v0.6
 	@docker push bioatlas/ala-collectory:v0.5
 	@docker push bioatlas/ala-biocacheservice:v0.5
