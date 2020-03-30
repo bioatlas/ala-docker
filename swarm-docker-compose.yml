@@ -82,8 +82,12 @@ services:
     image: jwilder/nginx-proxy
     init: true
     ports:
-      - 80:80
-      - 443:443
+      - target: 80
+        published: 80
+        mode: host
+      - target: 443
+        published: 443
+        mode: host
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
     secrets:
@@ -127,7 +131,7 @@ services:
       - basnet
 
   cassandradb:
-    image: bioatlas/ala-cassandra:v0.4
+    image: bioatlas/ala-cassandra:v0.5
     volumes:
       - db_data_cassandra:/var/lib/cassandra
     entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
@@ -138,7 +142,8 @@ services:
         constraints:
           - node.hostname == bas-cassandra
     environment:
-       JVM_OPTS: -Xmx16g -Xms16g -Xmn3200m
+      - MAX_HEAP_SIZE=31g
+      - HEAP_NEWSIZE=6400m
 
   biocacheservice:
     image: bioatlas/ala-biocacheservice:v0.5
@@ -205,10 +210,10 @@ services:
           - node.hostname == bas-main
 
   biocachebackend:
-    image: bioatlas/ala-biocachebackend:v0.7
+    image: bioatlas/ala-biocachebackend:v0.8
     command: /bin/ash
     environment:
-      - BIOCACHE_MEMORY_OPTS=-Xmx16g -Xms1g
+      - BIOCACHE_MEMORY_OPTS=-Xmx16g -Xms1g -Xss1024k
     volumes:
       - data_nameindex:/data/lucene/namematching
       - data_biocachebackend:/data
@@ -227,13 +232,13 @@ services:
           - node.hostname == bas-main
 
   solr:
-    image: bioatlas/ala-solr:v0.5
+    image: bioatlas/ala-solr:v0.6
     environment:
-      SOLR_HEAP: 40g
+      SOLR_HEAP: 31g
     volumes:
       - data_solr:/opt/solr
-    ports:
-      - 8983:8983
+#    ports:
+#      - 8983:8983
     networks:
       - basnet
     deploy:
@@ -509,23 +514,26 @@ services:
   spatialhub:
     image: bioatlas/ala-spatialhub:v0.7
     environment:
-      - JAVA_OPTS=-Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx16g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file:
+      - ./env/.envspatial
     volumes:
       - data_spatialhub:/data/ala/runtime/files
     configs:
       - source: config_spatial-hub
-        target: /data/spatial-hub/config/spatial-hub-config.yml
+        target: /tmp/spatial-hub-config.yml
       - source: config_spatial-hub-menu-config
         target: /data/spatial-hub/config/menu-config.json
       - source: config_spatial-hub-view-config
         target: /data/spatial-hub/config/view-config.json
+    command: /bin/bash -c "envsubst < /tmp/spatial-hub-config.yml > /data/spatial-hub/config/spatial-hub-config.yml && catalina.sh run"
     networks:
       - basnet
 
   spatialservice:
     image: bioatlas/ala-spatialservice:v0.8
     environment:
-      - JAVA_OPTS=-Xmx16g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - JAVA_OPTS=-Xmx31g -Xms128m -Xss1024k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file:
       - ./env/.envspatial
     volumes:
