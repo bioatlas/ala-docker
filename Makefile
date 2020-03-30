@@ -230,7 +230,7 @@ clean:
 
 build:
 	@echo "Building images..."
-	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.7 biocachebackend
+	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.8 biocachebackend
 	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v0.6 biocachehub
 	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.5 collectory
 	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.5 biocacheservice
@@ -268,7 +268,7 @@ stop:
 
 pull:
 	@echo "Downloading docker images for ALA modules..."
-	@docker pull bioatlas/ala-biocachebackend:v0.7
+	@docker pull bioatlas/ala-biocachebackend:v0.8
 	@docker pull bioatlas/ala-biocachehub:v0.6
 	@docker pull bioatlas/ala-collectory:v0.5
 	@docker pull bioatlas/ala-biocacheservice:v0.5
@@ -310,7 +310,7 @@ pull2:
 
 push:
 	@echo "Pushing images to Dockerhub..."
-	@docker push bioatlas/ala-biocachebackend:v0.7
+	@docker push bioatlas/ala-biocachebackend:v0.8
 	@docker push bioatlas/ala-biocachehub:v0.6
 	@docker push bioatlas/ala-collectory:v0.5
 	@docker push bioatlas/ala-biocacheservice:v0.5
