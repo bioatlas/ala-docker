@@ -256,6 +256,7 @@ build:
 	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.5 nameindex
 #	@docker build -t bioatlas/ala-dashboard -t bioatlas/ala-dashboard:v0.3 dashboard
 	@docker build -t bioatlas/ala-sds -t bioatlas/ala-sds:v0.1 sds
+	@docker build -t bioatlas/ala-solrcloud -t bioatlas/ala-solrcloud:v0.1 solrcloud
 
 up:
 	@echo "Starting services..."
@@ -334,6 +335,7 @@ push:
 	@docker push bioatlas/ala-dyntaxaindex:v0.4
 	@docker push bioatlas/ala-nameindex:v0.5
 	@docker push bioatlas/ala-sds:v0.1
+	@docker push bioatlas/ala-solrcloud:v0.1
 
 release: build push
 
