@@ -250,8 +250,8 @@ build:
 	@docker build -t bioatlas/ala-cas -t bioatlas/ala-cas:v0.3 cas2
 	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails
 	@docker build -t bioatlas/ala-apikey -t bioatlas/ala-apikey:v0.3 apikey
-	@docker build -t bioatlas/ala-cassandra -t bioatlas/ala-cassandra:v0.4 cassandra3
-	@docker build -t bioatlas/ala-solr -t bioatlas/ala-solr:v0.5 solr7
+	@docker build -t bioatlas/ala-cassandra -t bioatlas/ala-cassandra:v0.5 cassandra3
+	@docker build -t bioatlas/ala-solr -t bioatlas/ala-solr:v0.6 solr7
 	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.4 dyntaxa-index
 	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.5 nameindex
 #	@docker build -t bioatlas/ala-dashboard -t bioatlas/ala-dashboard:v0.3 dashboard
@@ -287,8 +287,8 @@ pull:
 	@docker pull bioatlas/ala-cas:v0.3
 	@docker pull bioatlas/ala-userdetails:v0.3
 	@docker pull bioatlas/ala-apikey:v0.3
-	@docker pull bioatlas/ala-cassandra:v0.4
-	@docker pull bioatlas/ala-solr:v0.5
+	@docker pull bioatlas/ala-cassandra:v0.5
+	@docker pull bioatlas/ala-solr:v0.6
 	@docker pull bioatlas/ala-dyntaxaindex:v0.4
 	@docker pull bioatlas/ala-nameindex:v0.5
 	@docker pull bioatlas/ala-sds:v0.1
@@ -329,8 +329,8 @@ push:
 	@docker push bioatlas/ala-cas:v0.3
 	@docker push bioatlas/ala-userdetails:v0.3
 	@docker push bioatlas/ala-apikey:v0.3
-	@docker push bioatlas/ala-cassandra:v0.4
-	@docker push bioatlas/ala-solr:v0.5
+	@docker push bioatlas/ala-cassandra:v0.5
+	@docker push bioatlas/ala-solr:v0.6
 	@docker push bioatlas/ala-dyntaxaindex:v0.4
 	@docker push bioatlas/ala-nameindex:v0.5
 	@docker push bioatlas/ala-sds:v0.1

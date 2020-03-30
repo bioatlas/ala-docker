@@ -19,7 +19,7 @@
 #SOLR_JAVA_HOME=""
 
 # Increase Java Heap as needed to support your indexing / query needs
-SOLR_HEAP="2g"
+SOLR_HEAP="$SOLR_HEAP"
 
 # Expert: If you want finer control over memory options, specify them directly
 # Comment out SOLR_HEAP if you are using this though, that takes precedence

@@ -161,8 +161,8 @@ USING_G1=$?
 # times. If in doubt, and if you do not particularly want to tweak, go with
 # 100 MB per physical CPU core.
 
-MAX_HEAP_SIZE="2G"
-HEAP_NEWSIZE="200M"
+MAX_HEAP_SIZE="$MAX_HEAP_SIZE"
+HEAP_NEWSIZE="$HEAP_NEWSIZE"
 
 # Set this to control the amount of arenas per-thread in glibc
 #export MALLOC_ARENA_MAX=4
