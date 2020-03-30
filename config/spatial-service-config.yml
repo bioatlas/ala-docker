@@ -18,8 +18,8 @@ biocacheUrl: "https://beta.bioatlas.se/ala-hub"
 openstreetmap:
   url: "https://tile.openstreetmap.org"
 
-#slave.enable: true
-#service.enable: true
+slave.enable: true
+service.enable: true
 
 batch_sampling_passwords: ''
 batch_sampling_points_limit: 1000000
@@ -34,8 +34,8 @@ shp2pgsql.path: "/usr/bin/shp2pgsql"
 gdal.dir: "/usr/bin"
 gdm.dir: "/data/spatial-data/modelling/gdm/DoGdm"
 
-slaveKey: ""
-serviceKey: ""
+slaveKey: $APIKEY
+serviceKey: $APIKEY
 
 # time between pushing status updates to the master for a task
 statusTime: "3000"

@@ -1,0 +1,130 @@
+version: '3.7'
+
+networks:
+  basnet:
+    external: true
+
+services:
+
+  cassandra-1:
+    image: bioatlas/ala-cassandra:v0.5
+    container_name: cassandra-1
+    deploy:
+      placement:
+        constraints: 
+          - node.hostname == bas-cassandra-1
+    environment:
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra-1
+      - CASSANDRA_LISTEN_ADDRESS=tasks.cassandra-1
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=31g
+      - HEAP_NEWSIZE=6400m
+    volumes:
+      - data_cassandra_1:/var/lib/cassandra
+    entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
+    networks:
+      - basnet
+    restart: always
+
+  cassandra-2:
+    image: bioatlas/ala-cassandra:v0.5
+    container_name: cassandra-2
+    deploy:
+      placement:
+        constraints: 
+          - node.hostname == bas-cassandra-2
+    environment:
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra-2
+      - CASSANDRA_LISTEN_ADDRESS=tasks.cassandra-2
+      - CASSANDRA_SEEDS=tasks.cassandra-1
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=31g
+      - HEAP_NEWSIZE=6400m
+    volumes:
+      - data_cassandra_2:/var/lib/cassandra
+    entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh" 
+    networks:
+      - basnet
+    restart: always
+    depends_on:
+      - cassandra-1
+
+  cassandra-3:
+    image: bioatlas/ala-cassandra:v0.5
+    container_name: cassandra-3
+    deploy:
+      placement:
+        constraints: 
+          - node.hostname == bas-cassandra-3
+    environment:
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra-3
+      - CASSANDRA_LISTEN_ADDRESS=tasks.cassandra-3
+      - CASSANDRA_SEEDS=tasks.cassandra-1
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=31g
+      - HEAP_NEWSIZE=6400m
+    volumes:
+      - data_cassandra_3:/var/lib/cassandra
+    entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
+    networks:
+      - basnet
+    restart: always
+    depends_on:
+      - cassandra-2
+
+  cassandra-4:
+    image: bioatlas/ala-cassandra:v0.5
+    container_name: cassandra-1
+    deploy:
+      placement:
+        constraints: 
+          - node.hostname == bas-cassandra-4
+    environment:
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra-4
+      - CASSANDRA_LISTEN_ADDRESS=tasks.cassandra-4
+      - CASSANDRA_SEEDS=tasks.cassandra-1
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=31g
+      - HEAP_NEWSIZE=6400m
+    volumes:
+      - data_cassandra_4:/var/lib/cassandra
+    entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
+    networks:
+      - basnet
+    restart: always
+    depends_on:
+      - cassandra-3
+
+volumes:
+  data_cassandra_1:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/datacluster/cassandra1"
+  data_cassandra_2:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/datacluster/cassandra2"
+  data_cassandra_3:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/datacluster/cassandra3"
+  data_cassandra_4:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/datacluster/cassandra4"

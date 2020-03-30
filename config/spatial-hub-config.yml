@@ -6,6 +6,7 @@ grails.cors.enabled: true
 
 googleAnalyticsId: ""
 google.apikey: "AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk"
+api_key: $APIKEY
 
 security:
   cas:
