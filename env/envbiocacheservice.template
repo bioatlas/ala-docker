@@ -1,0 +1,3 @@
+TOMCAT_HOST=records.bioatlas.se
+TOMCAT_CONTEXT_NAME=ws
+TOMCAT_CONTEXT_PATH=/ws
