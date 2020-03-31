@@ -1,5 +1,5 @@
-grails.serverURL: "https://beta.bioatlas.se/spatial-hub"
-grails.app.context: "/spatial-hub"
+grails.serverURL: "https://spatial.bioatlas.se"
+grails.app.context: ""
 grails.assets.bundle: false
 grails.assets.minifyJs: false
 grails.cors.enabled: true
@@ -14,16 +14,16 @@ security:
     uriFilterPattern: "/portal.*,,/,/alaAdmin,/alaAdmin.*"
     uriExclusionFilterPattern: "/portal/messages.*,/portal/sessionCache.*,/static.*,/assets.*"
     authenticateOnlyIfLoggedInFilterPattern: ""
-    appServerName: "https://beta.bioatlas.se"
+    appServerName: "https://spatial.bioatlas.se"
     casServerUrlPrefix: "https://auth.bioatlas.se/cas"
     loginUrl: "https://auth.bioatlas.se/cas/login"
     logoutUrl: "https://auth.bioatlas.se/cas/logout"
-    contextPath: "/spatial-hub"
+    contextPath: ""
     bypass: True
     disableCAS: True
     gateway: False
 
-autocompleteUrl: "https://beta.bioatlas.se/bie-index/search/auto.jsonp"
+autocompleteUrl: "https://species.bioatlas.se/ws/search/auto.jsonp"
 
 auth:
     admin_role: ROLE_ADMIN
@@ -34,29 +34,29 @@ app:
             userId: X-ALA-userId
 # Header and footer
 headerAndFooter:
-    baseURL: 'https://beta.bioatlas.se/static/bs3'
+    baseURL: 'https://static.bioatlas.se/bs3'
     version: '1'
 ala:
-  baseURL: "https://beta.bioatlas.se"
+  baseURL: "https://bioatlas.se"
 
 bie:
-  baseURL: "https://beta.bioatlas.se/ala-bie"
+  baseURL: "https://species.bioatlas.se"
   searchPath: "/search"
 
 bieService:
-    baseURL: "https://beta.bioatlas.se/bie-index"
+    baseURL: "https://species.bioatlas.se/ws"
 
 userdetails:
     baseUrl: "https://auth.bioatlas.se/userdetails"
 
 favicon:
-    url: "https://beta.bioatlas.se/wp-content/themes/atlas/img/favicon/favicon.ico"
+    url: "https://bioatlas.se/wp-content/themes/atlas/img/favicon/favicon.ico"
 
 layersService:
-    url: "https://beta.bioatlas.se/spatial-service"
+    url: "https://spatial.bioatlas.se/ws"
 
 lists:
-    url: "https://beta.bioatlas.se/specieslists"
+    url: "https://lists.bioatlas.se"
     threatenedSpeciesUrl: '/ws/speciesList/?isThreatened=eq:true&isAuthoritative=eq:true'
     invasiveSpeciesUrl: '/ws/speciesList/?isInvasive=eq:true&isAuthoritative=eq:true'
 #    facets: True
@@ -67,7 +67,7 @@ journalmap:
     url: "https://www.journalmap.org/"
 
 collections:
-    url: "https://beta.bioatlas.se/collectory"
+    url: "https://collections.bioatlas.se"
 
 sandbox:
     url: ""
@@ -81,10 +81,10 @@ gazField:
 userObjectsField:
 
 biocache:
-    url: "https://beta.bioatlas.se/ala-hub"
+    url: "https://records.bioatlas.se"
 
 biocacheService:
-    url: "https://beta.bioatlas.se/biocache-service"
+    url: "https://records.bioatlas.se/ws"
     #Facets to ignore in the biocache grouped/facets service
     default_facets_ignored: "data_resource_uid,data_provider_uid,species,collection_uid,institution_code_name,institution_uid,uncertainty"
     custom_facets:
@@ -93,10 +93,10 @@ biocacheService:
       Occurrence: ['Year;occurrence_year']
 
 sampling:
-    url: "https://beta.bioatlas.se/spatial-service"
+    url: "https://spatial.bioatlas.se/ws"
 
 geoserver:
-    url: "https://beta.bioatlas.se/geoserver"
+    url: "https://spatial.bioatlas.se/geoserver"
 
 flickr:
     url: "https://api.flickr.com/services/rest/?method="
@@ -136,7 +136,7 @@ speciesDotSize: 5
 speciesDotOpacity: 60
 
 logger:
-    baseUrl: "https://beta.bioatlas.se/logger-service/service"
+    baseUrl: "https://logger.bioatlas.se/service"
 
 phylolink:
     url: ""
