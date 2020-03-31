@@ -231,21 +231,21 @@ clean:
 build:
 	@echo "Building images..."
 	@docker build -t bioatlas/ala-biocachebackend -t bioatlas/ala-biocachebackend:v0.8 biocachebackend
-	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v0.6 biocachehub
-	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v0.5 collectory
-	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v0.5 biocacheservice
-	@docker build -t bioatlas/ala-loggerservice -t bioatlas/ala-loggerservice:v0.3 loggerservice
-	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v0.5 imageservice
-	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v0.4 imagestore
-	@docker build -t bioatlas/ala-api -t bioatlas/ala-api:v0.3 api
-	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v0.6 specieslists
-	@docker build -t bioatlas/ala-bieindex -t bioatlas/ala-bieindex:v0.7 bieindex
-	@docker build -t bioatlas/ala-biehub -t bioatlas/ala-biehub:v0.6 biehub
+	@docker build -t bioatlas/ala-biocachehub -t bioatlas/ala-biocachehub:v1.0 biocachehub
+	@docker build -t bioatlas/ala-collectory -t bioatlas/ala-collectory:v1.0 collectory
+	@docker build -t bioatlas/ala-biocacheservice -t bioatlas/ala-biocacheservice:v1.0 biocacheservice
+	@docker build -t bioatlas/ala-loggerservice -t bioatlas/ala-loggerservice:v1.0 loggerservice
+	@docker build -t bioatlas/ala-imageservice -t bioatlas/ala-imageservice:v1.0 imageservice
+	@docker build -t bioatlas/ala-imagestore -t bioatlas/ala-imagestore:v1.0 imagestore
+	@docker build -t bioatlas/ala-api -t bioatlas/ala-api:v1.0 api
+	@docker build -t bioatlas/ala-specieslists -t bioatlas/ala-specieslists:v1.0 specieslists
+	@docker build -t bioatlas/ala-bieindex -t bioatlas/ala-bieindex:v1.0 bieindex
+	@docker build -t bioatlas/ala-biehub -t bioatlas/ala-biehub:v1.0 biehub
 	@docker build -t bioatlas/ala-layersservice -t bioatlas/ala-layersservice:v0.4 layersservice
 	@docker build -t bioatlas/ala-layeringestion -t bioatlas/ala-layeringestion:v0.3 layeringestion
-	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v0.6 regions
-	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v0.7 spatialhub
-	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v0.8 spatialservice
+	@docker build -t bioatlas/ala-regions -t bioatlas/ala-regions:v1.0 regions
+	@docker build -t bioatlas/ala-spatialhub -t bioatlas/ala-spatialhub:v1.0 spatialhub
+	@docker build -t bioatlas/ala-spatialservice -t bioatlas/ala-spatialservice:v1.0 spatialservice
 	@docker build -t bioatlas/ala-geoserver -t bioatlas/ala-geoserver:v0.4 geoserver
 	@docker build -t bioatlas/ala-cas -t bioatlas/ala-cas:v0.3 cas2
 	@docker build -t bioatlas/ala-userdetails -t bioatlas/ala-userdetails:v0.3 userdetails
@@ -255,7 +255,7 @@ build:
 	@docker build -t bioatlas/ala-dyntaxaindex -t bioatlas/ala-dyntaxaindex:v0.4 dyntaxa-index
 	@docker build -t bioatlas/ala-nameindex -t bioatlas/ala-nameindex:v0.5 nameindex
 #	@docker build -t bioatlas/ala-dashboard -t bioatlas/ala-dashboard:v0.3 dashboard
-	@docker build -t bioatlas/ala-sds -t bioatlas/ala-sds:v0.1 sds
+	@docker build -t bioatlas/ala-sds -t bioatlas/ala-sds:v1.0 sds
 	@docker build -t bioatlas/ala-solrcloud -t bioatlas/ala-solrcloud:v0.1 solrcloud
 
 up:
@@ -269,21 +269,21 @@ stop:
 pull:
 	@echo "Downloading docker images for ALA modules..."
 	@docker pull bioatlas/ala-biocachebackend:v0.8
-	@docker pull bioatlas/ala-biocachehub:v0.6
-	@docker pull bioatlas/ala-collectory:v0.5
-	@docker pull bioatlas/ala-biocacheservice:v0.5
-	@docker pull bioatlas/ala-loggerservice:v0.3
-	@docker pull bioatlas/ala-imageservice:v0.5
-	@docker pull bioatlas/ala-imagestore:v0.4
-	@docker pull bioatlas/ala-api:v0.3
-	@docker pull bioatlas/ala-specieslists:v0.6
-	@docker pull bioatlas/ala-bieindex:v0.7
-	@docker pull bioatlas/ala-biehub:v0.6
+	@docker pull bioatlas/ala-biocachehub:v1.0
+	@docker pull bioatlas/ala-collectory:v1.0
+	@docker pull bioatlas/ala-biocacheservice:v1.0
+	@docker pull bioatlas/ala-loggerservice:v1.0
+	@docker pull bioatlas/ala-imageservice:v1.0
+	@docker pull bioatlas/ala-imagestore:v1.0
+	@docker pull bioatlas/ala-api:v1.0
+	@docker pull bioatlas/ala-specieslists:v1.0
+	@docker pull bioatlas/ala-bieindex:v1.0
+	@docker pull bioatlas/ala-biehub:v1.0
 	@docker pull bioatlas/ala-layersservice:v0.4
 	@docker pull bioatlas/ala-layeringestion:v0.3
-	@docker pull bioatlas/ala-regions:v0.6
-	@docker pull bioatlas/ala-spatialhub:v0.7
-	@docker pull bioatlas/ala-spatialservice:v0.8
+	@docker pull bioatlas/ala-regions:v1.0
+	@docker pull bioatlas/ala-spatialhub:v1.0
+	@docker pull bioatlas/ala-spatialservice:v1.0
 	@docker pull bioatlas/ala-geoserver:v0.4
 	@docker pull bioatlas/ala-cas:v0.3
 	@docker pull bioatlas/ala-userdetails:v0.3
@@ -292,7 +292,7 @@ pull:
 	@docker pull bioatlas/ala-solr:v0.6
 	@docker pull bioatlas/ala-dyntaxaindex:v0.4
 	@docker pull bioatlas/ala-nameindex:v0.5
-	@docker pull bioatlas/ala-sds:v0.1
+	@docker pull bioatlas/ala-sds:v1.0
 
 pull2:
 	@echo "Downloading other official docker images ..."
@@ -311,21 +311,21 @@ pull2:
 push:
 	@echo "Pushing images to Dockerhub..."
 	@docker push bioatlas/ala-biocachebackend:v0.8
-	@docker push bioatlas/ala-biocachehub:v0.6
-	@docker push bioatlas/ala-collectory:v0.5
-	@docker push bioatlas/ala-biocacheservice:v0.5
-	@docker push bioatlas/ala-loggerservice:v0.3
-	@docker push bioatlas/ala-imageservice:v0.5
-	@docker push bioatlas/ala-imagestore:v0.4
-	@docker push bioatlas/ala-api:v0.3
-	@docker push bioatlas/ala-specieslists:v0.6
-	@docker push bioatlas/ala-bieindex:v0.7
-	@docker push bioatlas/ala-biehub:v0.6
+	@docker push bioatlas/ala-biocachehub:v1.0
+	@docker push bioatlas/ala-collectory:v1.0
+	@docker push bioatlas/ala-biocacheservice:v1.0
+	@docker push bioatlas/ala-loggerservice:v1.0
+	@docker push bioatlas/ala-imageservice:v1.0
+	@docker push bioatlas/ala-imagestore:v1.0
+	@docker push bioatlas/ala-api:v1.0
+	@docker push bioatlas/ala-specieslists:v1.0
+	@docker push bioatlas/ala-bieindex:v1.0
+	@docker push bioatlas/ala-biehub:v1.0
 	@docker push bioatlas/ala-layersservice:v0.4
 	@docker push bioatlas/ala-layeringestion:v0.3
-	@docker push bioatlas/ala-regions:v0.6
-	@docker push bioatlas/ala-spatialhub:v0.7
-	@docker push bioatlas/ala-spatialservice:v0.8
+	@docker push bioatlas/ala-regions:v1.0
+	@docker push bioatlas/ala-spatialhub:v1.0
+	@docker push bioatlas/ala-spatialservice:v1.0
 	@docker push bioatlas/ala-geoserver:v0.4
 	@docker push bioatlas/ala-cas:v0.3
 	@docker push bioatlas/ala-userdetails:v0.3
@@ -334,7 +334,7 @@ push:
 	@docker push bioatlas/ala-solr:v0.6
 	@docker push bioatlas/ala-dyntaxaindex:v0.4
 	@docker push bioatlas/ala-nameindex:v0.5
-	@docker push bioatlas/ala-sds:v0.1
+	@docker push bioatlas/ala-sds:v1.0
 	@docker push bioatlas/ala-solrcloud:v0.1
 
 release: build push
