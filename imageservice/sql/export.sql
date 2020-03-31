@@ -6,7 +6,7 @@ CREATE OR REPLACE FUNCTION export_images() RETURNS void AS $$
             select
             data_resource_uid AS dataResourceUid,
             split_part(original_filename, '||', 2) AS occurrenceID,
-            CONCAT( 'https://beta.bioatlas.se/images/image/proxyImageThumbnailLarge?imageId=', image_identifier) AS identifier,
+            CONCAT( 'https://bioatlas.se/images/image/proxyImageThumbnailLarge?imageId=', image_identifier) AS identifier,
             creator AS creator,
             date_taken AS created,
             title AS title,
@@ -14,7 +14,7 @@ CREATE OR REPLACE FUNCTION export_images() RETURNS void AS $$
             license AS license,
             rights AS rights,
             rights_holder AS rightsHolder,
-            CONCAT('https://beta.bioatlas.se/images/image/details/', image_identifier) AS "references"
+            CONCAT('https://bioatlas.se/images/image/details/', image_identifier) AS "references"
             from image
             order by data_resource_uid
         )

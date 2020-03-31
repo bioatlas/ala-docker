@@ -10,11 +10,15 @@ RUN rm -r ${CATALINA_HOME}/webapps/ROOT \
 
 # service deployment section
 RUN mkdir -p /data \
+  /data/image-service/setup \
   /data/image-service/config \
   /data/image-service/store \
   /data/image-service/incoming \
-  /data/image-service/bin/imgcnv
+  /data/image-service/exports \
+  /data/image-service/bin/imgcnv \
+  /var/log/atlas/image-service
 
+COPY config/logback.groovy /data/image-service/config/
 RUN chmod +rw /data/image-service/store
 
 RUN mkdir -p $CATALINA_HOME/webapps-ala
