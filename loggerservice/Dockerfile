@@ -1,15 +1,27 @@
 FROM tomcat:7-jre8-alpine
 
+
+RUN rm -r ${CATALINA_HOME}/webapps/ROOT \
+    && rm -r ${CATALINA_HOME}/webapps/docs \
+    && rm -r ${CATALINA_HOME}/webapps/examples \
+    && rm -r ${CATALINA_HOME}/webapps/host-manager \
+    && rm -r ${CATALINA_HOME}/webapps/manager
+
 # logger-service deployment section
 
 RUN mkdir -p /data \
 	/data/logger/config
 
-COPY logger-service.war $CATALINA_HOME/webapps/
+RUN mkdir -p $CATALINA_HOME/webapps-ala
+COPY logger-service.war $CATALINA_HOME/webapps-ala/
+COPY context.xml /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml
+COPY context.xml /tmp/context.xml
 
 ENV \
-	BUILD_DEPS="gettext" \
-	RUNTIME_DEPS="libintl"
+    BUILD_DEPS="gettext" \
+    RUNTIME_DEPS="libintl" \
+    TOMCAT_CONTEXT_NAME="ROOT" \
+    TOMCAT_CONTEXT_PATH=""
 
 RUN \
     apk add --update $RUNTIME_DEPS && \
