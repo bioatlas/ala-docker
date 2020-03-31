@@ -644,11 +644,151 @@ footer {background-color: #fff;}
 .footer-list {clear: both;border-top: 1px solid #e2e5e8;padding: 20px 0;margin: 20px 0 0;}
 .footer-item {float: left;margin-right: 20px;height: 24px;line-height: 24px;}
 .footer-item-status {margin-right: 0;float: right;}
-.footer-bonus-brands a {display: inline-block;background: url('../img/footer-bonus-logos-mono.png') no-repeat;overflow: hidden;text-indent: -9999px;text-align: left;}
+.footer-bonus-brands a {display: inline-block;background: url('../img/logos/GBIF-grayscale.png') no-repeat;overflow: hidden;text-indent: -9999px;text-align: left;}
 .footer-bonus-brands #ncris {background-position: -5px -0px; width: 152px; height: 60px; margin: 20px 40px 75px 0;}
 .footer-bonus-brands #csiro {background-position: -5px -132px; width: 100px; height: 100px; margin: 5px 40px 60px 0;}
-.footer-bonus-brands #gbif {background-position: -5px -65px; width: 151px; height: 62px; margin: 20px 40px 75px 0;}
+.footer-bonus-brands #gbif {background-position: -5px -65px; width: 100px; height: 79px; margin: 10px 0px 10px 0;}
 .footer-bonus-brands #bas {background: url('../img/logos.png') no-repeat;overflow: hidden;text-indent: -9999px;text-align: left; background-position: -0px -0px;width: 770px; height: 79px; margin: 20px 40px 72px 0;}
+
+.footer-bonus-brands a {
+    display: inline-block;
+    background: url('../img/logos/GBIF-grayscale.png') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+}
+
+.footer-bonus-brands #gbif {
+    background: url('../img/logos/GBIF-grayscale.png') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 90px;
+    height: 79px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #su {
+    background: url('../img/logos/SU_LOGO_ENG.jpg') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 90px;
+    height: 79px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #nrm {
+    background: url('../img/logos/NRM_bw.jpg') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 88px;
+    height: 79px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #uu {
+    background: url('../img/logos/UU_logo.jpg') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 83px;
+    height: 79px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #ki {
+    background: url('../img/logos/Karolinska-Institute.png') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 79px;
+    height: 79px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #lu {
+    background: url('../img/logos/lund_university_logo_2.jpg') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 59px;
+    height: 79px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #liu {
+    background: url('../img/logos/linnaeus-university-lnu.png') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 88px;
+    height: 79px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #kth {
+    background: url('../img/logos/Kth_logo.svg.png') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 88px;
+    height: 79px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #ala {
+    background: url('../img/logos/ALA_logobyline_col.jpg') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 95px;
+    height: 79px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #vr {
+    background: url('../img/logos/vetenskapsradet_logo.png') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 90px;
+    height: 75px;
+    margin: 10px 0px 10px 0px;
+}
+
+.footer-bonus-brands #sll {
+    background: url('../img/logos/scilifelab_logo.jpg') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 94px;
+    height: 27px;
+    margin: 10px 0px 0px 0px;
+}
+
+.footer-bonus-brands #slw {
+    background: url('../img/logos/swedish_lifewatch.png') no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    background-position: -0px -0px;
+    width: 97px;
+    height: 30px;
+    margin: 10px 0px 10px 0px;
+}
 .footer-container {padding: 30px;}
 /*hr.footer-border {margin: -30px 0 20px 0;border-top: 1px solid #e2e5e8;}*/
 hr.footer-border {margin: 30px 0 30px 0; border-top: 2px solid #333;}

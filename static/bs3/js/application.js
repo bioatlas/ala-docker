@@ -1,7 +1,7 @@
 // initialise plugins
 $(function(){
 
-    var autocompleteUrl = 'https://beta.bioatlas.se/bie-index/search/auto.jsonp';
+    var autocompleteUrl = 'https://species.bioatlas.se/ws/search/auto.jsonp';
 
     if(typeof BIE_VARS != 'undefined' && BIE_VARS.autocompleteUrl){
         autocompleteUrl = BIE_VARS.autocompleteUrl;
