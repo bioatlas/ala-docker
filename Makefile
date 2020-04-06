@@ -176,7 +176,10 @@ dotfiles: secrets htpasswd
 			envsubst < env/envspatial.template > env/.envspatial && \
 			envsubst < env/layersservice.template > env/.envlayersservice && \
 			envsubst < env/envcas.template > env/.envcas && \
-			envsubst < env/envapikey.template > env/.envapikey'
+			envsubst < env/envapikey.template > env/.envapikey \
+			envsubst < env/envbiocachehub.template > env/.envbiocachehub \
+			envsubst < env/envbiocacheservice.template > env/.envbiocacheservice \
+			envsubst < env/envregions.template > env/.envregions'
 	touch dotfiles
 
 htpasswd:
