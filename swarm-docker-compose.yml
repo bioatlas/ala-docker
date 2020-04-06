@@ -108,7 +108,7 @@ services:
   webserver:
     image: nginx:alpine
     environment:
-      - VIRTUAL_HOST=beta.bioatlas.se,auth.bioatlas.se
+      - VIRTUAL_HOST=bioatlas.se,static.bioatlas.se,regions.bioatlas.se,collections.bioatlas.se,records.bioatlas.se,logger.bioatlas.se,images.bioatlas.se,species.bioatlas.se,api.bioatlas.se,sds.bioatlas.se,lists.bioatlas.se,spatial.bioatlas.se,auth.bioatlas.se
     configs:
       - source: config_webserver
         target: /etc/nginx/conf.d/app.conf
@@ -146,7 +146,7 @@ services:
       - HEAP_NEWSIZE=6400m
 
   biocacheservice:
-    image: bioatlas/ala-biocacheservice:v0.5
+    image: bioatlas/ala-biocacheservice:v1.0
     depends_on:
       - cassandradb
       - solr
@@ -154,6 +154,7 @@ services:
       JAVA_OPTS: -Xmx8g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     volumes:
       - data_nameindex:/data/lucene/namematching
+    env_file: ./env/.envbiocacheservice
     configs:
       - source: config_biocache
         target: /data/biocache/config/biocache-config.properties
@@ -165,11 +166,13 @@ services:
       placement:
         constraints:
           - node.hostname == bas-main
+    command: /bin/sh -c "rm /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml && envsubst < /tmp/context.xml > /usr/local/tomcat/conf/Catalina/localhost/ws.xml && catalina.sh run"
 
   biocachehub:
-    image: bioatlas/ala-biocachehub:v0.6
+    image: bioatlas/ala-biocachehub:v1.0
     depends_on:
       - biocacheservice
+    env_file: ./env/.envbiocachehub
     environment:
       JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     configs:
@@ -179,7 +182,7 @@ services:
       - basnet
 
   collectory:
-    image: bioatlas/ala-collectory:v0.5
+    image: bioatlas/ala-collectory:v1.0
     depends_on:
       - mysqldb
     environment:
@@ -247,7 +250,7 @@ services:
           - node.hostname == bas-solr
 
   loggerservice:
-    image: bioatlas/ala-loggerservice:v0.3
+    image: bioatlas/ala-loggerservice:v1.0
     depends_on:
       - mysqldblogger
     environment:
@@ -281,7 +284,7 @@ services:
       - basnet
 
   imageservice:
-    image: bioatlas/ala-imageservice:v0.5
+    image: bioatlas/ala-imageservice:v1.0
     depends_on:
       - psqldbimage
     environment:
@@ -308,7 +311,7 @@ services:
       - basnet
 
   imagestore:
-    image: bioatlas/ala-imagestore:v0.4
+    image: bioatlas/ala-imagestore:v1.0
     volumes:
       - data_images:/data/image-service/store
     networks:
@@ -323,7 +326,7 @@ services:
       - basnet
 
   apiservice:
-    image: bioatlas/ala-api:v0.3
+    image: bioatlas/ala-api:v1.0
     depends_on:
       - mysqldbapi
     environment:
@@ -372,7 +375,7 @@ services:
       - basnet
 
   specieslists:
-    image: bioatlas/ala-specieslists:v0.6
+    image: bioatlas/ala-specieslists:v1.0
     environment:
       JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file: ./env/.envspecieslists
@@ -396,7 +399,7 @@ services:
       - basnet
 
   bieindex:
-    image: bioatlas/ala-bieindex:v0.7
+    image: bioatlas/ala-bieindex:v1.0
     environment:
       - JAVA_OPTS=-Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     configs:
@@ -408,7 +411,7 @@ services:
       - basnet
 
   biehub:
-    image: bioatlas/ala-biehub:v0.6
+    image: bioatlas/ala-biehub:v1.0
     environment:
       - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     configs:
@@ -475,9 +478,10 @@ services:
 #        condition: none
 
   regions:
-    image: bioatlas/ala-regions:v0.6
+    image: bioatlas/ala-regions:v1.0
     environment:
       - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envregions
     configs:
       - source: config_regions
         target: /data/regions/config/regions-config.properties
@@ -512,7 +516,7 @@ services:
 #      - basnet
 
   spatialhub:
-    image: bioatlas/ala-spatialhub:v0.7
+    image: bioatlas/ala-spatialhub:v1.0
     environment:
       - JAVA_OPTS=-Xmx16g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file:
@@ -531,7 +535,7 @@ services:
       - basnet
 
   spatialservice:
-    image: bioatlas/ala-spatialservice:v0.8
+    image: bioatlas/ala-spatialservice:v1.0
     environment:
       - JAVA_OPTS=-Xmx31g -Xms128m -Xss1024k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
     env_file:
@@ -613,7 +617,7 @@ services:
 #      - basnet
 
   sds:
-    image: bioatlas/ala-sds:v0.1
+    image: bioatlas/ala-sds:v1.0
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     volumes:
