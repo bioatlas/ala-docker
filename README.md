@@ -1,3 +1,7 @@
+# Branch of the ala-docker deployed at NRM, decommissioned in April 2020.
+
+# Check the master or the develop branch
+
 # Docker version of Atlas of Living Australia
 
 This is currently Work In Progress! Beware!
