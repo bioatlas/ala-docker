@@ -13,7 +13,7 @@ services:
       - ./nginx-proxy-certs:/etc/nginx/certs:ro
       - ./nginx-proxy.conf:/etc/nginx/conf.d/nginx-proxy.conf:ro
     environment:
-      - DNSDOCK_ALIAS=bioatlas.se
+      - DNSDOCK_ALIAS=bioatlas.se,www.bioatlas.se
 
   #fs_db:
   #  image: tianon/true
@@ -79,7 +79,7 @@ services:
     image: bioatlas/ala-nginx:v0.1
     container_name: webserver
     environment:
-      - VIRTUAL_HOST=bioatlas.se,uptime.bioatlas.se
+      - VIRTUAL_HOST=www.bioatlas.se,bioatlas.se,uptime.bioatlas.se
     links:
       - biocachehub
       - biocacheservice
@@ -270,7 +270,7 @@ services:
       - data_mirroreum:/home/rstudio
 
   shiny:
-    image: raquamaps/shiny:v0.1.6
+    image: raquamaps/shiny:v0.1.7
     container_name: shiny
     environment:
       - VIRTUAL_HOST=birdringing.bioatlas.se
