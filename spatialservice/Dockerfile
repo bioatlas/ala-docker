@@ -16,8 +16,21 @@ RUN mkdir -p /data/spatial-service/config \
   /data/spatial-data/public \
   /data/tmp/tomcat-tmp
 
+RUN mkdir -p \
+  /data/ala/data/alaspatial \
+  /data/ala/runtime/output/maxent \
+  /data/ala/runtime/files \
+  /data/ala/runtime/output \
+  /data/ala/data/layers/analysis
+
+RUN mkdir -p \
+  /data/spatial-data/modelling/gdm \
+  /data/spatial-data/modelling/maxent
+
 COPY log4j.properties /data/spatial-service/config/log4j.properties
 COPY spatial-service.war $CATALINA_HOME/webapps/ws.war
+COPY files.xml /usr/local/tomcat/conf/Catalina/localhost/files.xml
+COPY maxent.jar /data/spatial-data/modelling/maxent/maxent.jar
 
 VOLUME /data/spatial-data
 
