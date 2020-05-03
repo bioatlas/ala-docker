@@ -22,7 +22,7 @@ URL_BIEHUB = https://github.com/bioatlas/ala-bie/releases/download/bas-1.4.19/al
 URL_BIEINDEX = https://github.com/bioatlas/bie-index/releases/download/bas-1.4.8/bie-index-1.4.8.war
 URL_SPECIESLIST = https://github.com/bioatlas/specieslist-webapp/releases/download/bas-3.3/specieslist-webapp-3.3.war
 #URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/master.zip
-URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/beta.zip
+URL_BIOATLAS_WORDPRESS_THEME = https://github.com/bioatlas/bioatlas-wordpress-theme/archive/bas2020.zip
 URL_LAYERS_SERVICE = https://github.com/bioatlas/layers-service/releases/download/2.1-SNAPSHOT/layers-service.war
 URL_LAYER_INGESTION = http://nexus.ala.org.au/service/local/repositories/snapshots/content/au/org/ala/layer-ingestion/1.0-SNAPSHOT/layer-ingestion-1.0-20160224.160123-13-bin.zip
 URL_REGIONS = https://github.com/bioatlas/regions/releases/download/bas-3.3.4/regions-3.3.4.war
@@ -137,10 +137,10 @@ init: theme-dl
 
 theme-dl:
 	@echo "Downloading bioatlas wordpress theme..."
-	@test -f wordpress/themes/atlas/beta.zip || \
+	@test -f wordpress/themes/atlas/bas2020.zip || \
 		mkdir -p wordpress/themes/atlas && \
-		wget -q --show-progress -O wordpress/themes/atlas/beta.zip $(URL_BIOATLAS_WORDPRESS_THEME) && \
-		unzip -q -o wordpress/themes/atlas/beta.zip -d wordpress/themes/atlas/
+		wget -q --show-progress -O wordpress/themes/atlas/bas2020.zip $(URL_BIOATLAS_WORDPRESS_THEME) && \
+		unzip -q -o wordpress/themes/atlas/bas2020.zip -d wordpress/themes/atlas/
 
 secrets:
 	docker run --rm -it -v $(PWD):/tmp -u $(UID):$(GID) httpd:alpine bash -c \
