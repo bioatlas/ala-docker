@@ -36,6 +36,7 @@ RUN mkdir -p $CATALINA_HOME/webapps-ala
 COPY biocache-service.war $CATALINA_HOME/webapps-ala/
 COPY context.xml /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml
 COPY context.xml /tmp/context.xml
+COPY biocache-download.xml /usr/local/tomcat/conf/Catalina/localhost/biocache-download.xml
 
 COPY server.xml $CATALINA_HOME/conf/server.xml
 
