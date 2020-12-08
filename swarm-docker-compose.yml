@@ -14,9 +14,9 @@ secrets:
 
 configs:
   config_nginx-proxy:
-    file: ./nginx-proxy/nginx-proxy.conf
-  config_webserver:
-    file: ./webserver/app.conf
+    file: ./webserver/nginx-proxy.conf
+  config_ala-cors:
+    file: ./webserver/ala-cors.conf
   config_biocache:
     file: ./config/biocache-config.properties
   config_logger-client:
@@ -43,12 +43,6 @@ configs:
     file: ./config/ala-bie-config.properties
   config_postgis:
     file: ./postgis/pg_hba.conf
-#  config_layers-service:
-#    file: ./config/layers-service-config.properties
-#  config_layers-store:
-#    file: ./config/layers-store-config.properties
-#  config_layers-data:
-#    file: ./config/layers-data.xml
   config_regions:
     file: ./config/regions-config.properties
   config_regions_menu-config:
@@ -90,6 +84,7 @@ services:
         mode: host
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
+      - ./webserver/conf.d:/etc/nginx/conf.d
     secrets:
       - source: bioatlas.se.crt
         target: /etc/nginx/certs/bioatlas.se.crt
@@ -97,24 +92,9 @@ services:
         target: /etc/nginx/certs/bioatlas.se.key
     configs:
       - source: config_nginx-proxy
-        target: /etc/nginx/conf.d/nginx-proxy.conf
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
-    networks:
-      - basnet
-
-  webserver:
-    image: nginx:alpine
-    environment:
-      - VIRTUAL_HOST=bioatlas.se,static.bioatlas.se,regions.bioatlas.se,collections.bioatlas.se,records.bioatlas.se,logger.bioatlas.se,images.bioatlas.se,species.bioatlas.se,api.bioatlas.se,sds.bioatlas.se,lists.bioatlas.se,spatial.bioatlas.se,auth.bioatlas.se
-    configs:
-      - source: config_webserver
-        target: /etc/nginx/conf.d/app.conf
-    secrets:
-      - source: htpasswd
-        target: /etc/nginx/htpasswd
+        target: /etc/nginx/proxy.conf
+      - source: config_ala-cors
+        target: /etc/nginx/ala-cors.conf
     deploy:
       placement:
         constraints:
@@ -129,21 +109,6 @@ services:
       - db_data_collectory:/var/lib/mysql
     networks:
       - basnet
-
-  cassandradb:
-    image: bioatlas/ala-cassandra:v0.5
-    volumes:
-      - db_data_cassandra:/var/lib/cassandra
-    entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
-    networks:
-      - basnet
-    deploy:
-      placement:
-        constraints:
-          - node.hostname == bas-cassandra
-    environment:
-      - MAX_HEAP_SIZE=31g
-      - HEAP_NEWSIZE=6400m
 
   biocacheservice:
     image: bioatlas/ala-biocacheservice:v1.0
@@ -267,7 +232,7 @@ services:
     image: mysql:5.7
     env_file: ./env/.envlogger
     volumes:
-      - ./loggerservice/db:/docker-entrypoint-initdb.d
+#      - ./loggerservice/db:/docker-entrypoint-initdb.d
       - db_data_loggerservice:/var/lib/mysql
     networks:
       - basnet
@@ -363,10 +328,10 @@ services:
     volumes:
 #      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
       - data_wordpress:/var/www/html
-      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-beta:/var/www/html/wp-content/themes/atlas
-    configs:
-      - source: config_wordpress
-        target: /usr/src/wordpress/wp-config-sample.php
+      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-bas2020:/var/www/html/wp-content/themes/atlas
+#    configs:
+#      - source: config_wordpress
+#        target: /usr/src/wordpress/wp-config-sample.php
     deploy:
       placement:
         constraints:
@@ -393,7 +358,7 @@ services:
     env_file: ./env/.envspecieslists
     command: --sql_mode=""
     volumes:
-      - ./specieslists/db:/docker-entrypoint-initdb.d
+ #     - ./specieslists/db:/docker-entrypoint-initdb.d
       - db_data_specieslists:/var/lib/mysql
     networks:
       - basnet
@@ -426,7 +391,7 @@ services:
     env_file: ./env/.envpostgis
     volumes:
       - db_data_postgis:/var/lib/postgresql/data
-      - ./postgis/layersdb.sql:/docker-entrypoint-initdb.d/layersdb.sql
+#      - ./postgis/layersdb.sql:/docker-entrypoint-initdb.d/layersdb.sql
     configs:
       - source: config_postgis
         target: /etc/postgresql/9.6/main/pg_hba.conf
@@ -551,9 +516,11 @@ services:
 
   mysqldbcas:
     image: mysql:5.7
+    environment:
+      LANG: C.UTF-8
     env_file: ./env/.envcas
     volumes:
-      - ./cas2/db:/docker-entrypoint-initdb.d
+    #  - ./cas2/db:/docker-entrypoint-initdb.d
       - db_data_mysqldbcas:/var/lib/mysql
     networks:
       - basnet
@@ -587,7 +554,7 @@ services:
     image: mysql:5.7
     env_file: ./env/.envapikey
     volumes:
-      - ./apikey/db:/docker-entrypoint-initdb.d
+#      - ./apikey/db:/docker-entrypoint-initdb.d
       - db_data_mysqldbapikey:/var/lib/mysql
     networks:
       - basnet
@@ -617,7 +584,7 @@ services:
 #      - basnet
 
   sds:
-    image: bioatlas/ala-sds:v1.0
+    image: bioatlas/ala-sds:v1.1
     environment:
       - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
     volumes:
