@@ -571,17 +571,21 @@ services:
     networks:
       - basnet
 
-#  dashboard:
-#    image: bioatlas/ala-dashboard:v0.3
-#    environment:
-#      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
-#    configs:
-#      - source: config_dashboard
-#        target: /data/dashboard/config/dashboard-config.properties
-#    volumes:
-#      - ./dashboard/data.json:/data/dashboard/data.json:rw
-#    networks:
-#      - basnet
+  dashboard:
+    image: bioatlas/ala-dashboard:v1.0
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    configs:
+      - source: config_dashboard
+        target: /data/dashboard/config/dashboard-config.properties
+    volumes:
+      - ./dashboard/data.json:/data/dashboard/data.json:rw
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - basnet
 
   sds:
     image: bioatlas/ala-sds:v1.1
