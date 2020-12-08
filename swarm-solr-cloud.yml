@@ -11,34 +11,10 @@ services:
     restart: always
     environment:
       ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888
     volumes:
       - data_zookeeper1:/data
       - data_zookeeperlog1:/datalog
-    networks:
-      - basnet
-
-  zookeeper2:
-    image: zookeeper:3.4.14
-    restart: always
-    environment:
-      ZOO_MY_ID: 2
-      ZOO_SERVERS: server.1=zookeeper1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zookeeper3:2888:3888
-    volumes:
-      - data_zookeeper2:/data
-      - data_zookeeperlog2:/datalog
-    networks:
-      - basnet
-
-  zookeeper3:
-    image: zookeeper:3.4.14
-    restart: always
-    environment:
-      ZOO_MY_ID: 3
-      ZOO_SERVERS: server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=0.0.0.0:2888:3888
-    volumes:
-      - data_zookeeper3:/data
-      - data_zookeeperlog3:/datalog
     networks:
       - basnet
 
@@ -47,7 +23,7 @@ services:
     restart: always
     environment:
       - SOLR_HEAP=31g
-      - ZK_HOST=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      - ZK_HOST=zookeeper1:2181
       - SOLR_HOST=solr1
     volumes:
       - data_solr1:/opt/solr
@@ -64,7 +40,7 @@ services:
     restart: always
     environment:
       - SOLR_HEAP=31g
-      - ZK_HOST=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      - ZK_HOST=zookeeper1:2181
       - SOLR_HOST=solr2
     volumes:
       - data_solr2:/opt/solr
@@ -81,7 +57,7 @@ services:
     restart: always
     environment:
       - SOLR_HEAP=31g
-      - ZK_HOST=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      - ZK_HOST=zookeeper1:2181
       - SOLR_HOST=solr3
     volumes:
       - data_solr3:/opt/solr
@@ -98,7 +74,7 @@ services:
     restart: always
     environment:
       - SOLR_HEAP=31g
-      - ZK_HOST=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      - ZK_HOST=zookeeper1:2181
       - SOLR_HOST=solr4
     volumes:
       - data_solr4:/opt/solr
@@ -121,7 +97,7 @@ services:
 #      - "-exc"
 #      - "wait-for-solr.sh --max-attempts 10 --wait-seconds 5 --solr-url http://$$SOLR_HOST:8983/; 
 #         solr zk upconfig -z zookeeper1:2181 -n biocache -d /opt/solr/server/solr/configsets/biocache/conf;
-#         solr create -c biocache -p 8983 -d biocache -shards 4 -replicationFactor 2;"
+#         solr create -c biocache -p 8983 -d biocache -shards 4 -replicationFactor 1;"
 #    networks:
 #      - basnet
 #    deploy:
@@ -137,36 +113,12 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=beta.bioatlas.se,rw
       device: ":/mnt/datacluster/zookeeper1"
-  data_zookeeper2:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/datacluster/zookeeper2"
-  data_zookeeper3:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/datacluster/zookeeper3"
   data_zookeeperlog1:
     driver: local
     driver_opts:
       type: nfs
       o: nfsvers=4,addr=beta.bioatlas.se,rw
       device: ":/mnt/datacluster/zookeeperlog1"
-  data_zookeeperlog2:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/datacluster/zookeeperlog2"
-  data_zookeeperlog3:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/datacluster/zookeeperlog3"
   data_solr1:
     driver: local
     driver_opts:
