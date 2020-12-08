@@ -1,0 +1,40 @@
+{
+  "filters": [
+    "-record_type:PreservedSpecimen"
+  ],
+  "ranks": [
+    {
+      "rank": "phylum",
+      "idField": null,
+      "nameField": "phylum"
+    },
+    {
+      "rank": "class",
+      "idField": null,
+      "nameField": "class"
+    },
+    {
+      "rank": "order",
+      "idField": null,
+      "nameField": "order"
+    },
+    {
+      "rank": "family",
+      "idField": null,
+      "nameField": "family"
+    },
+    {
+      "rank": "genus",
+      "idField": "genus_guid",
+      "nameField": "genus"
+    },
+    {
+      "rank": "species",
+      "idField": "species_guid",
+      "nameField": "taxon_name"
+    }
+  ],
+  "lists": [
+  ],
+  "imageFields":"taxon_concept_lsid,kingdom,phylum,class,order,family,genus,species,taxon_name,image_url,data_resource_uid"
+}

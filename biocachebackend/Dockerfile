@@ -1,25 +1,13 @@
-FROM openjdk:7-alpine
+FROM openjdk:8-alpine
 
 # biocache-properties section
 
 RUN mkdir -p /data/biocache/layers /data/biocache/config
 
-#COPY biocache-properties-files/biocache-config.properties \
-#	/data/biocache/config/biocache-config.properties
-
-#RUN chmod 0644 /data/biocache/config/biocache-config.properties
-
-COPY biocache-properties-files/sds-layers.tgz \
-	/data/biocache/layers/sds-layers.tgz
-
-RUN tar zxvf /data/biocache/layers/sds-layers.tgz -C /data/biocache/layers/ && \
-	rm -f /data/biocache/layers/sds-layers.tgz
-
 COPY biocache-properties-files/subgroups.json \
 	/data/biocache/config/subgroups.json
 
 RUN mkdir -m 0774 -p \
-	/data/ala/layers/ready/shape \
 	/data/biocache-load \
 	/data/biocache-media \
 	/data/biocache-upload \
@@ -27,23 +15,19 @@ RUN mkdir -m 0774 -p \
 	/data/cache \
 	/data/tmp \
 	/data/offline/exports \
-	/data/tool
+	/data/tool \
+	/data/lucene
 
 #biocache-cli deployment
 
-RUN mkdir -p /usr/lib/biocache && \
-	rm -Rf /usr/lib/biocache/lib /usr/lib/biocache/*.jar
-
+RUN mkdir -p /usr/lib/biocache
 COPY biocache-cli-files/log4j.xml /usr/lib/biocache/log4j.xml
-COPY biocache-cli-files/subgroups.json /data/biocache/config/subgroups.json
+COPY biocache-cli-files/vocab /data/biocache/vocab
 COPY biocache.zip /usr/lib/biocache/biocache.zip
 RUN unzip /usr/lib/biocache/biocache.zip -d /usr/lib/biocache/
-COPY biocache-cli-files/biocache.sh /usr/lib/biocache/biocache
-
-RUN chmod 777 /usr/lib/biocache/biocache && \
-	mv /usr/lib/biocache/biocache-store-*.jar /usr/lib/biocache/biocache.jar && \
-	cat /usr/lib/biocache/biocache.jar >> /usr/lib/biocache/biocache && \
-	ln -s /usr/lib/biocache/biocache /usr/bin/biocache
+RUN ln -s /usr/lib/biocache/biocache-store-2.4.5/bin/biocache /usr/bin/biocache
+COPY biocache-cli-files/environmentSetupFile.sh /usr/lib/biocache/biocache-store-2.4.5/bin/environmentSetupFile.sh
+RUN chmod 755 /usr/lib/biocache/biocache-store-2.4.5/bin/environmentSetupFile.sh
 
 RUN mkdir -m 777 -p \
     /data/biocache-reindex/solr-template \

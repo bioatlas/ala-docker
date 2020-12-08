@@ -27,4 +27,3 @@ restore:
 		sh -c "cd /var/www/html && tar xvf /tmp/wordpress-files-latest.tgz"
 
 	gunzip -c wordpress-db-latest.sql.gz | docker exec -i mysqldbwordpress mysql -u $(MYSQL_USER) -p'$(MYSQL_PASSWORD)' -h 127.0.0.1 $(MYSQL_DATABASE)
-

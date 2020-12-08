@@ -1,0 +1,51 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-1d13221b:152efd6efe4:-7ff8</id>
+  <name>Distributions</name>
+  <nativeName>Distributions</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-1d13221b:152efd6efe4:-7ffe</id>
+  </namespace>
+  <title>Distributions</title>
+  <keywords>
+    <string>Distributions</string>
+    <string>features</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>Distributions</name>
+        <sql>select * from distributions where geom_idx= %s% limit 1
+</sql>
+        <escapeSql>false</escapeSql>
+        <parameter>
+          <name>s</name>
+          <defaultValue>1</defaultValue>
+          <regexpValidator>^[\w\d\s]+$</regexpValidator>
+        </parameter>
+      </virtualTable>
+    </entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-1d13221b:152efd6efe4:-7ffd</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

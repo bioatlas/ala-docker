@@ -1,0 +1,91 @@
+grails:
+    serverURL: 'https://images.bioatlas.se'
+server:
+    contextPath: ''
+serverName: 'https://images.bioatlas.se'
+
+hibernate:
+    dialect: org.hibernate.dialect.PostgreSQLDialect
+
+dataSource:
+    url: jdbc:postgresql://psqldbimage/$POSTGRES_DB?autoReconnect=true&connectTimeout=0&useUnicode=true&characterEncoding=UTF-8
+    username: $POSTGRES_USER
+    password: $POSTGRES_PASSWORD
+    dbCreate: update
+    driverClassName: org.postgresql.Driver
+
+security:
+    cas:
+        casServerName: 'https://auth.bioatlas.se'
+        appServerName: 'https://images.bioatlas.se'
+        casServerUrlPrefix: 'https://auth.bioatlas.se/cas'
+        loginUrl: 'https://auth.bioatlas.se/cas/login'
+        logoutUrl: 'https://auth.bioatlas.se/cas/logout'
+        bypass: false
+        disableCAS: false
+        contextPath: ''
+
+imageservice:
+    imagestore:
+        root: '/data/image-service/store'
+        inbox: '/data/image-service/incoming'
+    apache:
+        root: 'https://images.bioatlas.se/store/'
+        # space separated list
+        multiple_roots: 'https://images.bioatlas.se/store/'
+    exportDir: '/data/image-service/exports'
+    thumbnail:
+        size: 300
+
+skin:
+    layout: main
+    fluidLayout: false
+    favicon: "https://bioatlas.se/wp-content/themes/atlas/img/favicon/favicon.ico"
+    orgNameLong: Bioatlas Sweden
+    orgNameShort: Bioatlas
+    homeUrl: "https://bioatlas.se"
+
+swagger:
+    info:
+        description: "API Documentation for Image Services"
+        version: "2.0"
+        title: "Image Service API"
+        termsOfServices: "https://bioatlas.se/terms-of-use/"
+        contact:
+            name: "Support"
+            url: "https://images.bioatlas.se"
+            email: "admin@mail.infrabas.se"
+    schemes:
+        - "HTTPS"
+
+facets: ["recognisedLicence", "dataResourceUid", "creator", "imageSize", "fileType", "format", "dateUploadedYearMonth"]
+
+collectory:
+    baseURL: 'https://collections.bioatlas.se'
+biocache:
+    baseURL: 'https://records.bioatlas.se'
+
+# Header and footer
+headerAndFooter:
+    baseURL: 'https://static.bioatlas.se/bs3'
+
+ala:
+    baseURL: 'https://bioatlas.se'
+
+bie:
+    baseURL: 'https://species.bioatlas.se'
+    searchPath: '/search'
+
+analytics:
+    credentialsJson: "/data/image-service/config/google-analytics.json"
+    URL: ""
+    ID: ""
+    baseURL: ""
+    viewID: ""
+
+elasticsearch:
+    indexName: "images"
+    host: "elasticsearch"
+    scheme: "http"
+    port1: 9200
+    port2: 9201

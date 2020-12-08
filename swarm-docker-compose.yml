@@ -1,0 +1,746 @@
+version: '3.7'
+
+networks:
+  basnet:
+    external: true
+
+secrets:
+  bioatlas.se.crt:
+    file: ./nginx-proxy-certs/bioatlas.se.crt
+  bioatlas.se.key:
+    file: ./nginx-proxy-certs/bioatlas.se.key
+  htpasswd:
+    file: ./env/.htpasswd
+
+configs:
+  config_nginx-proxy:
+    file: ./webserver/nginx-proxy.conf
+  config_ala-cors:
+    file: ./webserver/ala-cors.conf
+  config_biocache:
+    file: ./config/biocache-config.properties
+  config_logger-client:
+    file: ./config/logger-client.properties
+  config_logger:
+    file: ./config/logger-config.properties
+  config_ala_hub:
+    file: ./config/ala-hub-config.properties
+  config_collectory:
+    file: ./config/ala-collectory-config.properties
+  config_blacklist:
+    file: ./config/blacklistMediaUrls.txt
+  config_imageservice:
+    file: ./config/image-service-config.yml
+  config_apiservice:
+    file: ./config/webapi-config.properties
+  config_wordpress:
+    file: ./wordpress/wp-config-sample.php
+  config_specieslist:
+    file: ./config/specieslist-webapp-config.properties
+  config_bieindex:
+    file: ./config/bie-index-config.properties
+  config_biehub:
+    file: ./config/ala-bie-config.properties
+  config_postgis:
+    file: ./postgis/pg_hba.conf
+  config_regions:
+    file: ./config/regions-config.properties
+  config_regions_menu-config:
+    file: ./regions/regions-files/menu-config.json
+  config_regions_state-emblems:
+    file: ./regions/regions-files/state-emblems.json
+#  config_geonetworkdb:
+#    file: ./geonetwork/pg_hba.conf
+  config_spatial-hub:
+    file: ./config/spatial-hub-config.yml
+  config_spatial-hub-menu-config:
+    file: ./spatialhub/menu-config.json
+  config_spatial-hub-view-config:
+    file: ./spatialhub/view-config.json
+  config_spatial-service:
+    file: ./config/spatial-service-config.yml
+  config_cas:
+    file: ./config/cas.properties
+  config_userdetails:
+    file: ./config/userdetails-config.properties
+  config_apikey:
+    file: ./config/apikey-config.properties
+  config_dashboard:
+    file: ./config/dashboard-config.properties
+  config_sds:
+    file: ./config/sds-config.properties
+
+services:
+
+  proxy:
+    image: jwilder/nginx-proxy
+    init: true
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 443
+        published: 443
+        mode: host
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+      - ./webserver/conf.d:/etc/nginx/conf.d
+    secrets:
+      - source: bioatlas.se.crt
+        target: /etc/nginx/certs/bioatlas.se.crt
+      - source: bioatlas.se.key
+        target: /etc/nginx/certs/bioatlas.se.key
+    configs:
+      - source: config_nginx-proxy
+        target: /etc/nginx/proxy.conf
+      - source: config_ala-cors
+        target: /etc/nginx/ala-cors.conf
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - basnet
+
+  mysqldb:
+    image: mysql:5.7
+    env_file: ./env/.envcollectory
+    volumes:
+      - db_data_collectory:/var/lib/mysql
+    networks:
+      - basnet
+
+  biocacheservice:
+    image: bioatlas/ala-biocacheservice:v1.0
+    depends_on:
+      - cassandradb
+      - solr
+    environment:
+      JAVA_OPTS: -Xmx8g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+    env_file: ./env/.envbiocacheservice
+    configs:
+      - source: config_biocache
+        target: /data/biocache/config/biocache-config.properties
+      - source: config_logger-client
+        target: /data/logger-client/config/logger-client.properties
+    networks:
+      - basnet
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == bas-main
+    command: /bin/sh -c "rm /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml && envsubst < /tmp/context.xml > /usr/local/tomcat/conf/Catalina/localhost/ws.xml && catalina.sh run"
+
+  biocachehub:
+    image: bioatlas/ala-biocachehub:v1.0
+    depends_on:
+      - biocacheservice
+    env_file: ./env/.envbiocachehub
+    environment:
+      JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    configs:
+      - source: config_ala_hub
+        target: /data/ala-hub/config/ala-hub-config.properties
+    networks:
+      - basnet
+
+  collectory:
+    image: bioatlas/ala-collectory:v1.0
+    depends_on:
+      - mysqldb
+    environment:
+      JAVA_OPTS: -Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    volumes:
+      - data_collectory:/data/ala-collectory
+    env_file: ./env/.envcollectory
+    configs:
+      - source: config_collectory
+        target: /tmp/ala-collectory-config.properties
+    command: /bin/ash -c "envsubst < /tmp/ala-collectory-config.properties > /data/ala-collectory/config/ala-collectory-config.properties && catalina.sh run"
+    networks:
+      - basnet
+
+  nameindex:
+    image: bioatlas/ala-nameindex:v0.5
+    #image: bioatlas/ala-dyntaxaindex:v0.4
+    command: /bin/ash
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+    networks:
+      - basnet
+    deploy:
+      restart_policy:
+        condition: none
+      placement:
+        constraints:
+          - node.hostname == bas-main
+
+  biocachebackend:
+    image: bioatlas/ala-biocachebackend:v0.8
+    command: /bin/ash
+    environment:
+      - BIOCACHE_MEMORY_OPTS=-Xmx16g -Xms1g -Xss1024k
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+      - data_biocachebackend:/data
+    configs:
+      - source: config_blacklist
+        target: /data/biocache/config/blacklistMediaUrls.txt
+      - source: config_biocache
+        target: /data/biocache/config/biocache-config.properties
+    networks:
+      - basnet
+    deploy:
+      restart_policy:
+        condition: none
+      placement:
+        constraints:
+          - node.hostname == bas-main
+
+  solr:
+    image: bioatlas/ala-solr:v0.6
+    environment:
+      SOLR_HEAP: 31g
+    volumes:
+      - data_solr:/opt/solr
+#    ports:
+#      - 8983:8983
+    networks:
+      - basnet
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == bas-solr
+
+  loggerservice:
+    image: bioatlas/ala-loggerservice:v1.0
+    depends_on:
+      - mysqldblogger
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envlogger
+    configs:
+      - source: config_logger
+        target: /tmp/logger-config.properties
+    command: /bin/ash -c "envsubst < /tmp/logger-config.properties > /data/logger/config/logger-config.properties && catalina.sh run"
+    networks:
+      - basnet
+
+  mysqldblogger:
+    image: mysql:5.7
+    env_file: ./env/.envlogger
+    volumes:
+#      - ./loggerservice/db:/docker-entrypoint-initdb.d
+      - db_data_loggerservice:/var/lib/mysql
+    networks:
+      - basnet
+
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:7.0.0"
+    environment:
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - node.name=elasticsearch
+    volumes:
+      - data_images_elasticsearch:/usr/share/elasticsearch/data
+    networks:
+      - basnet
+
+  imageservice:
+    image: bioatlas/ala-imageservice:v1.0
+    depends_on:
+      - psqldbimage
+    environment:
+      JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envimage
+    volumes:
+      - data_images:/data/image-service/store
+    configs:
+      - source: config_imageservice
+        target: /tmp/image-service-config.yml
+    command: /bin/ash -c "envsubst < /tmp/image-service-config.yml > /data/image-service/config/image-service-config.yml && catalina.sh run"
+    networks:
+      - basnet
+
+  static:
+    image: nginx:alpine
+    volumes:
+      - ./static:/usr/share/nginx/html
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - basnet
+
+  imagestore:
+    image: bioatlas/ala-imagestore:v1.0
+    volumes:
+      - data_images:/data/image-service/store
+    networks:
+      - basnet
+
+  psqldbimage:
+    image: postgres:9.6.8-alpine
+    env_file: ./env/.envimage
+    volumes:
+      - db_data_imageservice:/var/lib/postgresql/data
+    networks:
+      - basnet
+
+  apiservice:
+    image: bioatlas/ala-api:v1.0
+    depends_on:
+      - mysqldbapi
+    environment:
+      JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envapi
+    configs:
+      - source: config_apiservice
+        target: /tmp/webapi-config.properties
+    command: /bin/ash -c "envsubst < /tmp/webapi-config.properties > /data/webapi/config/webapi-config.properties && catalina.sh run"
+    networks:
+      - basnet
+
+  mysqldbapi:
+    image: mysql:5.7
+    env_file: ./env/.envapi
+    volumes:
+      - db_data_apiservice:/var/lib/mysql
+    networks:
+      - basnet
+
+  mysqldbwordpress:
+    image: mysql:5.7
+    env_file: ./env/.envwordpress
+    volumes:
+      - db_data_wordpress:/var/lib/mysql
+    networks:
+      - basnet
+
+  wordpress:
+    image: wordpress:4.9.5-apache
+    ports:
+      - 8080:80
+    env_file: ./env/.envwordpress
+    volumes:
+#      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-master:/var/www/html/wp-content/themes/atlas
+      - data_wordpress:/var/www/html
+      - ./wordpress/themes/atlas/bioatlas-wordpress-theme-bas2020:/var/www/html/wp-content/themes/atlas
+#    configs:
+#      - source: config_wordpress
+#        target: /usr/src/wordpress/wp-config-sample.php
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - basnet
+
+  specieslists:
+    image: bioatlas/ala-specieslists:v1.0
+    environment:
+      JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envspecieslists
+    configs:
+      - source: config_specieslist
+        target: /tmp/specieslist-webapp-config.properties
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+    command: /bin/ash -c "envsubst < /tmp/specieslist-webapp-config.properties > /data/specieslist-webapp/config/specieslist-webapp-config.properties && catalina.sh run"
+    networks:
+      - basnet
+
+  mysqldbspecieslist:
+    image: mysql:5.7
+    env_file: ./env/.envspecieslists
+    command: --sql_mode=""
+    volumes:
+ #     - ./specieslists/db:/docker-entrypoint-initdb.d
+      - db_data_specieslists:/var/lib/mysql
+    networks:
+      - basnet
+
+  bieindex:
+    image: bioatlas/ala-bieindex:v1.0
+    environment:
+      - JAVA_OPTS=-Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    configs:
+      - source: config_bieindex
+        target: /data/bie-index/config/bie-index-config.properties
+    volumes:
+      - data_bieindex:/data
+    networks:
+      - basnet
+
+  biehub:
+    image: bioatlas/ala-biehub:v1.0
+    environment:
+      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    configs:
+      - source: config_biehub
+        target: /data/ala-bie/config/ala-bie-config.properties
+    networks:
+      - basnet
+
+  postgis:
+    image: mdillon/postgis:9.6-alpine
+    #image: kartoza/postgis:9.6-2.4
+    env_file: ./env/.envpostgis
+    volumes:
+      - db_data_postgis:/var/lib/postgresql/data
+#      - ./postgis/layersdb.sql:/docker-entrypoint-initdb.d/layersdb.sql
+    configs:
+      - source: config_postgis
+        target: /etc/postgresql/9.6/main/pg_hba.conf
+    networks:
+      - basnet
+
+  geoserver:
+    #image: kartoza/geoserver:2.11.2
+    image: bioatlas/ala-geoserver:v0.4
+    environment:
+      - JAVA_OPTS=-Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envgeoserver
+    volumes:
+      - data_geoserver:/data/geoserver_data_dir
+      - data_spatialservice:/data/spatial-data
+    #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver-files/geoserver.sh"
+    networks:
+      - basnet
+
+#  layersservice:
+#    image: bioatlas/ala-layersservice:v0.4
+#    environment:
+#      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+#    env_file: env/.envlayersservice
+#    configs:
+#      - source: config_layers-service
+#        target: /data/layers-service/config/layers-service-config.properties
+#      - source: config_layers-store
+#        target: /tmp/layers-store-config.properties
+#      - source: config_layers-data
+#        target: /tmp/layers-service-data-config.xml
+#      - source: config_layers-data
+#        target: /tmp/layers-store-data-config.xml
+#    volumes:
+#      - data_layersservice:/data
+#      - data_spatialservice:/data/spatial-data
+#    command: /bin/bash -c "envsubst < /tmp/layers-store-config.properties > /data/layers-store/config/layers-store-config.properties && envsubst < /tmp/layers-service-data-config.xml > /data/layers-service/config/layers-service-data-config.xml && envsubst < /tmp/layers-store-data-config.xml > /data/layers-store/config/layers-store-data-config.xml && catalina.sh run"
+#    networks:
+#      - basnet
+#
+#  layeringestion:
+#    image: bioatlas/ala-layeringestion:v0.3
+#    volumes:
+#      - data_layersservice:/data
+#    networks:
+#      - basnet
+#    deploy:
+#      restart_policy:
+#        condition: none
+
+  regions:
+    image: bioatlas/ala-regions:v1.0
+    environment:
+      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envregions
+    configs:
+      - source: config_regions
+        target: /data/regions/config/regions-config.properties
+      - source: config_regions_menu-config
+        target: /data/regions/config/menu-config.json
+      - source: config_regions_state-emblems
+        target: /data/regions/config/state-emblems.json
+    networks:
+      - basnet
+
+#  geonetwork:
+#    image: geonetwork:3.4.1
+#    env_file: ./env/.envgeonetwork
+#    volumes:
+#      - data_geonetwork:/data/ala/data/geonetwork/
+#    environment:
+#      - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+#    depends_on:
+#      - geonetworkdb
+#    networks:
+#      - basnet
+
+#  geonetworkdb:
+#    image: mdillon/postgis:9.6-alpine
+#    env_file: ./env/.envgeonetworkdb
+#    volumes:
+#      - db_data_geonetworkdb:/var/lib/postgresql/data
+#    configs:
+#      - source: config_geonetworkdb
+#        target: /etc/pg_hba.conf
+#    networks:
+#      - basnet
+
+  spatialhub:
+    image: bioatlas/ala-spatialhub:v1.0
+    environment:
+      - JAVA_OPTS=-Xmx16g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file:
+      - ./env/.envspatial
+    volumes:
+      - data_spatialhub:/data/ala/runtime/files
+    configs:
+      - source: config_spatial-hub
+        target: /tmp/spatial-hub-config.yml
+      - source: config_spatial-hub-menu-config
+        target: /data/spatial-hub/config/menu-config.json
+      - source: config_spatial-hub-view-config
+        target: /data/spatial-hub/config/view-config.json
+    command: /bin/bash -c "envsubst < /tmp/spatial-hub-config.yml > /data/spatial-hub/config/spatial-hub-config.yml && catalina.sh run"
+    networks:
+      - basnet
+
+  spatialservice:
+    image: bioatlas/ala-spatialservice:v1.0
+    environment:
+      - JAVA_OPTS=-Xmx31g -Xms128m -Xss1024k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file:
+      - ./env/.envspatial
+    volumes:
+      - data_spatialservice:/data/spatial-data
+    configs:
+      - source: config_spatial-service
+        target: /tmp/spatial-service-config.yml
+    command: /bin/bash -c "envsubst < /tmp/spatial-service-config.yml > /data/spatial-service/config/spatial-service-config.yml && catalina.sh run"
+    networks:
+      - basnet
+
+  mysqldbcas:
+    image: mysql:5.7
+    environment:
+      LANG: C.UTF-8
+    env_file: ./env/.envcas
+    volumes:
+    #  - ./cas2/db:/docker-entrypoint-initdb.d
+      - db_data_mysqldbcas:/var/lib/mysql
+    networks:
+      - basnet
+
+  casserver:
+    image: bioatlas/ala-cas:v0.3
+    environment:
+      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envcas
+    configs:
+      - source: config_cas
+        target: /tmp/cas.properties
+    command: /bin/ash -c "envsubst < /tmp/cas.properties > /data/cas/config/cas.properties && catalina.sh run"
+    networks:
+      - basnet
+
+  userdetails:
+    image: bioatlas/ala-userdetails:v0.3
+    domainname: auth.bioatlas.se
+    environment:
+      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envcas
+    configs:
+      - source: config_userdetails
+        target: /tmp/userdetails-config.properties
+    command: /bin/ash -c "envsubst < /tmp/userdetails-config.properties > /data/userdetails/config/userdetails-config.properties && catalina.sh run"
+    networks:
+      - basnet
+
+  mysqldbapikey:
+    image: mysql:5.7
+    env_file: ./env/.envapikey
+    volumes:
+#      - ./apikey/db:/docker-entrypoint-initdb.d
+      - db_data_mysqldbapikey:/var/lib/mysql
+    networks:
+      - basnet
+
+  apikey:
+    image: bioatlas/ala-apikey:v0.3
+    environment:
+      - JAVA_OPTS=-Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    env_file: ./env/.envapikey
+    configs:
+      - source: config_apikey
+        target: /tmp/apikey-config.properties
+    command: /bin/ash -c "envsubst < /tmp/apikey-config.properties > /data/apikey/config/apikey-config.properties && catalina.sh run"
+    networks:
+      - basnet
+
+  dashboard:
+    image: bioatlas/ala-dashboard:v1.0
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    configs:
+      - source: config_dashboard
+        target: /data/dashboard/config/dashboard-config.properties
+    volumes:
+      - ./dashboard/data.json:/data/dashboard/data.json:rw
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - basnet
+
+  sds:
+    image: bioatlas/ala-sds:v1.1
+    environment:
+      - JAVA_OPTS=-Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true
+    volumes:
+      - data_nameindex:/data/lucene/namematching
+    configs:
+      - source: config_sds
+        target: /data/sds/config/sds-config.properties
+    networks:
+      - basnet
+
+volumes:
+  db_data_collectory:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_collectory"
+  data_collectory:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_collectory"
+  db_data_cassandra:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_cassandra"
+  db_data_loggerservice:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_loggerservice"
+  db_data_imageservice:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_imageservice"
+  db_data_apiservice:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_apiservice"
+  data_nameindex:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_nameindex"
+  data_images:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_images"
+  data_biocachebackend:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_biocachebackend"
+  data_solr:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_solr"
+  data_images_elasticsearch:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_images_elasticsearch"
+  db_data_wordpress:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_wordpress"
+  data_wordpress:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_wordpress"
+  db_data_specieslists:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_specieslists"
+  db_data_postgis:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_postgis"
+  data_geoserver:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_geoserver"
+ # data_layersservice:
+ #    driver: local
+ #    driver_opts:
+ #      type: nfs
+ #      o: nfsvers=4,addr=beta.bioatlas.se,rw
+ #      device: ":/mnt/extvol/nfs/data/data_layersservice"
+ # data_geonetwork:
+ #   driver: local
+ #   driver_opts:
+ #     type: nfs
+ #     o: nfsvers=4,addr=beta.bioatlas.se,rw
+ #     device: ":/mnt/extvol/nfs/data/data_geonetwork"
+ # db_data_geonetworkdb:
+ #   driver: local
+ #   driver_opts:
+ #     type: nfs
+ #     o: nfsvers=4,addr=beta.bioatlas.se,rw
+ #     device: ":/mnt/extvol/nfs/data/db_data_geonetworkdb"
+  data_spatialhub:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_spatialhub"
+  data_spatialservice:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_spatialservice"
+  db_data_mysqldbcas:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_mysqldbcas"
+  db_data_mysqldbapikey:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/db_data_mysqldbapikey"
+  data_bieindex:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=beta.bioatlas.se,rw
+      device: ":/mnt/extvol/nfs/data/data_bieindex"

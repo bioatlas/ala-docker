@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sensitivity-zones>
+  <sensitivity-zone id="Sweden" name="Sweden" type="Country" layerId="cl10038" pids="1"/>
+</sensitivity-zones>

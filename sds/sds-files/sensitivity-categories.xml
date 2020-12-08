@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sensitivity-categories>
+    <sensitivity-category id="NE" name="Not Evaluated" type="Conservation"/>
+    <sensitivity-category id="NA" name="Not Applicable" type="Conservation"/>
+    <sensitivity-category id="DD" name="Data Deficient" type="Conservation"/>
+    <sensitivity-category id="LC" name="Least Concern" type="Conservation"/>
+    <sensitivity-category id="NT" name="Near Threatened" type="Conservation"/>
+    <sensitivity-category id="VU" name="Vulnerable" type="Conservation"/>
+    <sensitivity-category id="EN" name="Endangered" type="Conservation"/>
+    <sensitivity-category id="CR" name="Critically Endangered" type="Conservation"/>
+    <sensitivity-category id="RE" name="Regionally Extinct" type="Conservation"/>
+    <sensitivity-category id="EW" name="Extinct in the Wild" type="Conservation"/>
+    <sensitivity-category id="EX" name="Extinct" type="Conservation"/>
+</sensitivity-categories>

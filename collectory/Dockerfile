@@ -1,23 +1,33 @@
-FROM tomcat:8-alpine
+FROM tomcat:7-jre8-alpine
 
-# collectory deployment section
+RUN rm -r ${CATALINA_HOME}/webapps/ROOT \
+    && rm -r ${CATALINA_HOME}/webapps/docs \
+    && rm -r ${CATALINA_HOME}/webapps/examples \
+    && rm -r ${CATALINA_HOME}/webapps/host-manager \
+    && rm -r ${CATALINA_HOME}/webapps/manager
 
 RUN mkdir -p /data \
 	/data/ala-collectory \
 	/data/ala-collectory/upload/tmp \
 	/data/ala-collectory/taxa/data
 
-COPY generic-collectory-data/generic-collectory/config/connection-profiles.json \
+COPY ala-collectory-data/ala-collectory/config/* \
 	/data/ala-collectory/config/
 
-COPY generic-collectory-data/generic-collectory/data\
+COPY ala-collectory-data/ala-collectory/data \
 	/data/ala-collectory/data
 
-COPY collectory.war $CATALINA_HOME/webapps/
+RUN mkdir -p $CATALINA_HOME/webapps-ala
+COPY collectory.war $CATALINA_HOME/webapps-ala/
+COPY server.xml $CATALINA_HOME/conf/server.xml
+COPY context.xml /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml
+COPY context.xml /tmp/context.xml
 
-ENV \ 
-	BUILD_DEPS="gettext" \ 
-	RUNTIME_DEPS="libintl" 
+ENV \
+	BUILD_DEPS="gettext" \
+	RUNTIME_DEPS="libintl" \
+	TOMCAT_CONTEXT_NAME="ROOT" \
+	TOMCAT_CONTEXT_PATH=""
 
 RUN \
     apk add --update $RUNTIME_DEPS && \

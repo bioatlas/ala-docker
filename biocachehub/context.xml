@@ -1,0 +1,5 @@
+<Context
+  docBase="/usr/local/tomcat/webapps-ala/ala-hub"
+  path=""
+  reloadable="true"
+/>
