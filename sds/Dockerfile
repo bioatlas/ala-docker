@@ -14,7 +14,8 @@ COPY sds-webapp.war $CATALINA_HOME/webapps/ROOT.war
 
 COPY sds-files/sensitivity-categories.xml /data/sds/sensitivity-categories.xml
 COPY sds-files/sensitivity-zones.xml /data/sds/sensitivity-zones.xml
-COPY sds-files/sensitive-species.xml /data/sds/sensitive-species.xml
+#COPY sds-files/sensitive-species.xml /data/sds/sensitive-species.xml
+COPY sds-files/legacy-sds-config.properties /data/sds/sds-config.properties
 
 ENV \
     BUILD_DEPS="gettext" \
