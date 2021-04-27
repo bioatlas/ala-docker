@@ -22,7 +22,7 @@ services:
     image: bioatlas/ala-solrcloud:v0.1
     restart: always
     environment:
-      - SOLR_HEAP=31g
+      - SOLR_HEAP=12g
       - ZK_HOST=zookeeper1:2181
       - SOLR_HOST=solr1
     volumes:
@@ -33,13 +33,13 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.hostname == bas-solr-1]
+        constraints: [node.hostname == solr-1]
 
   solr2:
     image: bioatlas/ala-solrcloud:v0.1
     restart: always
     environment:
-      - SOLR_HEAP=31g
+      - SOLR_HEAP=12g
       - ZK_HOST=zookeeper1:2181
       - SOLR_HOST=solr2
     volumes:
@@ -50,13 +50,13 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.hostname == bas-solr-2]
+        constraints: [node.hostname == solr-2]
 
   solr3:
     image: bioatlas/ala-solrcloud:v0.1
     restart: always
     environment:
-      - SOLR_HEAP=31g
+      - SOLR_HEAP=12g
       - ZK_HOST=zookeeper1:2181
       - SOLR_HOST=solr3
     volumes:
@@ -67,13 +67,13 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.hostname == bas-solr-3]
+        constraints: [node.hostname == solr-3]
 
   solr4:
     image: bioatlas/ala-solrcloud:v0.1
     restart: always
     environment:
-      - SOLR_HEAP=31g
+      - SOLR_HEAP=12g
       - ZK_HOST=zookeeper1:2181
       - SOLR_HOST=solr4
     volumes:
@@ -84,7 +84,7 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.hostname == bas-solr-4]
+        constraints: [node.hostname == solr-4]
 
 #  create-collection:
 #    image: solr:7.7.2-slim
@@ -122,24 +122,24 @@ volumes:
   data_solr1:
     driver: local
     driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/datacluster/solr1"
+      type: none
+      o: bind
+      device: "/mnt/data/data_solr/solr1"
   data_solr2:
     driver: local
     driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/datacluster/solr2"      
+      type: none
+      o: bind
+      device: "/mnt/data/data_solr/solr2"
   data_solr3:
     driver: local
     driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/datacluster/solr3"
+      type: none
+      o: bind
+      device: "/mnt/data/data_solr/solr3"
   data_solr4:
     driver: local
     driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/datacluster/solr4"
+      type: none
+      o: bind
+      device: "/mnt/data/data_solr/solr4"
