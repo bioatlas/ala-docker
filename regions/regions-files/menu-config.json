@@ -1,8 +1,50 @@
-[{
- "label": "Counties",
- "fid": "cl10097"
-},
-{
- "label": "Municipalities",
- "fid": "cl10040"
-}]
+[
+	{
+	 "label": "Counties",
+	 "fid": "cl10097"
+	},
+	{
+	 "label": "Municipalities",
+	 "fid": "cl10040"
+	},
+	{
+	 "label": "National parks",
+	 "fid": "cl10063"
+	},
+	{
+	 "label": "Nature reserves",
+	  "fid": "cl10071"
+	},
+	{
+	 "label": "Nature conservation areas",
+	 "fid": "cl10061"
+	},
+	{
+	 "label": "Water protection areas",
+	 "fid": "cl10090"
+	},
+	{
+	 "label": "Biotope protected areas",
+	 "fid": "cl10083"
+	},
+	{
+	 "label": "Cultural reserves",
+	 "fid": "cl10059"
+	},
+	{
+	 "label": "OSPAR marine protected areas in Sweden",
+	 "fid": "cl10074"
+	},
+	{
+	 "label": "Protected areas, RAMSAR",
+	 "fid": "cl10067"
+	},
+	{
+	 "label": "Coastal waters",
+	 "fid": "cl10047"
+	},
+	{
+	 "label": "Water bodies",
+	 "fid": "cl10046"
+	}
+]

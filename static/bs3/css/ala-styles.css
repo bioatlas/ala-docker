@@ -859,7 +859,7 @@ body > footer > div > div.col-md-12.acknowledgement-callout.acknowledgement-call
 ================================= */
 h1, h2, h3, h4, h5, h6 {color: #384047;display: block;font-weight: 700;margin: 0;text-rendering: optimizeLegibility;}
 #main h1 {margin-bottom: 30px;}
-#main h2,#main h3 {margin-bottom: 16px;}
+/* #main h2,#main h3 {margin-bottom: 16px;} */
 .ala-wordpress #main h1 {margin-bottom: 0;}
 .ala-wordpress #main h2,.ala-wordpress #main h3 {margin-bottom: 0;}
 ul {list-style: none;}
