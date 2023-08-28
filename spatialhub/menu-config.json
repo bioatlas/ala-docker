@@ -27,10 +27,6 @@
       "open": "ToolAreaReportService"
     },
       {
-        "name": "Area Report - PDF",
-        "open": "AreaReport"
-      },
-      {
         "name": "Scatterplot - single",
         "open": "ScatterplotCreate"
       },
@@ -43,28 +39,8 @@
         "open": "TaxonFrequency"
       },
       {
-        "name": "Tabulate",
-        "open": "tabulate"
-      },
-      {
-        "name": "Species by Layer",
-        "open": "SpeciesByLayer"
-      },
-      {
         "name": "Compare Points",
         "open": "pointComparison"
-      },
-      {
-        "name": "Compare Areas",
-        "open": "CompareAreas"
-      },
-      {
-        "name": "Generate Points",
-        "open": "GeneratePoints"
-      },
-      {
-        "name": "Points to Grid",
-        "open": "PointsToGrid"
       },
       {
         "name": "Calculate AOO and EOO",
@@ -75,42 +51,15 @@
         "open": "Maxent"
       },
       {
-        "name": "Classify",
-        "open": "Classification"
-      }, {
-        "name": "Nearest Locality",
-        "open": "nearestLocality"
-      },
-      {
-        "separator": true
-      },
-      {
-        "name": "Restore Prior Analysis",
+        "name": "Restore prior analysis",
         "open": "analysis"
       }
-
     ]
   },
   {
     "name": "Import",
     "width": 78,
-    "items": [{
-      "name": "Points",
-      "open": "sandBox",
-      "params": {
-        "display": {
-          "size": "full"
-        }
-      }
-    },
-      {
-        "name": "Species List",
-        "open": "createSpeciesList",
-        "params": {
-          "speciesOption": "speciesList",
-          "importList": true
-        }
-      },
+    "items": [
       {
         "name": "Areas",
         "open": "addArea",
@@ -153,23 +102,19 @@
     "width": 69,
     "items": [{
       "name": "Getting Started",
-      "open": "https://www.ala.org.au/spatial-portal-help/getting-started"
+      "open": "https://docs.biodiversitydata.se/tutorials/step-by-step-help-guides/spatial-portal-basic-functions/"
     },
       {
-        "name": "Add To Map",
-        "open": "https://www.ala.org.au/spatial-portal-help/add-to-map"
-      },
-      {
         "name": "Tools",
-        "open": "https://www.ala.org.au/spatial-portal-help/tools"
+        "open": "https://docs.biodiversitydata.se/analyse-data/spatial-portal/"
       },
       {
         "name": "Import",
-        "open": "https://www.ala.org.au/spatial-portal-help/import"
+        "open": "https://docs.biodiversitydata.se/tutorials/step-by-step-help-guides/spatial-portal-importing-data/"
       },
       {
         "name": "Export",
-        "open": "https://www.ala.org.au/spatial-portal-help/export"
+        "open": "https://docs.biodiversitydata.se/tutorials/step-by-step-help-guides/spatial-portal-exporting-data/"
       }
     ]
   }
