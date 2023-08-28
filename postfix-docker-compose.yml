@@ -1,0 +1,23 @@
+version: '3.7'
+
+networks:
+  basnet:
+    external: true
+
+services:
+
+  postfix:
+    image: juanluisbaptiste/postfix:latest
+    expose:
+      - "25"
+    env_file:
+      - env/.envpostfix
+    volumes:
+     - "/etc/localtime:/etc/localtime:ro"
+    networks:
+      - basnet
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == live-manager-1
+
