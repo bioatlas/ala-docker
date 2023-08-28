@@ -11,8 +11,8 @@ services:
     deploy:
       endpoint_mode: dnsrr
       placement:
-        constraints: 
-          - node.hostname == cassandra-1
+        constraints:
+          - node.hostname == live-cassandra-1
     environment:
       - CASSANDRA_BROADCAST_ADDRESS=cassandra-1
       - CASSANDRA_LISTEN_ADDRESS=cassandra-1
@@ -26,16 +26,15 @@ services:
     entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
     networks:
       basnet:
-        ipv4_address: 10.0.5.201
-#    restart: always
+    restart: always
 
   cassandra-2:
     image: bioatlas/ala-cassandra:v0.5
     deploy:
       endpoint_mode: dnsrr
       placement:
-        constraints: 
-          - node.hostname == cassandra-2
+        constraints:
+          - node.hostname == live-cassandra-2
     environment:
       - CASSANDRA_BROADCAST_ADDRESS=cassandra-2
       - CASSANDRA_LISTEN_ADDRESS=cassandra-2
@@ -50,18 +49,17 @@ services:
     entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh" 
     networks:
       basnet:
-        ipv4_address: 10.0.5.202
-#    restart: always
-#    depends_on:
-#      - cassandra-1
+    restart: always
+    depends_on:
+      - cassandra-1
 
   cassandra-3:
     image: bioatlas/ala-cassandra:v0.5
     deploy:
       endpoint_mode: dnsrr
       placement:
-        constraints: 
-          - node.hostname == cassandra-3
+        constraints:
+          - node.hostname == live-cassandra-3
     environment:
       - CASSANDRA_BROADCAST_ADDRESS=cassandra-3
       - CASSANDRA_LISTEN_ADDRESS=cassandra-3
@@ -76,18 +74,17 @@ services:
     entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
     networks:
       basnet:
-        ipv4_address: 10.0.5.203
-#    restart: always
-#    depends_on:
-#      - cassandra-2
+    restart: always
+    depends_on:
+      - cassandra-2
 
   cassandra-4:
     image: bioatlas/ala-cassandra:v0.5
     deploy:
       endpoint_mode: dnsrr
       placement:
-        constraints: 
-          - node.hostname == cassandra-4
+        constraints:
+          - node.hostname == live-cassandra-4
     environment:
       - CASSANDRA_BROADCAST_ADDRESS=cassandra-4
       - CASSANDRA_LISTEN_ADDRESS=cassandra-4
@@ -102,10 +99,9 @@ services:
     entrypoint: /bin/bash -c "cp /tmp/cassandra.yaml /etc/cassandra/cassandra.yaml && cp /tmp/cassandra-env.sh /etc/cassandra/cassandra-env.sh && /entrypoint-wrap.sh"
     networks:
       basnet:
-        ipv4_address: 10.0.5.204
-#    restart: always
-#    depends_on:
-#      - cassandra-3
+    restart: always
+    depends_on:
+      - cassandra-3
 
 volumes:
   data_cassandra_1:
@@ -113,22 +109,22 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: "/mnt/data/data_cassandra/cassandra1"
+      device: "/data/cassandra1"
   data_cassandra_2:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "/mnt/data/data_cassandra/cassandra2"
+      device: "/data/cassandra2"
   data_cassandra_3:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "/mnt/data/data_cassandra/cassandra3"
+      device: "/data/cassandra3"
   data_cassandra_4:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "/mnt/data/data_cassandra/cassandra4"
+      device: "/data/cassandra4"
