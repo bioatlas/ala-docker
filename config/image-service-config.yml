@@ -1,8 +1,8 @@
 grails:
-    serverURL: 'https://images.bioatlas.se'
+    serverURL: 'https://images.biodiversitydata.se'
 server:
     contextPath: ''
-serverName: 'https://images.bioatlas.se'
+serverName: 'https://images.biodiversitydata.se'
 
 hibernate:
     dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -16,23 +16,28 @@ dataSource:
 
 security:
     cas:
-        casServerName: 'https://auth.bioatlas.se'
-        appServerName: 'https://images.bioatlas.se'
-        casServerUrlPrefix: 'https://auth.bioatlas.se/cas'
-        loginUrl: 'https://auth.bioatlas.se/cas/login'
-        logoutUrl: 'https://auth.bioatlas.se/cas/logout'
+        casServerName: 'https://auth.biodiversitydata.se'
+        appServerName: 'https://images.biodiversitydata.se'
+        casServerUrlPrefix: 'https://auth.biodiversitydata.se/cas'
+        loginUrl: 'https://auth.biodiversitydata.se/cas/login'
+        logoutUrl: 'https://auth.biodiversitydata.se/cas/logout'
         bypass: false
         disableCAS: false
         contextPath: ''
+    apikey:
+        ip:
+            whitelist: ''
+        check:
+            serviceUrl: https://auth.biodiversitydata.se/apikey/ws/check?apikey=
 
 imageservice:
     imagestore:
         root: '/data/image-service/store'
         inbox: '/data/image-service/incoming'
     apache:
-        root: 'https://images.bioatlas.se/store/'
+        root: 'https://images.biodiversitydata.se/store/'
         # space separated list
-        multiple_roots: 'https://images.bioatlas.se/store/'
+        multiple_roots: 'https://images.biodiversitydata.se/store/'
     exportDir: '/data/image-service/exports'
     thumbnail:
         size: 300
@@ -40,20 +45,20 @@ imageservice:
 skin:
     layout: main
     fluidLayout: false
-    favicon: "https://bioatlas.se/wp-content/themes/atlas/img/favicon/favicon.ico"
-    orgNameLong: Bioatlas Sweden
-    orgNameShort: Bioatlas
-    homeUrl: "https://bioatlas.se"
+    favicon: "https://static.biodiversitydata.se/favicon.ico"
+    orgNameLong: Swedish Biodiversity Data Infrastructure
+    orgNameShort: SBDI
+    homeUrl: "https://tools.biodiversitydata.se"
 
 swagger:
     info:
         description: "API Documentation for Image Services"
         version: "2.0"
         title: "Image Service API"
-        termsOfServices: "https://bioatlas.se/terms-of-use/"
+        termsOfServices: "https://docs.biodiversitydata.se/sbdi-data/sbdi-atlas-terms-of-use/"
         contact:
             name: "Support"
-            url: "https://images.bioatlas.se"
+            url: "https://images.biodiversitydata.se"
             email: "admin@mail.infrabas.se"
     schemes:
         - "HTTPS"
@@ -61,19 +66,20 @@ swagger:
 facets: ["recognisedLicence", "dataResourceUid", "creator", "imageSize", "fileType", "format", "dateUploadedYearMonth"]
 
 collectory:
-    baseURL: 'https://collections.bioatlas.se'
+    baseURL: 'https://collections.biodiversitydata.se'
 biocache:
-    baseURL: 'https://records.bioatlas.se'
+    baseURL: 'https://records.biodiversitydata.se'
 
 # Header and footer
 headerAndFooter:
-    baseURL: 'https://static.bioatlas.se/bs3'
+    baseURL: 'https://static.biodiversitydata.se'
+    version: '2'
 
 ala:
-    baseURL: 'https://bioatlas.se'
+    baseURL: 'https://biodiversitydata.se'
 
 bie:
-    baseURL: 'https://species.bioatlas.se'
+    baseURL: 'https://species.biodiversitydata.se'
     searchPath: '/search'
 
 analytics:
