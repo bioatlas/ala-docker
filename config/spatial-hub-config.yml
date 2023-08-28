@@ -1,4 +1,4 @@
-grails.serverURL: "https://spatial.bioatlas.se"
+grails.serverURL: "https://spatial.biodiversitydata.se"
 grails.app.context: ""
 grails.assets.bundle: false
 grails.assets.minifyJs: false
@@ -10,20 +10,20 @@ api_key: $APIKEY
 
 security:
   cas:
-    casServerName: "https://auth.bioatlas.se"
+    casServerName: "https://auth.biodiversitydata.se"
     uriFilterPattern: "/portal.*,,/,/alaAdmin,/alaAdmin.*"
     uriExclusionFilterPattern: "/portal/messages.*,/portal/sessionCache.*,/static.*,/assets.*"
     authenticateOnlyIfLoggedInFilterPattern: ""
-    appServerName: "https://spatial.bioatlas.se"
-    casServerUrlPrefix: "https://auth.bioatlas.se/cas"
-    loginUrl: "https://auth.bioatlas.se/cas/login"
-    logoutUrl: "https://auth.bioatlas.se/cas/logout"
+    appServerName: "https://spatial.biodiversitydata.se"
+    casServerUrlPrefix: "https://auth.biodiversitydata.se/cas"
+    loginUrl: "https://auth.biodiversitydata.se/cas/login"
+    logoutUrl: "https://auth.biodiversitydata.se/cas/logout"
     contextPath: ""
-    bypass: True
-    disableCAS: True
+    bypass: False
+    disableCAS: False
     gateway: False
 
-autocompleteUrl: "https://species.bioatlas.se/ws/search/auto.jsonp"
+autocompleteUrl: "https://species.biodiversitydata.se/ws/search/auto.jsonp"
 
 auth:
     admin_role: ROLE_ADMIN
@@ -34,40 +34,40 @@ app:
             userId: X-ALA-userId
 # Header and footer
 headerAndFooter:
-    baseURL: 'https://static.bioatlas.se/bs3'
-    version: '1'
+    baseURL: 'https://static.biodiversitydata.se'
+    version: '2'
 ala:
-  baseURL: "https://bioatlas.se"
+  baseURL: "https://biodiversitydata.se"
 
 bie:
-  baseURL: "https://species.bioatlas.se"
+  baseURL: "https://species.biodiversitydata.se"
   searchPath: "/search"
 
 bieService:
-    baseURL: "https://species.bioatlas.se/ws"
+    baseURL: "https://species.biodiversitydata.se/ws"
 
 userdetails:
-    baseUrl: "https://auth.bioatlas.se/userdetails"
+    baseUrl: "https://auth.biodiversitydata.se/userdetails"
 
 favicon:
-    url: "https://bioatlas.se/wp-content/themes/atlas/img/favicon/favicon.ico"
+    url: "https://static.biodiversitydata.se/favicon.ico"
 
 layersService:
-    url: "https://spatial.bioatlas.se/ws"
+    url: "https://spatial.biodiversitydata.se/ws"
 
 lists:
-    url: "https://lists.bioatlas.se"
+    url: "https://lists.biodiversitydata.se"
     threatenedSpeciesUrl: '/ws/speciesList/?isThreatened=eq:true&isAuthoritative=eq:true'
     invasiveSpeciesUrl: '/ws/speciesList/?isInvasive=eq:true&isAuthoritative=eq:true'
-#    facets: True
-#    migratoryDR: dr1005
-#    iconicSpeciesDR: dr781
+    facets: True
+    migratoryDR: ""
+    iconicSpeciesDR: ""
 
 journalmap:
-    url: "https://www.journalmap.org/"
+    url: ""
 
 collections:
-    url: "https://collections.bioatlas.se"
+    url: "https://collections.biodiversitydata.se"
 
 sandbox:
     url: ""
@@ -81,10 +81,10 @@ gazField:
 userObjectsField:
 
 biocache:
-    url: "https://records.bioatlas.se"
+    url: "https://records.biodiversitydata.se"
 
 biocacheService:
-    url: "https://records.bioatlas.se/ws"
+    url: "https://records.biodiversitydata.se/ws"
     #Facets to ignore in the biocache grouped/facets service
     default_facets_ignored: "data_resource_uid,data_provider_uid,species,collection_uid,institution_code_name,institution_uid,uncertainty"
     custom_facets:
@@ -93,10 +93,10 @@ biocacheService:
       Occurrence: ['Year;occurrence_year']
 
 sampling:
-    url: "https://spatial.bioatlas.se/ws"
+    url: "https://spatial.biodiversitydata.se/ws"
 
 geoserver:
-    url: "https://spatial.bioatlas.se/geoserver"
+    url: "https://spatial.biodiversitydata.se/geoserver"
 
 flickr:
     url: "https://api.flickr.com/services/rest/?method="
@@ -125,9 +125,10 @@ skin:
     header: true
     footer: true
     fluidLayout: true
-    layout: 'generic'
-    orgNameLong: 'BioAtlas Sweden'
-    orgNameShort: 'BioAtlas Sweden'
+    layout: 'sbdi'
+    orgNameLong: 'Swedish Biodiversity Data Infrastructure'
+    orgNameShort: 'SBDI'
+    homeUrl: 'https://tools.biodiversitydata.se'
 
 grails.controllers.upload.maxFileSize: 524288000
 grails.controllers.upload.maxRequestSize: 524288000
@@ -136,12 +137,12 @@ speciesDotSize: 5
 speciesDotOpacity: 60
 
 logger:
-    baseUrl: "https://logger.bioatlas.se/service"
+    baseUrl: "https://logger.biodiversitydata.se/service"
 
 phylolink:
     url: ""
 
-apiKeyCheckUrlTemplate: "https://auth.bioatlas.se/apikey/ws/check?apikey={0}"
+apiKeyCheckUrlTemplate: "https://auth.biodiversitydata.se/apikey/ws/check?apikey={0}"
 
 biocollect:
   url: ""
@@ -214,21 +215,15 @@ defaultareas:
       bbox: [-180, -90, 180, 90]
 
 presetWMSServers:
-    - name: "AusCover"
-      url: "http://data.auscover.org.au/geoserver/wms?request=getCapabilities"
-    - name: "Geoserver IMOS"
-      url: "http://geoserver.imos.org.au/geoserver/wms?REQUEST=GetCapabilities"
-    - name: "GA"
-      url: "https://www.ga.gov.au/gis/services/earth_science/GA_Surface_Geology_of_Australia/MapServer/WMSServer?request=GetCapabilities"
-    - name: "Geofabric BOM"
-      url: "http://geofabric.bom.gov.au/simplefeatures/ows?request=getcapabilities"
+    - name: ""
+      url: ""
 
 allowProxy:
-    server: "data.auscover.org.au;data.auscover.org.au:80;geoserver.imos.org.au;www.ga.gov.au/gis;geofabric.bom.gov.au"
+    server: ""
 
 getMapExamples:
-    - name: "Fractional Cover CLW - Non-PS Veg - 2012.297"
-      url: "http://data.auscover.org.au/geoserver/ows?SERVICE=WMS&REQUEST=GetMap&LAYERS=clw:FractCover.V2_2.NPV&FORMAT=image/png&SRS=epsg:3857&TRANSPARENT=true&VERSION=1.3.0&CRS=EPSG:3857&EXCEPTIONS=INIMAGE&STYLES="
+    - name: ""
+      url: ""
 
 wms:
     intersect: True

@@ -6,15 +6,15 @@ google:
 data:
   dir: '/data/spatial-data'
 geoserver:
-  url: 'https://spatial.bioatlas.se/geoserver'
+  url: 'https://spatial.biodiversitydata.se/geoserver'
   username: 'admin'
   password: $GEOSERVER_PASS
   canDeploy: true
   remote:
     geoserver_data_dir: '/data/geoserver_data_dir'
 
-biocacheServiceUrl: "https://records.bioatlas.se/ws"
-biocacheUrl: "https://records.bioatlas.se"
+biocacheServiceUrl: "https://records.biodiversitydata.se/ws"
+biocacheUrl: "https://records.biodiversitydata.se"
 openstreetmap:
   url: "https://tile.openstreetmap.org"
 
@@ -29,7 +29,7 @@ batch_sampling_fields_limit: 1000
 # au.org.ala.spatial.slave config
 #
 
-spatialService.url: "https://spatial.bioatlas.se/ws"
+spatialService.url: "https://spatial.biodiversitydata.se/ws"
 shp2pgsql.path: "/usr/bin/shp2pgsql"
 gdal.dir: "/usr/bin"
 gdm.dir: "/data/spatial-data/modelling/gdm/DoGdm"
@@ -48,14 +48,14 @@ retryTime: "30000"
 #  NOTE: Some of these will be ignored if default_config exists
 security:
   cas:
-    casServerName: https://auth.bioatlas.se
+    casServerName: https://auth.biodiversitydata.se
     uriFilterPattern: /manageLayers,/manageLayers/.*,/admin,/admin/.*,/alaAdmin.*
     uriExclusionFilterPattern: /assets.*,/images.*,/css.*,/js.*,/less.*,/tasks/status/.*
     authenticateOnlyIfLoggedInFilterPattern: /master,/master/.*,/tasks,/tasks/.*
-    appServerName: https://spatial.bioatlas.se
-    casServerUrlPrefix: https://auth.bioatlas.se/cas
-    loginUrl: https://auth.bioatlas.se/cas/login
-    logoutUrl: https://auth.bioatlas.se/cas/logout
+    appServerName: https://spatial.biodiversitydata.se
+    casServerUrlPrefix: https://auth.biodiversitydata.se/cas
+    loginUrl: https://auth.biodiversitydata.se/cas/login
+    logoutUrl: https://auth.biodiversitydata.se/cas/logout
     contextPath: '/ws'
     bypass: false
     disableCAS: false
@@ -64,21 +64,24 @@ security:
 auth.admin_role: ROLE_ADMIN
 app.http.header.userId: X-ALA-userId
 
-headerAndFooter.baseURL: 'https://static.bioatlas.se/bs3'
-ala.baseURL: 'https://bioatlas.se'
-bie.baseURL: 'https://species.bioatlas.se'
+headerAndFooter:
+    baseURL: 'https://static.biodiversitydata.se'
+    version: '2'
+
+ala.baseURL: 'https://biodiversitydata.se'
+bie.baseURL: 'https://species.biodiversitydata.se'
 bie.searchPath: '/search'
 
 records.url: 'https://archives.ala.org.au/archives/exports/lat_lon_taxon.zip'
 
-api_key: ''
-lists.url: 'https://lists.bioatlas.se'
-collections.url: 'https://collections.bioatlas.se'
+api_key: $APIKEY
+lists.url: 'https://lists.biodiversitydata.se'
+collections.url: 'https://collections.biodiversitydata.se'
 sandboxHubUrl: ''
 sandboxBiocacheServiceUrl: ''
 phyloServiceUrl: ''
-spatialHubUrl: 'https://spatial.bioatlas.se'
-apiKeyCheckUrlTemplate: 'https://auth.bioatlas.se/apikey/ws/check?apikey={0}'
+spatialHubUrl: 'https://spatial.biodiversitydata.se'
+apiKeyCheckUrlTemplate: 'https://auth.biodiversitydata.se/apikey/ws/check?apikey={0}'
 spatialService.remote: ''
 
 gazField: ''
@@ -143,7 +146,7 @@ layers_store.LOCAL_SAMPLING: true
 
 #layers_store.FIELD_STYLES: true
 
-layers_store.GEONETWORK_URL: 'https://spatial.bioatlas.se/geonetwork'
+layers_store.GEONETWORK_URL: 'https://spatial.biodiversitydata.se/geonetwork'
 
 distributions.cache.dir: "/data/spatial-service/mapCache/"
 distributions.geoserver.image.url: "/ALA/wms?service=WMS&version=1.1.0&request=GetMap&sld=https://fish.ala.org.au/data/dist.sld&layers=ALA:aus1,ALA:Distributions&styles=&bbox=109,-47,157,-7&srs=EPSG:4326&format=image/png&width=400&height=400&viewparams=s:"
@@ -156,16 +159,16 @@ dataSource:
     username: $POSTGRES_USER
     password: $POSTGRES_PASS
 
-grails.serverURL: https://spatial.bioatlas.se/ws
+grails.serverURL: https://spatial.biodiversitydata.se/ws
 grails.app.context: /ws
 grails.cors.enabled: true
 
 skin.layout: main
 skin.fluidLayout: false
-skin.orgNameLong: Bioatlas Sweden
-skin.orgNameShort: Bioatlas
-skin.favicon: https://bioatlas.se/wp-content/themes/atlas/img/favicon/favicon.ico
-skin.homeUrl: https://bioatlas.se
+skin.orgNameLong: Swedish Biodiversity Data Infrastructure
+skin.orgNameShort: SBDI
+skin.favicon: https://static.biodiversitydata.se/favicon.ico
+skin.homeUrl: https://tools.biodiversitydata.se
 
 #grails.controllers.upload.maxFileSize: 524288000
 #grails.controllers.upload.maxRequestSize: 524288000
@@ -175,3 +178,5 @@ grails.controllers.upload.maxRequestSize: 2097152000
 map.lat: 62
 map.lng: 16
 map.zoom: 4
+
+download.layer.licence_levels: '1'
