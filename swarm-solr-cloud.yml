@@ -32,7 +32,7 @@ services:
         mode: host
     deploy:
       placement:
-        constraints: [node.hostname == solr-1]
+        constraints: [node.hostname == live-solr-1]
 
   zookeeper2:
     image: zookeeper:3.4.14
@@ -60,7 +60,7 @@ services:
         mode: host
     deploy:
       placement:
-        constraints: [node.hostname == solr-2]
+        constraints: [node.hostname == live-solr-2]
 
   solr1:
     image: bioatlas/ala-solrcloud:v0.1
@@ -78,7 +78,7 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.hostname == solr-1]
+        constraints: [node.hostname == live-solr-1]
 
   solr2:
     image: bioatlas/ala-solrcloud:v0.1
@@ -96,7 +96,7 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.hostname == solr-2]
+        constraints: [node.hostname == live-solr-2]
 
   solr3:
     image: bioatlas/ala-solrcloud:v0.1
@@ -114,7 +114,7 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.hostname == solr-1]
+        constraints: [node.hostname == live-solr-3]
 
   solr4:
     image: bioatlas/ala-solrcloud:v0.1
@@ -132,7 +132,7 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.hostname == solr-2]
+        constraints: [node.hostname == live-solr-4]
 
 #  create-collection:
 #    image: solr:7.7.2-slim
@@ -145,61 +145,61 @@ services:
 #      - "-exc"
 #      - "wait-for-solr.sh --max-attempts 10 --wait-seconds 5 --solr-url http://$$SOLR_HOST:8983/; 
 #         solr zk upconfig -z zookeeper1:2181 -n biocache -d /opt/solr/server/solr/configsets/biocache/conf;
-#         solr create -c biocache -p 8983 -d biocache -shards 4 -replicationFactor 1;"
+#         solr create -c biocache -p 8983 -d biocache -shards 4 -replicationFactor 2;"
 #    networks:
 #      - basnet
 #    deploy:
 #      mode: replicated
 #      replicas: 1
 #      placement:
-#        constraints: [node.hostname == bas-main]
+#        constraints: [node.hostname == live-manager-1]
 
 volumes:
   data_zookeeper1:
     driver: local
     driver_opts:
       type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/extvol/nfs/data/zookeeper1"
+      o: nfsvers=4,addr=live-manager-1,rw
+      device: ":/docker_nfs/var/volumes/zookeeper1"
   data_zookeeperlog1:
     driver: local
     driver_opts:
       type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/extvol/nfs/data/zookeeperlog1"
+      o: nfsvers=4,addr=live-manager-1,rw
+      device: ":/docker_nfs/var/volumes/zookeeperlog1"
   data_zookeeper2:
     driver: local
     driver_opts:
       type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/extvol/nfs/data/zookeeper2"
+      o: nfsvers=4,addr=live-manager-1,rw
+      device: ":/docker_nfs/var/volumes/zookeeper2"
   data_zookeeperlog2:
     driver: local
     driver_opts:
       type: nfs
-      o: nfsvers=4,addr=beta.bioatlas.se,rw
-      device: ":/mnt/extvol/nfs/data/zookeeperlog2"
+      o: nfsvers=4,addr=live-manager-1,rw
+      device: ":/docker_nfs/var/volumes/zookeeperlog2"
   data_solr1:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "/mnt/data/data_solr/solr1"
+      device: "/data/solr1"
   data_solr2:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "/mnt/data/data_solr/solr2"
+      device: "/data/solr2"
   data_solr3:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "/mnt/data/data_solr/solr3"
+      device: "/data/solr3"
   data_solr4:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: "/mnt/data/data_solr/solr4"
+      device: "/data/solr4"
