@@ -66,7 +66,7 @@ services:
     image: bioatlas/ala-solrcloud:v0.1
     restart: always
     environment:
-      SOLR_HEAP: 8g
+      SOLR_HEAP: 12g
       ZK_HOST: zookeeper1:2181
       SOLR_HOST: solr1
       SOLR_OPTS: -Dlog4j2.formatMsgNoLookups=true
@@ -84,7 +84,7 @@ services:
     image: bioatlas/ala-solrcloud:v0.1
     restart: always
     environment:
-      SOLR_HEAP: 8g
+      SOLR_HEAP: 12g
       ZK_HOST: zookeeper2:2181
       SOLR_HOST: solr2
       SOLR_OPTS: -Dlog4j2.formatMsgNoLookups=true
@@ -102,7 +102,7 @@ services:
     image: bioatlas/ala-solrcloud:v0.1
     restart: always
     environment:
-      SOLR_HEAP: 8g
+      SOLR_HEAP: 12g
       ZK_HOST: zookeeper1:2181
       SOLR_HOST: solr3
       SOLR_OPTS: -Dlog4j2.formatMsgNoLookups=true
@@ -120,7 +120,7 @@ services:
     image: bioatlas/ala-solrcloud:v0.1
     restart: always
     environment:
-      SOLR_HEAP: 8g
+      SOLR_HEAP: 12g
       ZK_HOST: zookeeper2:2181
       SOLR_HOST: solr4
       SOLR_OPTS: -Dlog4j2.formatMsgNoLookups=true
