@@ -21,8 +21,6 @@ configs:
     file: ./config/biocache-config.properties
   config_logger-client:
     file: ./config/logger-client.properties
-  config_logger:
-    file: ./config/logger-config.properties
   config_ala_hub:
     file: ./config/ala-hub-config.properties
   config_blacklist:
@@ -165,29 +163,6 @@ services:
       SOLR_OPTS: "-Dlog4j2.formatMsgNoLookups=true"
     volumes:
       - data_solr:/opt/solr
-    networks:
-      - basnet
-
-  loggerservice:
-    image: bioatlas/ala-loggerservice:v1.0
-    depends_on:
-      - mysqldblogger
-    environment:
-      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    env_file: ./env/.envlogger
-    configs:
-      - source: config_logger
-        target: /tmp/logger-config.properties
-    command: /bin/ash -c "envsubst < /tmp/logger-config.properties > /data/logger/config/logger-config.properties && catalina.sh run"
-    networks:
-      - basnet
-
-  mysqldblogger:
-    image: mysql:5.7
-    env_file: ./env/.envlogger
-    volumes:
-#      - ./loggerservice/db:/docker-entrypoint-initdb.d
-      - db_data_loggerservice:/var/lib/mysql
     networks:
       - basnet
 
@@ -397,12 +372,6 @@ services:
       - basnet
 
 volumes:
-  db_data_loggerservice:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/db_data_loggerservice"
   db_data_imageservice:
     driver: local
     driver_opts:
