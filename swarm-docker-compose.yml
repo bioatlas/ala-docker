@@ -29,8 +29,6 @@ configs:
     file: ./config/image-service-config.yml
   config_apiservice:
     file: ./config/webapi-config.properties
-  config_specieslist:
-    file: ./config/specieslist-webapp-config.properties
   config_bieindex:
     file: ./config/bie-index-config.properties
   config_biehub:
@@ -224,32 +222,6 @@ services:
     networks:
       - basnet
 
-  specieslists:
-    image: bioatlas/ala-specieslists:v3.5.9
-    environment:
-      JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    env_file: ./env/.envspecieslists
-    configs:
-      - source: config_specieslist
-        target: /tmp/specieslist-webapp-config.properties
-    volumes:
-      - data_nameindex:/data/lucene/namematching
-    command: /bin/ash -c "envsubst < /tmp/specieslist-webapp-config.properties > /data/specieslist-webapp/config/specieslist-webapp-config.properties && catalina.sh run"
-    networks:
-      - basnet
-
-  mysqldbspecieslist:
-    image: mysql:5.7
-    environment:
-      LANG: C.UTF-8
-    env_file: ./env/.envspecieslists
-    command: --sql_mode=""
-    volumes:
- #     - ./specieslists/db:/docker-entrypoint-initdb.d
-      - db_data_specieslists:/var/lib/mysql
-    networks:
-      - basnet
-
   bieindex:
     image: bioatlas/ala-bieindex:v1.0
     environment:
@@ -393,12 +365,6 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=live-manager-1,rw
       device: ":/docker_nfs/var/volumes/data_images_elasticsearch"
-  db_data_specieslists:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/db_data_specieslists"
   db_data_postgis:
     driver: local
     driver_opts:
