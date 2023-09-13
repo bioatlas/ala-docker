@@ -37,12 +37,6 @@ configs:
     file: ./config/ala-bie-config.properties
   config_postgis:
     file: ./postgis/pg_hba.conf
-  config_regions:
-    file: ./config/regions-config.properties
-  config_regions_menu-config:
-    file: ./regions/regions-files/menu-config.json
-  config_regions_state-emblems:
-    file: ./regions/regions-files/state-emblems.json
   config_spatial-hub:
     file: ./config/spatial-hub-config.yml
   config_spatial-hub-menu-config:
@@ -301,21 +295,6 @@ services:
       - data_geoserver:/data/geoserver_data_dir
       - data_spatialservice:/data/spatial-data
     #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver-files/geoserver.sh"
-    networks:
-      - basnet
-
-  regions:
-    image: bioatlas/ala-regions:v3.3.5
-    environment:
-      JAVA_OPTS: -Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    env_file: ./env/.envregions
-    configs:
-      - source: config_regions
-        target: /data/regions/config/regions-config.properties
-      - source: config_regions_menu-config
-        target: /data/regions/config/menu-config.json
-      - source: config_regions_state-emblems
-        target: /data/regions/config/state-emblems.json
     networks:
       - basnet
 
