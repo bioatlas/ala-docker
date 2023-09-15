@@ -31,8 +31,6 @@ configs:
     file: ./config/webapi-config.properties
   config_bieindex:
     file: ./config/bie-index-config.properties
-  config_biehub:
-    file: ./config/ala-bie-config.properties
   config_postgis:
     file: ./postgis/pg_hba.conf
   config_spatial-hub:
@@ -231,16 +229,6 @@ services:
         target: /data/bie-index/config/bie-index-config.properties
     volumes:
       - data_bieindex:/data
-    networks:
-      - basnet
-
-  biehub:
-    image: bioatlas/ala-biehub:v1.0
-    environment:
-      JAVA_OPTS: -Xmx2g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    configs:
-      - source: config_biehub
-        target: /data/ala-bie/config/ala-bie-config.properties
     networks:
       - basnet
 
