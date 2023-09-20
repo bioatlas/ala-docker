@@ -69,6 +69,11 @@ services:
         target: /etc/nginx/proxy.conf
       - source: config_ala-cors
         target: /etc/nginx/ala-cors.conf
+    logging:
+      driver: local
+      options:
+        max-size: 100m
+        max-file: 5
     deploy:
       placement:
         constraints:
