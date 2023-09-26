@@ -29,8 +29,6 @@ configs:
     file: ./config/image-service-config.yml
   config_apiservice:
     file: ./config/webapi-config.properties
-  config_bieindex:
-    file: ./config/bie-index-config.properties
   config_postgis:
     file: ./postgis/pg_hba.conf
   config_spatial-hub:
@@ -151,16 +149,6 @@ services:
         constraints:
           - node.hostname == live-manager-1
 
-  solr:
-    image: bioatlas/ala-solr:v0.6
-    environment:
-      SOLR_HEAP: 4g
-      SOLR_OPTS: "-Dlog4j2.formatMsgNoLookups=true"
-    volumes:
-      - data_solr:/opt/solr
-    networks:
-      - basnet
-
   elasticsearch:
     image: "docker.elastic.co/elasticsearch/elasticsearch:7.0.0"
     environment:
@@ -222,18 +210,6 @@ services:
     env_file: ./env/.envapi
     volumes:
       - db_data_apiservice:/var/lib/mysql
-    networks:
-      - basnet
-
-  bieindex:
-    image: bioatlas/ala-bieindex:v1.0
-    environment:
-      JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    configs:
-      - source: config_bieindex
-        target: /data/bie-index/config/bie-index-config.properties
-    volumes:
-      - data_bieindex:/data
     networks:
       - basnet
 
@@ -346,12 +322,6 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=live-manager-1,rw
       device: ":/docker_nfs/var/volumes/data_biocachebackend"
-  data_solr:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/data_solr"
   data_images_elasticsearch:
     driver: local
     driver_opts:
@@ -382,10 +352,4 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=live-manager-1,rw
       device: ":/docker_nfs/var/volumes/data_spatialservice"
-  data_bieindex:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/data_bieindex"
 
