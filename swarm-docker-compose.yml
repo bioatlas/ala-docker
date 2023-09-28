@@ -25,8 +25,6 @@ configs:
     file: ./config/ala-hub-config.properties
   config_blacklist:
     file: ./config/blacklistMediaUrls.txt
-  config_imageservice:
-    file: ./config/image-service-config.yml
   config_apiservice:
     file: ./config/webapi-config.properties
   config_postgis:
@@ -149,48 +147,6 @@ services:
         constraints:
           - node.hostname == live-manager-1
 
-  elasticsearch:
-    image: "docker.elastic.co/elasticsearch/elasticsearch:7.0.0"
-    environment:
-      - cluster.name=docker-cluster
-      - discovery.type=single-node
-      - node.name=elasticsearch
-    volumes:
-      - data_images_elasticsearch:/usr/share/elasticsearch/data
-    networks:
-      - basnet
-
-  imageservice:
-    image: bioatlas/ala-imageservice:v1.0
-    depends_on:
-      - psqldbimage
-    environment:
-      JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    env_file: ./env/.envimage
-    volumes:
-      - data_images:/data/image-service/store
-    configs:
-      - source: config_imageservice
-        target: /tmp/image-service-config.yml
-    command: /bin/ash -c "envsubst < /tmp/image-service-config.yml > /data/image-service/config/image-service-config.yml && catalina.sh run"
-    networks:
-      - basnet
-
-  imagestore:
-    image: bioatlas/ala-imagestore:v1.0
-    volumes:
-      - data_images:/data/image-service/store
-    networks:
-      - basnet
-
-  psqldbimage:
-    image: postgres:9.6.8-alpine
-    env_file: ./env/.envimage
-    volumes:
-      - db_data_imageservice:/var/lib/postgresql/data
-    networks:
-      - basnet
-
   apiservice:
     image: bioatlas/ala-api:v1.0
     depends_on:
@@ -292,12 +248,6 @@ services:
       - basnet
 
 volumes:
-  db_data_imageservice:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/db_data_imageservice"
   db_data_apiservice:
     driver: local
     driver_opts:
@@ -310,24 +260,12 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=live-manager-1,rw
       device: ":/docker_nfs/var/volumes/data_nameindex"
-  data_images:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/data_images"
   data_biocachebackend:
     driver: local
     driver_opts:
       type: nfs
       o: nfsvers=4,addr=live-manager-1,rw
       device: ":/docker_nfs/var/volumes/data_biocachebackend"
-  data_images_elasticsearch:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/data_images_elasticsearch"
   db_data_postgis:
     driver: local
     driver_opts:
