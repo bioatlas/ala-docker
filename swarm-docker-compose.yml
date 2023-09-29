@@ -29,12 +29,6 @@ configs:
     file: ./config/webapi-config.properties
   config_postgis:
     file: ./postgis/pg_hba.conf
-  config_spatial-hub:
-    file: ./config/spatial-hub-config.yml
-  config_spatial-hub-menu-config:
-    file: ./spatialhub/menu-config.json
-  config_spatial-hub-view-config:
-    file: ./spatialhub/view-config.json
   config_spatial-service:
     file: ./config/spatial-service-config.yml
   config_sds:
@@ -195,25 +189,6 @@ services:
     networks:
       - basnet
 
-  spatialhub:
-    image: bioatlas/ala-spatialhub:v0.4.0.1-bas
-    environment:
-      JAVA_OPTS: -Xmx16g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    env_file:
-      - ./env/.envspatial
-    volumes:
-      - data_spatialhub:/data/ala/runtime/files
-    configs:
-      - source: config_spatial-hub
-        target: /tmp/spatial-hub-config.yml
-      - source: config_spatial-hub-menu-config
-        target: /data/spatial-hub/config/menu-config.json
-      - source: config_spatial-hub-view-config
-        target: /data/spatial-hub/config/view-config.json
-    command: /bin/bash -c "envsubst < /tmp/spatial-hub-config.yml > /data/spatial-hub/config/spatial-hub-config.yml && catalina.sh run"
-    networks:
-      - basnet
-
   spatialservice:
     image: bioatlas/ala-spatialservice:v0.4
     environment:
@@ -278,12 +253,6 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=live-manager-1,rw
       device: ":/docker_nfs/var/volumes/data_geoserver"
-  data_spatialhub:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/data_spatialhub"
   data_spatialservice:
     driver: local
     driver_opts:
