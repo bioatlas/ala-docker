@@ -27,10 +27,6 @@ configs:
     file: ./config/blacklistMediaUrls.txt
   config_apiservice:
     file: ./config/webapi-config.properties
-  config_postgis:
-    file: ./postgis/pg_hba.conf
-  config_spatial-service:
-    file: ./config/spatial-service-config.yml
   config_sds:
     file: ./config/sds-config.properties
 
@@ -163,53 +159,6 @@ services:
     networks:
       - basnet
 
-  postgis:
-    image: mdillon/postgis:9.6-alpine
-    #image: kartoza/postgis:9.6-2.4
-    env_file: ./env/.envpostgis
-    volumes:
-      - db_data_postgis:/var/lib/postgresql/data
-#      - ./postgis/layersdb.sql:/docker-entrypoint-initdb.d/layersdb.sql
-    configs:
-      - source: config_postgis
-        target: /etc/postgresql/9.6/main/pg_hba.conf
-    networks:
-      - basnet
-
-  geoserver:
-    #image: kartoza/geoserver:2.11.2
-    image: bioatlas/ala-geoserver:v0.4
-    environment:
-      JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    env_file: ./env/.envgeoserver
-    volumes:
-      - data_geoserver:/data/geoserver_data_dir
-      - data_spatialservice:/data/spatial-data
-    #command: /bin/bash -c "catalina.sh run & (while ! echo exit | nc localhost 8080; do sleep 100; done) && /data/geoserver-files/geoserver.sh"
-    networks:
-      - basnet
-
-  spatialservice:
-    image: bioatlas/ala-spatialservice:v0.4
-    environment:
-      JAVA_OPTS: -Xmx31g -Xms128m -Xss1024k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    env_file:
-      - ./env/.envspatial
-    volumes:
-      - data_spatialservice:/data/spatial-data
-    configs:
-      - source: config_spatial-service
-        target: /tmp/spatial-service-config.yml
-    command: /bin/bash -c "envsubst < /tmp/spatial-service-config.yml > /data/spatial-service/config/spatial-service-config.yml && catalina.sh run"
-    networks:
-      - basnet
-    deploy:
-      restart_policy:
-        condition: none
-      placement:
-        constraints:
-          - node.hostname == live-manager-1
-
   sds:
     image: bioatlas/ala-sds:v1.1
     environment:
@@ -241,22 +190,4 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=live-manager-1,rw
       device: ":/docker_nfs/var/volumes/data_biocachebackend"
-  db_data_postgis:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/db_data_postgis"
-  data_geoserver:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/data_geoserver"
-  data_spatialservice:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/data_spatialservice"
 
