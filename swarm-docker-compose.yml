@@ -27,8 +27,6 @@ configs:
     file: ./config/blacklistMediaUrls.txt
   config_apiservice:
     file: ./config/webapi-config.properties
-  config_sds:
-    file: ./config/sds-config.properties
 
 services:
 
@@ -75,7 +73,7 @@ services:
     environment:
       JAVA_OPTS: -Xmx8g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
     volumes:
-      - data_nameindex:/data/lucene/namematching
+      - data_nameindex_old:/data/lucene/namematching
     env_file: ./env/.envbiocacheservice
     configs:
       - source: config_biocache
@@ -108,7 +106,7 @@ services:
     #image: bioatlas/ala-dyntaxaindex:v0.4
     command: /bin/ash
     volumes:
-      - data_nameindex:/data/lucene/namematching
+      - data_nameindex_old:/data/lucene/namematching
     networks:
       - basnet
     deploy:
@@ -121,7 +119,7 @@ services:
     environment:
       - BIOCACHE_MEMORY_OPTS=-Xmx16g -Xms1g -Xss1024k
     volumes:
-      - data_nameindex:/data/lucene/namematching
+      - data_nameindex_old:/data/lucene/namematching
       - data_biocachebackend:/data
     configs:
       - source: config_blacklist
@@ -159,18 +157,6 @@ services:
     networks:
       - basnet
 
-  sds:
-    image: bioatlas/ala-sds:v1.1
-    environment:
-      JAVA_OPTS: -Xmx1g -Xms128m -Xss256k -Djava.awt.headless=true -Dlog4j2.formatMsgNoLookups=true
-    volumes:
-      - data_nameindex:/data/lucene/namematching
-    configs:
-      - source: config_sds
-        target: /data/sds/config/sds-config.properties
-    networks:
-      - basnet
-
 volumes:
   db_data_apiservice:
     driver: local
@@ -178,12 +164,12 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=live-manager-1,rw
       device: ":/docker_nfs/var/volumes/db_data_apiservice"
-  data_nameindex:
+  data_nameindex_old:
     driver: local
     driver_opts:
       type: nfs
       o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/data_nameindex"
+      device: ":/docker_nfs/var/volumes/data_nameindex_old"
   data_biocachebackend:
     driver: local
     driver_opts:
