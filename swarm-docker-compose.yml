@@ -25,8 +25,6 @@ configs:
     file: ./config/ala-hub-config.properties
   config_blacklist:
     file: ./config/blacklistMediaUrls.txt
-  config_apiservice:
-    file: ./config/webapi-config.properties
 
 services:
 
@@ -135,35 +133,7 @@ services:
         constraints:
           - node.hostname == live-manager-1
 
-  apiservice:
-    image: bioatlas/ala-api:v1.0
-    depends_on:
-      - mysqldbapi
-    environment:
-      JAVA_OPTS: -Xmx4g -Xms128m -Xss256k -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dlog4j2.formatMsgNoLookups=true
-    env_file: ./env/.envapi
-    configs:
-      - source: config_apiservice
-        target: /tmp/webapi-config.properties
-    command: /bin/ash -c "envsubst < /tmp/webapi-config.properties > /data/webapi/config/webapi-config.properties && catalina.sh run"
-    networks:
-      - basnet
-
-  mysqldbapi:
-    image: mysql:5.7
-    env_file: ./env/.envapi
-    volumes:
-      - db_data_apiservice:/var/lib/mysql
-    networks:
-      - basnet
-
 volumes:
-  db_data_apiservice:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: nfsvers=4,addr=live-manager-1,rw
-      device: ":/docker_nfs/var/volumes/db_data_apiservice"
   data_nameindex_old:
     driver: local
     driver_opts:
